@@ -9,8 +9,6 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
   	class SP_Activity {
 
         public static function activity_create(){
@@ -425,4 +423,3 @@
         }
         
     }
-?>

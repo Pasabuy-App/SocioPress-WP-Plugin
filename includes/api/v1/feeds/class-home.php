@@ -9,8 +9,6 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
   	class SP_Homefeed {
          
         public static function home_feeds(){
@@ -133,6 +131,3 @@
 		}
 
     }
-
-
-?>

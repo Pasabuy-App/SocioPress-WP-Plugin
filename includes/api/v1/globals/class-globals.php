@@ -5,12 +5,11 @@
 	}
 
 	/** 
-        * @package datavice-wp-plugin
+        * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
+
   	class SP_Globals {
          
         public static function create($table_name, $data){
@@ -100,6 +99,24 @@
             global $wpdb;
             return $wpdb->insert($table_name,  $fields);
         }
+
+        public static function validate_user(){
+            
+            //User verification
+             $verified = DV_Verification::initialize();
+
+            //Convert object to array
+            $array =  (array) $verified;
+
+            // Pass request status in a variable
+            $response =  $array['data']['status'];
+            
+            if ($response != 'success') {
+                    return $verified;
+            } else {
+                    return true;
+            }
+            
+        }
         
     }
-?>

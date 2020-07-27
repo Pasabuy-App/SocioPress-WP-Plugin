@@ -9,8 +9,6 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
   	class SP_Newsfeed {
          
         public static function profile_feeds(){
@@ -138,6 +136,3 @@
 
 		
     }
-
-
-?>

@@ -9,25 +9,17 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-
-<?php
 
     //Require the USocketNet class which have the core function of this plguin. 
-    require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php'; // Example
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-profile.php'; // profile feeds
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-home.php'; // home feeds
+    require plugin_dir_path(__FILE__) . '/v1/feeds/class-posts.php'; // user posts feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-activity.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php'; // globals
 	
 	// Init check if USocketNet successfully request from wapi.
     function sociopress_route()
-    {
-        // Example
-        register_rest_route( 'sociopress/v1/user', 'auth', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Authenticate','initialize'),
-        ));      
+    {   
         
         // profile feeds
         register_rest_route( 'sociopress/v1/feeds', 'profile', array(
@@ -46,8 +38,6 @@
             'methods' => 'GET',
             'callback' => array('SP_Homefeed','home_feeds'),
         ));
-
-     
 
         // Activity
         register_rest_route( 'sociopress/v1/feeds', 'c_activity', array(
@@ -70,9 +60,12 @@
             'callback' => array('SP_Activity','get_activity_byid'),
         ));
 
+        //Post user feeds
+        register_rest_route( 'sociopress/v1/feeds', 'posts', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Posts', 'filter_posts'),
+        ));
         
 
     }
     add_action( 'rest_api_init', 'sociopress_route' );
-
-?>
