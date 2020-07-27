@@ -7,7 +7,7 @@ In this project, we will try to make our RestAPI plugin focused on Social Networ
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
@@ -66,7 +66,7 @@ IF SUCCESS:
     }
 ```
 
-#### ADDITIONAL PROFILE FEED LIST => /datavice/api/v1/feeds/p_feeds
+#### ADDITIONAL PROFILE FEED LIST => /datavice/api/v1/feeds/profile
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -171,7 +171,7 @@ IF SUCCESS:
     }
 ```
 
-#### ADDITIONAL HOME FEED LIST => /datavice/api/v1/feeds/h_feeds
+#### ADDITIONAL HOME FEED LIST => /datavice/api/v1/feeds/home
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -234,7 +234,7 @@ IF SUCCESS:
     }
 ```
 
-#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/get_act_feed
+#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/activity
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
@@ -303,7 +303,7 @@ IF SUCCESS:
 ```
 
 
-#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/get_act_addfeed
+#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/activity
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded

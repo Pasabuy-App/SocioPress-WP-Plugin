@@ -32,7 +32,7 @@
         // profile feeds
         register_rest_route( 'sociopress/v1/feeds', 'profile', array(
             'methods' => 'GET',
-            'callback' => array('SP_Newsfeed','get_feeds'),
+            'callback' => array('SP_Newsfeed','profile_feeds'),
         ));
 
         register_rest_route( 'sociopress/v1/feeds', 'p_feeds', array(
@@ -47,10 +47,7 @@
             'callback' => array('SP_Homefeed','home_feeds'),
         ));
 
-        register_rest_route( 'sociopress/v1/feeds', 'h_feeds', array(
-            'methods' => 'GET',
-            'callback' => array('SP_Homefeed','home_additional_feeds'),
-        ));
+     
 
         // Activity
         register_rest_route( 'sociopress/v1/feeds', 'c_activity', array(
@@ -58,7 +55,7 @@
             'callback' => array('SP_Activity','activity_create'),
         ));
         
-        register_rest_route( 'sociopress/v1/feeds', 'get_act_feed', array(
+        register_rest_route( 'sociopress/v1/feeds', 'activity', array(
             'methods' => 'GET',
             'callback' => array('SP_Activity','get_activity'),
         ));
