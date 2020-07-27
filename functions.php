@@ -3,7 +3,7 @@
     /*
         Plugin Name: SocioPress WP Plugin
         Plugin URI: http://www.bytescrafter.net/projects/sociopress
-        Description: sociopress WP Plugin is a user management for your application or game users.
+        Description: Plugin for user Feeds, Activity, Messages, and Many more.
         Version: 0.1.0
         Author: Bytes Crafter
         Author URI:   https://www.bytescrafter.net/about-us
