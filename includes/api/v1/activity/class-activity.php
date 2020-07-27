@@ -5,7 +5,7 @@
 	}
 
 	/** 
-        * @package datavice-wp-plugin
+        * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
@@ -278,7 +278,7 @@
 
 		public static function get_activity_byid(){
 			global $wpdb;
-            
+
 			// Step 1: Check if ID is passed
 			if (!isset($_GET["wpid"]) || !isset($_GET["snky"]) || !isset($_GET["atid"])) {
 				return rest_ensure_response( 
