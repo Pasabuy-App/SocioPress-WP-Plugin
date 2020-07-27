@@ -171,7 +171,7 @@ IF SUCCESS:
     }
 ```
 
-#### ADDITIONAL HOME FEED LIST => /datavice/api/v1/feeds/home_add_feeds
+#### ADDITIONAL HOME FEED LIST => /datavice/api/v1/feeds/h_feeds
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -213,7 +213,7 @@ IF SUCCESS:
 
 
 
-#### ACTIVITY LOG CREATE => /datavice/api/v1/activity/dv_activity
+#### ACTIVITY LOG CREATE => /datavice/api/v1/activity/c_activity
 REQUEST:
 - Method : POST
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
@@ -234,7 +234,7 @@ IF SUCCESS:
     }
 ```
 
-#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/get_activity
+#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/get_act_feed
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
@@ -303,7 +303,7 @@ IF SUCCESS:
 ```
 
 
-#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/get_activity_feed
+#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/get_act_addfeed
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
@@ -353,7 +353,7 @@ IF SUCCESS:
     }
 ```
 
-#### ACTIVITY LOG FETCH ACTIVTY BY ID => /datavice/api/v1/activity/get_activity_byid
+#### ACTIVITY LOG FETCH ACTIVTY BY ID => /datavice/api/v1/activity/get_act_byid
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
