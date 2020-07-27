@@ -55,7 +55,7 @@
             'callback' => array('SP_Activity','activity_create'),
         ));
         
-        register_rest_route( 'sociopress/v1/feeds', 'get_act_feed', array(
+        register_rest_route( 'sociopress/v1/feeds', 'activity', array(
             'methods' => 'GET',
             'callback' => array('SP_Activity','get_activity'),
         ));

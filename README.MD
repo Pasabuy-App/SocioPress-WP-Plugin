@@ -234,7 +234,7 @@ IF SUCCESS:
     }
 ```
 
-#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/get_act_feed
+#### ACTIVITY LOG FETCH => /datavice/api/v1/activity/activity
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
@@ -303,7 +303,7 @@ IF SUCCESS:
 ```
 
 
-#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/get_act_addfeed
+#### ACTIVITY LOG FETCH ADDITIONAL FEED => /datavice/api/v1/activity/activity
 REQUEST:
 - Method : GET
 - Header : key=Content-Type, value=application/xx-www-form-urlencoded
