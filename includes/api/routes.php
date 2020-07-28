@@ -23,7 +23,7 @@
         
         // profile feeds
         register_rest_route( 'sociopress/v1/feeds', 'profile', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('SP_Newsfeed','profile_feeds'),
         ));
 
@@ -35,7 +35,7 @@
         // home feeds
 
         register_rest_route( 'sociopress/v1/feeds', 'home', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('SP_Homefeed','home_feeds'),
         ));
 

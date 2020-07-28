@@ -130,7 +130,7 @@
 
 		public static function get_activity(){
 			global $wpdb;
-			if ( !isset($_GET['wpid']) || !isset($_GET['snky']) ) {
+			if ( !isset($_POST['wpid']) || !isset($_POST['snky']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -140,7 +140,7 @@
 			}
 
 			// Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_GET["wpid"])) {
+			if (!is_numeric($_POST["wpid"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -150,7 +150,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['wpid'])) {
+			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -159,10 +159,10 @@
 				);
             }
             
-            if (!isset($_GET['lid'])){
+            if (!isset($_POST['lid'])){
                 
                 // Step 4: Pass the processed ids in a variable
-                $id = $_GET['wpid'];
+                $id = $_POST['wpid'];
 
                 //Step 5: Create table name for posts (bc_dv_activity)
                 $table_activity = SP_PREFIX.'activity';
@@ -195,7 +195,7 @@
 
             }else{
                 
-            	if(!is_numeric($_GET["lid"])){
+            	if(!is_numeric($_POST["lid"])){
 					return rest_ensure_response( 
 						array(
 							"status" => "failed",
@@ -206,8 +206,8 @@
 				}
 
                 // Step 4: Pass the processed ids in a variable
-                $id = $_GET['wpid'];
-                $lid = $_GET['lid'];
+                $id = $_POST['wpid'];
+                $lid = $_POST['lid'];
 
                 //Get 5 new posts
                 $add_feeds = $lid - 5;
@@ -261,7 +261,7 @@
 		public static function get_activity_feed(){
 			global $wpdb;
 
-			if ( !isset($_GET['wpid']) || !isset($_GET['snky']) || !isset($_GET['lid']) ) {
+			if ( !isset($_POST['wpid']) || !isset($_POST['snky']) || !isset($_POST['lid']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -270,7 +270,7 @@
 				);
 			}
 			// Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_GET["wpid"])) {
+			if (!is_numeric($_POST["wpid"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -280,7 +280,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['wpid'])) {
+			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -295,7 +295,7 @@
 			global $wpdb;
 
 			// Step 1: Check if ID is passed
-			if (!isset($_GET["wpid"]) || !isset($_GET["snky"]) || !isset($_GET["atid"])) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST["atid"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -304,7 +304,7 @@
 				);
 			}
 			// Step 2: Check if ID and Last ID is in valid format (integer)
-			if ( !is_numeric($_GET["atid"]) || !is_numeric($_GET["wpid"])  ) {
+			if ( !is_numeric($_POST["atid"]) || !is_numeric($_POST["wpid"])  ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -314,7 +314,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['wpid'])) {
+			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -324,8 +324,8 @@
             }
 
 			// Step 4: Pass the processed ids in a variable
-			$id = $_GET['wpid'];
-			$activity_id = $_GET['atid'];
+			$id = $_POST['wpid'];
+			$activity_id = $_POST['atid'];
 			
 			$now = current_time( 'mysql' ); 
             $date = date( 'Y-m-d H:i:s', strtotime( $now ) + 3600 ); 

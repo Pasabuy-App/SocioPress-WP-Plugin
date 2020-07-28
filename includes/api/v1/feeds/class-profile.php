@@ -15,7 +15,7 @@
 			// Initialize WP global variable
 			global $wpdb;
 			// Step 1: Check if ID is passed
-			if (!isset($_GET["wpid"]) || !isset($_GET["snky"])) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -24,7 +24,7 @@
 				);
 			}
 			// Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_GET["wpid"])) {
+			if (!is_numeric($_POST["wpid"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -34,7 +34,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['wpid'])) {
+			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -43,10 +43,10 @@
 				);
 			}
 
-			if(!isset($_GET['lid'])){
+			if(!isset($_POST['lid'])){
 				
 				//Step 4: Pass the processed id in a variable
-				$id = $_GET['wpid'];
+				$id = $_POST['wpid'];
 				
 				//Step 5: Create table name for posts (bc_posts)
 				$table_post = SP_PREFIX.'posts';
@@ -74,7 +74,7 @@
 
 			}else{
 
-				if ( !is_numeric($_GET["lid"])) {
+				if ( !is_numeric($_POST["lid"])) {
 					return rest_ensure_response( 
 						array(
 							"status" => "failed",
@@ -84,8 +84,8 @@
 				}
 
 				// Step 4: Pass the processed ids in a variable
-				$id = $_GET['wpid'];
-				$get_last_id = $_GET['lid'];
+				$id = $_POST['wpid'];
+				$get_last_id = $_POST['lid'];
 
 				//Get 5 new posts
 				$add_feeds = $get_last_id - 5;
