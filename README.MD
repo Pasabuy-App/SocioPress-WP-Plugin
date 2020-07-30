@@ -70,7 +70,7 @@ IF SUCCESS:
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=LID (value=Last ID of feed list)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=lid (value=Last ID of feed list)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
@@ -175,7 +175,7 @@ IF SUCCESS:
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=LID (value=Last ID of feed list)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=lid (value=Last ID of feed list)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null

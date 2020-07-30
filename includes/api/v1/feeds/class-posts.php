@@ -24,7 +24,7 @@
 			}
 			
 			//Check if post type filter is set
-			if (!isset($_POST["PT"])) {
+			if (!isset($_POST["pt"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -34,7 +34,7 @@
 			}
 
 			//Pass into a variable
-			$post_type = $_POST["PT"];
+			$post_type = $_POST["pt"];
 
 			//Passing define variables to local variables
 			$fields = POST_FIELDS;
@@ -43,7 +43,7 @@
 			$succeeding_feeds = SUCCEEDING_FEEDS; 
 
 			//Check if last ID is passed, if not, it means this is the initial feed listing
-			if(!isset($_POST['LID'])){
+			if(!isset($_POST['lid'])){
 
 				$posts = $wpdb->get_results("
 					SELECT $fields
@@ -79,7 +79,7 @@
 			//Additional Feeds
 			} else {
 
-				if ( !is_numeric($_POST["LID"])) {
+				if ( !is_numeric($_POST["lid"])) {
 					return rest_ensure_response( 
 						array(
 							"status" => "failed",
@@ -88,7 +88,7 @@
 					);
 				}
 
-				$get_last_id = $_POST['LID'];
+				$get_last_id = $_POST['lid'];
 
 				//Get 5 new posts
 				$add_feeds = $get_last_id - $succeeding_feeds;
