@@ -16,11 +16,17 @@
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-posts.php'; // user posts feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-activity.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php'; // globals
+    require plugin_dir_path(__FILE__) . '/v1/profile/class-data.php'; // globals
 	
 	// Init check if USocketNet successfully request from wapi.
     function sociopress_route()
     {   
-        
+        // profile data
+        register_rest_route( 'sociopress/api/v1/profile', 'data', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Profile_data','listen'),
+        ));
+
         // profile feeds
         register_rest_route( 'sociopress/v1/feeds', 'profile', array(
             'methods' => 'POST',
