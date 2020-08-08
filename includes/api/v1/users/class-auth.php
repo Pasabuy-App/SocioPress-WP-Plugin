@@ -7,12 +7,12 @@
 	}
 
 	/** 
-        * @package datavice-wp-plugin
+        * @package sociopress-wp-plugin
         * @version 0.1.0
 	*/
 ?>
 <?php
-	class DV_Authenticate {
+	class SP_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
 		public static function dv_get_session( $user_id ) {
@@ -27,7 +27,7 @@
 		}
 
 		//Authenticate user via Rest Api.
-		public static function initialize() {
+		public static function listen() {
 		
 			// Check that we're trying to authenticate
 			if (!isset($_POST["UN"]) || !isset($_POST["PW"])) {
@@ -60,12 +60,10 @@
 				array(
 					"status" => "success",
 					"data" => array(
-						"snky" => DV_Authenticate::dv_get_session($user->ID), 
+						"snky" => SP_Authenticate::dv_get_session($user->ID), 
 						"wpid" => $user->ID
 						)
 					)  
 				);
 		}
 	}
-
-?>

@@ -22,7 +22,7 @@
         // Example
         register_rest_route( 'sociopress/v1/user', 'auth', array(
             'methods' => 'POST',
-            'callback' => array('DV_Authenticate','initialize'),
+            'callback' => array('SP_Authenticate','listen'),
         ));       
     }
     add_action( 'rest_api_init', 'sociopress_route' );
