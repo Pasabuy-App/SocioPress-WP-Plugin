@@ -103,7 +103,7 @@
         public static function validate_user(){
             
             //User verification
-             $verified = DV_Verification::initialize();
+             $verified = DV_Verification::listen();
 
             //Convert object to array
             $array =  (array) $verified;
