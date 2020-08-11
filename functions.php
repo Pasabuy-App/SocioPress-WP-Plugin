@@ -34,6 +34,9 @@
     //Important config files and plugin updates.
     include_once ( SP_PLUGIN_PATH . '/includes/core/config.php' );
     include_once ( SP_PLUGIN_PATH . '/includes/core/update.php' );
+    
+    // For registration post type
+    include_once ( SP_PLUGIN_PATH . '/includes/view/primary.php' );
 
      //Make sure to create required mysql tables.
     include_once ( SP_PLUGIN_PATH . '/includes/core/dbhook.php' );
@@ -43,5 +46,7 @@
 
     //Include the REST API of USocketNet to be accessible.
     include_once ( SP_PLUGIN_PATH . '/includes/api/routes.php' );
+
+    
 
 ?>
