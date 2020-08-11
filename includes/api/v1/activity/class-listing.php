@@ -18,29 +18,29 @@
 
         public static function get_list_of_activty(){
             global $wpdb;
-            if ( !isset($_POST['wpid']) || !isset($_POST['snky']) ) {
+
+            $table_revision = SP_REVS_TABLE;
+            $table_activity = SP_ACTIVITY_TABLE;
+
+            // Step1 : Check if prerequisites plugin are missing
+            $plugin = SP_Globals::verify_prerequisites();
+            if ($plugin !== true) {
+
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Request unknown!",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
-    
-            // Step 2: Check if ID is in valid format (integer)
-            if (!is_numeric($_POST["wpid"])) {
-                return array(
-                    "status" => "failed",
-                    "message" => "Please contact your administrator. ID not in valid format!",
-                );
-            }
-    
-            // Step 3: Check if ID exists
-            if (!get_user_by("ID", $_POST['wpid'])) {
-                return array(
-                    "status" => "failed",
-                    "message" => "User not found!",
-                );
-            }
+
+			//  Step2 : Validate if user is exist
+			if (DV_Verification::is_verified() == false) {
                 
+                return array(
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
+                );
+            }
+
             if (!isset($_POST['lid'])){
                     
                 // Step 4: Pass the processed ids in a variable
@@ -54,11 +54,11 @@
                     sp_act.ID,
                     sp_act.wpid,
                     sp_act.icon,
-                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_act.`title` ) AS `activity_title`,
-                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_act.`info` ) AS `activity_info`,
+                    ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`title` ) AS `activity_title`,
+                    ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`info` ) AS `activity_info`,
                     sp_act.date_created 
                 FROM
-                    sp_activities sp_act
+                    $table_activity sp_act
                 WHERE
                     sp_act.wpid = 1 
                 GROUP BY

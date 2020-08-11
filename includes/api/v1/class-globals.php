@@ -18,48 +18,21 @@
             return $wpdb->insert($table_name, $data);
                        
         }
-        
-        // NOTE: unfinished
-        public static function retrieve($table_name, $fields, $sort_field, $sort){
-            global $wpdb;
-            // fields
-            $data = implode( ', ', $fields );
-            
-            // sort_fields
-            $str_sortFiled = implode( ', ', $sort_field );
-            $sorted_field = preg_replace('/[0-9,]+/', '', $str_sortFiled);
-            
-            // sort
-            $sorted = implode( ', ', $sort );
-            // $sorts = preg_replace('/[0-9,]+/', '', $str_sort);
 
+        public static function verify_prerequisites(){
 
-            return $wpdb->get_results("SELECT $data FROM $table_name $sorted_field $sorted ");
-        }
+            if(!class_exists('DV_Verification') ){
+                return 'DataVice';
+            }
 
-        /**
-         * Not working 
-         
-            *public static function retrieveById($table_name, $fields, $id){
-            *    global $wpdb;
-            *    $data = implode( ', ', $fields );
-            *    return $data;
-            *    // return $wpdb->get_results("SELECT $data FROM $table_name WHERE id = $id ");
-            *}
-         */
+            // if(!class_exists('MP_Process') ){
+            //     return 'MobilePOS';
+            // }
 
-        public static function delete($table_name , $id){
-            global $wpdb;
-        
-            return $wpdb->delete( $table_name, array( 'id' => $id ) );
+            return true;
 
         }
 
-        public static function update($table_name, $id, $fields){
-            global $wpdb;
-            
-            return $wpdb->update( $table_name , $fields, array('id' => $id) );
-        }
 
         public static function check_by_field($table_name, $key, $value){
             
@@ -89,16 +62,7 @@
             
         }
 
-        public static function signup($user_table_name, $data){
-            global $wpdb;
-            return $wpdb->insert($user_table_name, $data);
-        }
 
-        // new
-        public static function insert($table_name,  $fields){
-            global $wpdb;
-            return $wpdb->insert($table_name,  $fields);
-        }
 
         public static function validate_user(){
             

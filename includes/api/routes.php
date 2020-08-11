@@ -19,10 +19,11 @@
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-profile.php'; // profile feeds
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-home.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-posts.php'; // user posts feeds
-    require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php'; // globals
     require plugin_dir_path(__FILE__) . '/v1/profile/class-data.php'; // globals
-	
-	// Init check if USocketNet successfully request from wapi.
+    
+    require plugin_dir_path(__FILE__) . '/v1/class-globals.php'; // globals
+
+    // Init check if USocketNet successfully request from wapi.
     function sociopress_route()
     {   
                    
