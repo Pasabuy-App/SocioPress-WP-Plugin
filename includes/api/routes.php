@@ -24,6 +24,8 @@
     // Post Folder
     require plugin_dir_path(__FILE__) . '/v1/post/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/post/class-delete.php';
+    require plugin_dir_path(__FILE__) . '/v1/post/class-count.php';
     
     require plugin_dir_path(__FILE__) . '/v1/class-globals.php'; // globals
 
@@ -105,6 +107,14 @@
             register_rest_route( 'sociopress/v1/post', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Update_Post','listen'),
+            ));
+            register_rest_route( 'sociopress/v1/post', 'delete', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Delete_Post','listen'),
+            ));
+            register_rest_route( 'sociopress/v1/post/user', 'count', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Count_Post','listen'),
             ));
         
     }

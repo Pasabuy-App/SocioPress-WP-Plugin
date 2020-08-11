@@ -9,11 +9,11 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_Delete_Post {
+  	class SP_Count_Post {
 
         public static function listen(){
             return rest_ensure_response( 
-                SP_Delete_Post:: list_open()
+                SP_Count_Post:: list_open()
             );
         }
          
@@ -22,7 +22,8 @@
             // Initialize WP global variable
 			global $wpdb;
 			
-            $post_id = $_POST["post_id"];
+            $user_id = $_POST["user_id"];
+            $table_posts = 'wp_posts';
 			
             // Step1 : Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -41,8 +42,7 @@
 			}
 
             // Step3 : Sanitize all request
-            if (!isset($_POST["post_id"]) 
-                ) {
+            if (!isset($_POST["user_id"]) ) {
 				return array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request unknown!",
@@ -50,16 +50,15 @@
             }
 
             // Step4 : Sanitize all variable is empty
-            if (empty($_POST["post_id"]) 
-            ) {
+            if (empty($_POST["user_id"]) ) {
                 return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                 );
             }
-            
+			
             // Step5 : Validation of post id
-            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' ");
+            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE ID = '$user_id' ");
             if ( !$get_id ) {
                 return array(
                         "status" => "failed",
@@ -68,20 +67,30 @@
             }
             
             // Step6 : Query
-            //$result = wp_delete_post( $get_id->ID, true); // If custom post, it change post_status to trash but if post type is post it will be deleted.
-            $result = wp_trash_post( $get_id->ID); // Change post_status to trash and add revision
-			
-            // Step7 : Check result if failed
-            if ($result < 1) {
+            $result = $wpdb->get_results("SELECT
+                wp_pos.post_author AS user_id,
+                COUNT(wp_pos.post_author) AS count
+            FROM
+                $table_posts AS wp_pos
+            WHERE 
+                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id'
+            GROUP BY 
+                wp_pos.post_author
+            ");
+            
+            // Step7 : Check if no result
+            if (!$result)
+            {
                 return array(
                         "status" => "failed",
-                        "message" => "An error occured while submitting data to database.",
+                        "message" => "No results found.",
                 );
             }
-            // Step8 : Return a success status and message 
+            
+            // Step8 : Return Result 
             return array(
-                "status" => "success",
-                "message" => "Data has been deleted successfully.",
+                    "status" => "success",
+                    "data" => $result
             );
 
 		}

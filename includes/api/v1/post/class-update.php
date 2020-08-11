@@ -43,6 +43,7 @@
             // Step3 : Sanitize all request
             if (!isset($_POST["title"]) 
                 || !isset($_POST["content"])
+                || !isset($_POST["post_id"])
                 ) {
 				return array(
 						"status" => "unknown",
@@ -53,6 +54,7 @@
             // Step4 : Sanitize all variable is empty
             if (empty($_POST["title"]) 
                 || empty($_POST["content"])
+                || empty($_POST["post_id"])
             ) {
                 return array(
                         "status" => "failed",
@@ -60,7 +62,7 @@
                 );
             }
 			
-            // Step6 : Validation of post id
+            // Step5 : Validation of post id
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '{$user["post_id"]}' ");
             if ( !$get_id ) {
                 return array(
