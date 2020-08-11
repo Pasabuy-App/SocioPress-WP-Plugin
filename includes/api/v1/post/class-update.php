@@ -93,7 +93,6 @@
             );
 
 		}
-		
 
         // Catch Post 
         public static function catch_post()

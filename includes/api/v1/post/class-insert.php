@@ -87,10 +87,8 @@
                 "status" => "success",
                 "message" => "Data has been added successfully.",
             );
-
 		}
 		
-
         // Catch Post 
         public static function catch_post()
         {
