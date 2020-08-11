@@ -33,7 +33,7 @@
 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
                 );
             }
 
@@ -42,7 +42,7 @@
                 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
+                    "message" => "Please contact your administrator. Verification issues.",
                 );
             }
 
@@ -81,8 +81,8 @@
             
                 if ( !is_numeric($_POST['stid']) ) {
                     return array(
-                        "status" => "unknown",
-                        "message" => "ID is not in valid format",
+                        "status" => "failed",
+                        "message" => "ID is not in valid format.",
                     );
                 }
 
@@ -105,7 +105,7 @@
                 $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('activity', 0, 'info', '{$user["activity_info"]}', '{$user["user_id"]}', '$user_date' ) ");
                 $info_last_id = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $table_activity $table_activity_fields VALUES ('$wpid', '$stid', '{$user["activity_icon"]}', '$title_last_id', '$info_last_id', '{$user["user_id"]}', NULL, '$user_date' ) ");
+                $wpdb->query("INSERT INTO $table_activity $table_activity_fields VALUES ('$wpid', '$stid', '{$user["activity_icon"]}', '$title_last_id', '$info_last_id', NULL, '$user_date' ) ");
                 $activity_last_id = $wpdb->insert_id;
 
                 $update_parent_id = $wpdb->query("UPDATE $table_revision SET `parent_id` = $activity_last_id WHERE ID IN ($title_last_id, $info_last_id) ");
