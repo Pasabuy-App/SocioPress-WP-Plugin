@@ -36,7 +36,7 @@
 
             register_rest_route( 'sociopress/v1/activity', 'list/all', array(
                 'methods' => 'POST',
-                'callback' => array('SP_Insert_Activity','listen'),
+                'callback' => array('SP_Listing_Activity','listen'),
             ));
 
             register_rest_route( 'sociopress/v1/activity', 'select', array(
@@ -89,8 +89,5 @@
                 'callback' => array('SP_Posts', 'filter_posts'),
             ));
         
-
-            //'callback' => array('SP_Authenticate','listen'),
-        //));       
     }
     add_action( 'rest_api_init', 'sociopress_route' );

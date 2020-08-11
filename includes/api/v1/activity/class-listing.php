@@ -11,7 +11,9 @@
 	*/
   	class SP_Listing_Activity {
         public static function listen(){
-
+            return rest_ensure_response( 
+                SP_Listing_Activity::get_list_of_activty()
+            );
         }
 
         public static function get_list_of_activty(){
@@ -49,38 +51,38 @@
     
                 //Step 6: Get results from database 
                 $result= $wpdb->get_results("SELECT
-                    sp_activity_revs.parent_id,
-                    sp_activity.date_created,
-                    MAX( IF ( sp_activity_revs.child_key = 'title', sp_activity_revs.child_val, '' ) ) AS title,
-                    MAX( IF ( sp_activity_revs.child_key= 'info', sp_activity_revs.child_val, '' ) ) AS info 
+                    sp_act.ID,
+                    sp_act.wpid,
+                    sp_act.icon,
+                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_act.`title` ) AS `activity_title`,
+                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_act.`info` ) AS `activity_info`,
+                    sp_act.date_created 
                 FROM
-                    sp_activity_revs
-                INNER JOIN sp_activity ON sp_activity.ID = sp_activity_revs.parent_id WHERE sp_activity.wpid = $id
+                    sp_activities sp_act
+                WHERE
+                    sp_act.wpid = 1 
                 GROUP BY
-                    sp_activity_revs.parent_id DESC LIMIT 12
+                    sp_act.ID DESC 
+                    LIMIT 12
                 ", OBJECT);
     
                 $last_id = min($result);
     
                 //Step 8: Return a success message and a complete object
-                return rest_ensure_response( 
-                    array(
-                        "status" => "success",
-                        "data" => array(
-                            'list' => $result,
-                            'last_id' => $last_id
-                        )
+                return array(
+                    "status" => "success",
+                    "data" => array(
+                        'list' => $result,
+                        'last_id' => $last_id
                     )
                 );
     
             }else{
                     
                 if(!is_numeric($_POST["lid"])){
-                    return rest_ensure_response( 
-                        array(
-                            "status" => "failed",
-                            "message" => "Parameters not in valid format!",
-                        )
+                    return array(
+                        "status" => "failed",
+                        "message" => "Parameters not in valid format!",
                     );
                 }
     
@@ -96,39 +98,40 @@
     
                 //Step 6: Get results from database 
                 $result= $wpdb->get_results("SELECT
-                    sp_activity_revs.parent_id,
-                    sp_activity.date_created,
-                    MAX( IF ( sp_activity_revs.child_key = 'title', sp_activity_revs.child_val, '' ) ) AS title,
-                    MAX( IF ( sp_activity_revs.child_key= 'info', sp_activity_revs.child_val, '' ) ) AS info 
+                    ac_act.ID,
+                    ac_act.wpid,
+                    ac_act.icon,
+                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_activities.`title` ) AS `activity_title`,
+                    ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.ID = sp_activities.`info` ) AS `activity_info`,
+                    ac_act.date_created 
                 FROM
-                    sp_activity_revs
-                INNER JOIN sp_activity ON sp_activity.ID = sp_activity_revs.parent_id WHERE sp_activity.wpid = $id 
-                AND sp_activity.ID BETWEEN $add_feeds AND ( $lid - 1 )
+                    sp_activities ac_act 
+                WHERE
+                    ac_act.wpid = 1 
+                BETWEEN $add_feeds AND ( $lid - 1 )
                 GROUP BY
-                    sp_activity_revs.parent_id DESC
-                ", OBJECT);
+                    ac_act.ID DESC  LIMIT 12
+                    ", OBJECT);
     
                 //Step 7: Check if array count is 0 , return error message if true
                 if (count($result) < 1) {
-                    return rest_ensure_response( 
-                        array(
-                            "status" => "failed",
-                            "message" => "No more posts to see",
-                        )
+
+                    return array(
+                        "status" => "failed",
+                        "message" => "No more posts to see",
                     );
+
                 } else {
                     //Pass the last id
                     $last_id = min($result);
                 }
                     
                 //Step 8: Return a success message and a complete object
-                return rest_ensure_response( 
-                    array(
-                        "status" => "success",
-                        "data" => array(
-                            'list' => $result, 
-                            'last_id' => $last_id
-                        )
+                return array(
+                    "status" => "success",
+                    "data" => array(
+                        'list' => $result, 
+                        'last_id' => $last_id
                     )
                 );
             }

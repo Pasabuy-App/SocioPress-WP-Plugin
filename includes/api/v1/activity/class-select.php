@@ -37,107 +37,58 @@
 			// Step 3: Check if ID exists
 			if (!get_user_by("ID", $_POST['wpid'])) {
 				return array(
-						"status" => "failed",
-						"message" => "User not found!",
+					"status" => "failed",
+					"message" => "User not found!",
 				);
             }
 
-			// Step 4: Pass the processed ids in a variable
-			$id = $_POST['wpid'];
-			$activity_id = $_POST['atid'];
-			
-			$now = current_time( 'mysql' ); 
-            $date = date( 'Y-m-d H:i:s', strtotime( $now ) + 3600 ); 
+            $activity_id = $_POST['atid'];
+            $wpid = $_POST['wpid'];
 
-			//Step 5: Create table name for posts (bc_posts)
-			$table_activity = SP_PREFIX.'activity';
-			$table_activity_revs = SP_PREFIX.'activity_revs';
+            $user_date = TP_Globals::get_user_date($_POST['wpid']);
 
+             $result = $wpdb->get_row("SELECT
+                ac_act.ID,
+                ac_act.wpid,
+                ac_act.icon,
+                ( SELECT sp_rev.child_val FROM sp_revisions sp_rev WHERE sp_rev.ID = ac_act.`title` ) AS `activity_title`,
+                ( SELECT sp_rev.child_val FROM sp_revisions sp_rev WHERE sp_rev.ID = ac_act.`info` ) AS `activity_info`,
+                ac_act.date_created 
+            FROM
+                sp_activities ac_act 
+            WHERE
+                ac_act.wpid = $wpid AND ac_act.ID = $activity_id
+            GROUP BY
+                ac_act.ID DESC 
+                LIMIT 12");
 
-			 //Step 6: Get results from database 
-			$result_title = $wpdb->get_results("SELECT
-					sp_activity.ID,
-					sp_activity.icon,
-					sp_activity.date_created,
-					sp_activity_revs.child_key,
-					sp_activity_revs.child_val,
-					sp_activity.wpid 
-				FROM
-			 		sp_activity_revs
-					INNER JOIN sp_activity ON sp_activity.title = sp_activity_revs.ID 
-				WHERE
-					sp_activity.wpid = $id 
-				AND sp_activity.ID = $activity_id  LIMIT 1", OBJECT);
-
-			$result_info = $wpdb->get_results("SELECT
-					sp_activity.ID,
-					sp_activity.icon,
-					sp_activity.date_created,
-					sp_activity_revs.child_key,
-					sp_activity_revs.child_val,
-					sp_activity.wpid 
-				FROM
-					sp_activity_revs
-					INNER JOIN sp_activity ON sp_activity.info = sp_activity_revs.ID 
-				WHERE
-					sp_activity.wpid = $id  
-					AND sp_activity.ID = $activity_id LIMIT  1 ", OBJECT);
-
-			// step 7 : conditions if query is correct
-			if( !empty( $result_title)  || !empty($result_info )){
-
-				// step 7.1 : conditions/sanitation if acitivity log ID is correct and existing in database
-				if($result_info[0]->ID != $result_title[0]->ID){
-					return rest_ensure_response( 
-						array(
-							"status" => "unknown",
-							"message" => "Please contact your administrator. Request Activity Unknown!",
-						)
-					);
-
-				}else{
-					// step 8 : update date_open from dv_activity log  
-					$result_activty_dateOpen =  $wpdb->update($table_activity, array('date_open' => $date ), array('ID' => $activity_id )  );
-
-					// step 9 : check if update for date_open is successfuly updated!
-					if($result_activty_dateOpen < 0 ){
-						return rest_ensure_response( 
-							array(
-								"status" => "unknown",
-								"message" => "Please contact your administrator. Request unknown!",
-							)
-						);
-
-					}else{
-
-						// step 10 : return success result  
-						return rest_ensure_response( 
-							array(
-								"status" => "success",
-								"data" => array(
-									'list' => array(
-										'id' => $result_title[0]->ID,
-										'title' => $result_title[0]->child_val,
-										'info' => $result_info[0]->child_val,
-										'date_created' => $result_info[0]->child_val,
-									) 
-								)
-							)
-						);
-					}
-
-				}
-
-			}else {
-				// step 10: returm failed if activity log ID is not existed in wpid activity log list
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Please contact your administrator. Theres no activity in your log with this ID",
-					)
+            if (!$result) {
+                return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request Activity Unknown!",
 				);
-				
-			}
+            }else{
+                 $update_date_open = $wpdb->query("UPDATE sp_activities SET date_open = '$user_date' WHERE ID = $activity_id ");
+
+				// step 9 : check if update for date_open is successfuly updated!
+                if($update_date_open  < 1 ){
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+
+                }else{
+
+                    // step 10 : return success result  
+                    return array(
+                        "status" => "success",
+                        "data" => $result
+                    );
+                }
+                
+            }
+            
+
 				
         }
     }
