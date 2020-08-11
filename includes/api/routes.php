@@ -20,6 +20,10 @@
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-home.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-posts.php'; // user posts feeds
     require plugin_dir_path(__FILE__) . '/v1/profile/class-data.php'; // globals
+
+    // Post Folder
+    require plugin_dir_path(__FILE__) . '/v1/post/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/post/class-update.php';
     
     require plugin_dir_path(__FILE__) . '/v1/class-globals.php'; // globals
 
@@ -88,6 +92,19 @@
             register_rest_route( 'sociopress/v1/feeds', 'posts', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Posts', 'filter_posts'),
+            ));
+
+        /*
+         * PROFILE RESTAPI
+        */
+    
+            register_rest_route( 'sociopress/v1/post', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Insert_Post','listen'),
+            ));
+            register_rest_route( 'sociopress/v1/post', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Update_Post','listen'),
             ));
         
     }
