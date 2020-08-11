@@ -73,5 +73,7 @@
         ));
         
 
+            //'callback' => array('SP_Authenticate','listen'),
+        //));       
     }
     add_action( 'rest_api_init', 'sociopress_route' );
