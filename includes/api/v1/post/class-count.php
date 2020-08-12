@@ -22,6 +22,7 @@
             // Initialize WP global variable
 			global $wpdb;
 			
+            $post_type = $_POST["post_type"];
             $user_id = $_POST["user_id"];
             $table_posts = 'wp_posts';
 			
@@ -73,7 +74,7 @@
             FROM
                 $table_posts AS wp_pos
             WHERE 
-                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id'
+                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id' and wp_pos.post_type = 'sell' or wp_pos.post_type = 'move'
             GROUP BY 
                 wp_pos.post_author
             ");
