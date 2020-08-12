@@ -97,7 +97,7 @@
             ));
 
         /*
-         * PROFILE RESTAPI
+         * POST RESTAPI
         */
     
             register_rest_route( 'sociopress/v1/post', 'insert', array(

@@ -20,12 +20,12 @@
 	define('SP_REVS_TABLE_FIELDS', '(revs_type, parent_id, child_key, child_val,  date_created)');
 
 	//Initializing table names
-	define('SP_POSTS_TABLE', SP_PREFIX.'posts');
+	//define('SP_POSTS_TABLE', SP_PREFIX.'posts');
 	define('SP_CONFIGS_TABLE', SP_PREFIX.'configs');
 
 
 	//Initializing table fields to be called
-	define('POST_FIELDS', 'ID, user_id, post_type');
+	//define('POST_FIELDS', 'ID, user_id, post_type');
 
 	//Init feeds limit
 	define('INITIAL_FEEDS', 12);

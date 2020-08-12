@@ -16,13 +16,13 @@
 		global $wpdb;
 
 		//Passing from global defined variable to local variable
-		$tbl_posts = SP_POSTS_TABLE;
+		//$tbl_posts = SP_POSTS_TABLE;
 		$tbl_act = SP_ACT_TABLE;
 		$tbl_configs = SP_CONFIGS_TABLE;
 		$tbl_revs = SP_REVS_TABLE;
 
 		//Database table creation for posts
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_posts'" ) != $tbl_posts) {
+		/*if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_posts'" ) != $tbl_posts) {
 			$sql = "CREATE TABLE `".$tbl_posts."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`user_id` int(11) NOT NULL, ";
@@ -31,7 +31,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
-		}
+		}*/
 
 		//Database table creation for activities
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
