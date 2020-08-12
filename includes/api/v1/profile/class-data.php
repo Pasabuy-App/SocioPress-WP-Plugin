@@ -30,18 +30,18 @@
                 );
             }
 
-            //User validation
-             if (DV_Verification::is_verified() == false) {
+            // Step2 : Check if wpid and snky is valid
+            if (DV_Verification::is_verified() == false) {
                 return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Request Unknown!",
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 
-            // Find user in db using wpid
+            // Step3 : Find user in db using wpid
             $wp_user = get_user_by("ID", $_POST['wpid']);
                     
-            // Return success status and complete object.
+            // Step4 : Return success status and complete object.
             return array(
                 "status" => "success",
                 "data" => array(

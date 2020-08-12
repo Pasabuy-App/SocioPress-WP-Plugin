@@ -72,7 +72,7 @@
             if ( $validate ) {
                 return array(
                         "status" => "failed",
-                        "message" => "This post is already deleted.",
+                        "message" => "This post has already been deleted.",
                 );
             }
             
