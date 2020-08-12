@@ -26,12 +26,22 @@
     require plugin_dir_path(__FILE__) . '/v1/post/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-count.php';
+
+    // User Authentication
+    require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     
     require plugin_dir_path(__FILE__) . '/v1/class-globals.php'; // globals
 
     // Init check if USocketNet successfully request from wapi.
     function sociopress_route()
     {   
+        /*
+         * AUTHENTICATION RESTAPI
+        */
+        register_rest_route( 'sociopress/v1/users', 'auth', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Authenticate','listen'),
+        ));
                    
         /*
          * ACTIVITY RESTAPI
@@ -62,7 +72,7 @@
             ));
 
         /*
-         * PROFILE RESTAPI
+         * FEEDS RESTAPI
         */
 
             register_rest_route( 'sociopress/v1/feeds', 'profile', array(

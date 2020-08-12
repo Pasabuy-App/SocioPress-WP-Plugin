@@ -32,6 +32,7 @@
                         "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
+
             // Step2 : Check if wpid and snky is valid
             if (DV_Verification::is_verified() == false) {
                 return array(
@@ -80,10 +81,10 @@
             }
             
             $update_post = array( 
-                'ID' => $user["post_id"], 
-                'post_title'=>$user["title"], 
-                'post_content'=>$user["content"], 
-                'post_status'=>$user["post_status"] 
+                'ID'            => $user["post_id"], 
+                'post_title'    =>$user["title"], 
+                'post_content'  =>$user["content"], 
+                'post_status'   =>$user["post_status"] 
             );
 
             // Step6 : Query

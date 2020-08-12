@@ -43,7 +43,7 @@
 
 			if( !isset($_POST['lid'])){
 				
-				//Step 2: Get results from database 
+				//Step 3: Get results from database 
 				$result= $wpdb->get_results("SELECT 
 					id
 				FROM 
@@ -54,10 +54,10 @@
 					id DESC
 				LIMIT 12", OBJECT);
 				
-				//Step 3: Pass the last id or the minimum id
+				//Step 4: Pass the last id or the minimum id
 				$last_id = min($result);
 				
-				//Step 4: Return a success message and a complete object
+				//Step 5: Return a success message and a complete object
 				return array(
 						"status" => "success",
 						"data" => array(
@@ -79,7 +79,7 @@
 				// $id = $_POST['ID'];
 				$get_last_id = $_POST['lid'];
 
-				//Get 5 new posts
+				//Step 2: Get 5 new posts
 				$add_feeds = $get_last_id - 7;
 
 				//Step 3: Get results from database 

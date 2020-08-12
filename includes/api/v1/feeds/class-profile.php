@@ -69,6 +69,7 @@
 					)
 				);
 			}else{
+				
 				if ( !is_numeric($_POST["lid"])) {
 					return array(
 							"status" => "failed",
@@ -79,7 +80,7 @@
 				// Step 4: Pass the processed ids in a variable
 				$get_last_id = $_POST['lid'];
 
-				//Get 5 new posts
+				// Step 5: Get 5 new posts
 				$add_feeds = $get_last_id - 7;
 				
 				//Step 6: Get results from database 

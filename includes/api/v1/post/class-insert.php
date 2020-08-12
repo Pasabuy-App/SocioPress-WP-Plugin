@@ -32,6 +32,7 @@
                         "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
+            
             // Step2 : Check if wpid and snky is valid
             if (DV_Verification::is_verified() == false) {
                 return array(
