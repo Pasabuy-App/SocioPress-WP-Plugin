@@ -60,7 +60,16 @@
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                 );
-			}
+            }
+
+            // Step5 : Ensure that type is correct
+            if ( !($_POST["type"] === 'move') 
+                && !($_POST["type"] === 'sell') ) {
+                return array(
+                    "status" => "failed",
+                    "message" => "Invalid type.",
+                );
+            }
 			
 			$insert_post = array(
 				'post_author'	=>$user["created_by"],
@@ -72,17 +81,17 @@
 				'post_type'		=>$user["post_type"]
 			);
 
-            // Step5 : Query
+            // Step6 : Query
 			$result = wp_insert_post($insert_post);
 			
-            // Step6 : Check result if failed
+            // Step7 : Check result if failed
             if ($result < 1) {
                 return array(
                         "status" => "failed",
                         "message" => "An error occured while submitting data to database.",
                 );
             }
-            // Step7 : Return a success status and message 
+            // Step8 : Return a success status and message 
             return array(
                 "status" => "success",
                 "message" => "Data has been added successfully.",

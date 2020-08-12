@@ -71,6 +71,14 @@
                 );
             }
             
+            $validate = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
+            if ( $validate ) {
+                return array(
+                        "status" => "failed",
+                        "message" => "This post is deleted.",
+                );
+            }
+            
             $update_post = array( 
                 'ID' => $user["post_id"], 
                 'post_title'=>$user["title"], 

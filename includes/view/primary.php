@@ -42,7 +42,7 @@
       }
       add_action( 'init', 'my_custom_post_types' );*/
 
-      /* working for insert, update and delete
+      /* working for insert, update and delete 
       function custom_post_type() {
  
         // Set UI labels for Custom Post Type
@@ -97,7 +97,7 @@
         * unnecessarily executed. 
         */
          
-        /*add_action( 'init', 'custom_post_type', 0 );
+       /* add_action( 'init', 'custom_post_type', 0 );
 
         add_filter('pre_get_posts', 'query_post_type');
           function query_post_type($query) {
@@ -110,7 +110,7 @@
               $query->set('post_type',$post_type);
               return $query;
               }
-          }*/
+          }
 
           /*
           * Adding a menu to contain the custom post types for frontpage
@@ -118,14 +118,7 @@
 
           function frontpage_admin_menu() {
 
-            add_menu_page(
-                'New Post',
-                'New Post',
-                'read',
-                'front-sections',
-                '',
-                'dashicons-admin-home',
-                40
+            add_menu_page('New Post','New Post','read','front-sections','','dashicons-admin-home',3
             );
 
           }
@@ -175,21 +168,12 @@
             'description'         => __( 'Sell', 'sell status' ),
             'labels'              => $labels_sell,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'hierarchical'        => false,
             'public'              => false,
             'show_ui'             => true,
             'show_in_menu'        => 'front-sections',
-            'show_in_nav_menus'   => true,
-            'show_in_admin_bar'   => true,
-            'menu_position'       => 5,
-            'can_export'          => true,
-            'has_archive'         => true,
-            'exclude_from_search' => false,
-            'publicly_queryable'  => true,
-            'capability_type'     => 'post',
             
             // This is where we add taxonomies to our CPT
-            'taxonomies'          => array( 'category' ),
+            //'taxonomies'          => array( 'category' ),
           );
 
           $args_move = array(
@@ -197,21 +181,12 @@
             'description'         => __( 'Move', 'move status' ),
             'labels'              => $labels_move,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'hierarchical'        => false,
             'public'              => false,
             'show_ui'             => true,
             'show_in_menu'        => 'front-sections',
-            'show_in_nav_menus'   => true,
-            'show_in_admin_bar'   => true,
-            'menu_position'       => 5,
-            'can_export'          => true,
-            'has_archive'         => true,
-            'exclude_from_search' => false,
-            'publicly_queryable'  => true,
-            'capability_type'     => 'post',
             
             // This is where we add taxonomies to our CPT
-            'taxonomies'          => array( 'category' ),
+            //'taxonomies'          => array( 'category' ),
           );
           
           register_post_type( 'move', $args_move );
@@ -219,4 +194,5 @@
     }
           
           add_action( 'init', 'register_cpt_features' );
+
       #endregion

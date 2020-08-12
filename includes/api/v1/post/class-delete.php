@@ -67,6 +67,14 @@
                 );
             }
             
+            $validate = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' and post_status = 'trash'");
+            if ( $validate ) {
+                return array(
+                        "status" => "failed",
+                        "message" => "This post is already deleted.",
+                );
+            }
+            
             // Step6 : Query
             //$result = wp_delete_post( $get_id->ID, true); // If custom post, it change post_status to trash but if post type is post it will be deleted.
             $result = wp_trash_post( $get_id->ID); // Change post_status to trash and add revision
