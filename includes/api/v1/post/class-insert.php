@@ -64,7 +64,8 @@
 
             // Step5 : Ensure that type is correct
             if ( !($_POST["type"] === 'move') 
-                && !($_POST["type"] === 'sell') ) {
+                && !($_POST["type"] === 'sell')
+                && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
                     "message" => "Invalid type.",

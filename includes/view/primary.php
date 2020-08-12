@@ -116,9 +116,10 @@
           * Adding a menu to contain the custom post types for frontpage
           */
 
+          // Front Page for custom post type
           function frontpage_admin_menu() {
 
-            add_menu_page('New Post','New Post','read','front-sections','','dashicons-admin-home',3
+            add_menu_page('New Post','New Post','read','front-sections','','dashicons-admin-home',4
             );
 
           }
@@ -163,9 +164,25 @@
             'not_found_in_trash'  => __( 'Not found in Trash', 'move' ),
           );
 
+          $labels_status = array(
+            'name'                => _x( 'Status', 'Post Type General Name', 'status' ),
+            'singular_name'       => _x( 'Status', 'Post Type Singular Name', 'status' ),
+            'menu_name'           => __( 'Status', 'status' ),
+            'parent_item_colon'   => __( 'Parent Status', 'status' ),
+            'all_items'           => __( 'Status Post', 'status' ),
+            'view_item'           => __( 'View Status', 'status' ),
+            'add_new_item'        => __( 'Add New Status', 'status' ),
+            'add_new'             => __( 'Add New', 'status' ),
+            'edit_item'           => __( 'Edit Status', 'status' ),
+            'update_item'         => __( 'Update Status', 'status' ),
+            'search_items'        => __( 'Search Status', 'status' ),
+            'not_found'           => __( 'Not Found', 'status' ),
+            'not_found_in_trash'  => __( 'Not found in Trash', 'status' ),
+          );
+
           $args_sell = array(
             'label'               => __( 'sell', 'sell' ),
-            'description'         => __( 'Sell', 'sell status' ),
+            'description'         => __( 'Sell', 'sell' ),
             'labels'              => $labels_sell,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
             'public'              => false,
@@ -173,12 +190,12 @@
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
-            //'taxonomies'          => array( 'category' ),
+            'taxonomies'          => array( 'category' ),
           );
 
           $args_move = array(
             'label'               => __( 'move', 'move' ),
-            'description'         => __( 'Move', 'move status' ),
+            'description'         => __( 'Move', 'move' ),
             'labels'              => $labels_move,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
             'public'              => false,
@@ -186,11 +203,25 @@
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
-            //'taxonomies'          => array( 'category' ),
+            'taxonomies'          => array( 'category' ),
+          );
+
+          $args_status = array(
+            'label'               => __( 'status', 'status' ),
+            'description'         => __( 'Status', 'status' ),
+            'labels'              => $labels_status,
+            'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => 'front-sections',
+            
+            // This is where we add taxonomies to our CPT
+            'taxonomies'          => array( 'category' ),
           );
           
           register_post_type( 'move', $args_move );
           register_post_type( 'sell', $args_sell );
+          register_post_type( 'status', $args_status );
     }
           
           add_action( 'init', 'register_cpt_features' );
