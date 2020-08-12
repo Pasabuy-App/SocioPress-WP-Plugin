@@ -34,6 +34,7 @@
                         "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
+
             // Step2 : Check if wpid and snky is valid
             if (DV_Verification::is_verified() == false) {
                 return array(
@@ -68,16 +69,16 @@
             }
             
             // Step6 : Query
-            /*$result = $wpdb->get_results("SELECT
+            $result = $wpdb->get_results("SELECT
                 wp_pos.post_author AS user_id,
                 COUNT(wp_pos.post_author) AS count
             FROM
                 $table_posts AS wp_pos
             WHERE 
-                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id' and wp_pos.post_type = 'sell' or wp_pos.post_type = 'move'
+                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id'
             GROUP BY 
                 wp_pos.post_author
-            ");*/
+            ");
 
             /* Select Query
             $result = $wpdb->get_results("SELECT
@@ -88,7 +89,7 @@
 	            wp_posts.post_content,
 	            wp_posts.post_type
             FROM
-                wp_posts where post_type != 'post' and post_type != 'page'
+                wp_posts
             ");*/
             
             // Step7 : Check if no result

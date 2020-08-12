@@ -67,7 +67,7 @@
 
             register_rest_route( 'sociopress/v1/feeds', 'profile', array(
                 'methods' => 'POST',
-                'callback' => array('SP_Newsfeed','profile_feeds'),
+                'callback' => array('SP_Newsfeed','listen'),
             ));
 
             register_rest_route( 'sociopress/v1/feeds', 'p_feeds', array(
@@ -78,7 +78,7 @@
 
             register_rest_route( 'sociopress/v1/feeds', 'home', array(
                 'methods' => 'POST',
-                'callback' => array('SP_Homefeed','home_feeds'),
+                'callback' => array('SP_Homefeed','listen'),
             ));
         
             register_rest_route( 'sociopress/v1/feeds', 'get_act_addfeed', array(
