@@ -43,7 +43,7 @@
             // Step3 : Sanitize all request
             if (!isset($_POST["title"]) 
 				|| !isset($_POST["content"])
-				|| !isset($_POST["status"])
+				|| !isset($_POST["type"])
                 ) {
 				return array(
 						"status" => "unknown",
@@ -54,7 +54,7 @@
             // Step4 : Sanitize all variable is empty
             if (empty($_POST["title"]) 
 				|| empty($_POST["content"])
-				|| empty($_POST["status"])
+				|| empty($_POST["type"])
             ) {
                 return array(
                         "status" => "failed",
@@ -100,7 +100,7 @@
                 $cur_user['post_status'] = 'publish';
                 $cur_user['comment_status'] = 'open';
                 $cur_user['ping_status'] = 'open';
-                $cur_user['post_type'] = $_POST["status"];
+                $cur_user['post_type'] = $_POST["type"];
   
               return  $cur_user;
         }
