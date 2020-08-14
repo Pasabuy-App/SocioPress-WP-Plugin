@@ -20,6 +20,7 @@
 		$tbl_act = SP_ACT_TABLE;
 		$tbl_configs = SP_CONFIGS_TABLE;
 		$tbl_revs = SP_REVS_TABLE;
+		$tbl_mess = SP_MESSAGES_TABLE;
 
 		//Database table creation for posts
 		/*if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_posts'" ) != $tbl_posts) {
@@ -34,7 +35,7 @@
 		}*/
 
 		//Database table creation for activities
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
+		/*if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
 			$sql = "CREATE TABLE `".$tbl_act."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
@@ -47,7 +48,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
-		}
+		}*/
 
 		//Database table creation for configs
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
@@ -61,11 +62,26 @@
 			$result = $wpdb->get_results($sql);
 		}
 
+		//Database table creation for messages
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_mess'" ) != $tbl_mess) {
+			$sql = "CREATE TABLE `".$tbl_mess."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`content` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
+				$sql .= "`sender` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
+				$sql .= "`recepient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
+				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this message is created.', ";
+				$sql .= "`date_seen` datetime DEFAULT NULL COMMENT 'The date this message is seen.', ";
+				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT '1 active or 0 inactive, use to delete.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
 		//Database table creation for revisions
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
 			$sql = "CREATE TABLE `".$tbl_revs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`revs_type` enum('none','configs','activity') NOT NULL COMMENT 'Target table', ";
+				$sql .= "`revs_type` enum('none','configs','activity','messages') NOT NULL COMMENT 'Target table', ";
 				$sql .= "`parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of this Revision', ";
 				$sql .= "`child_key` varchar(50) NOT NULL COMMENT 'Column name on the table', ";
 				$sql .= "`child_val` longtext NOT NULL COMMENT 'Text Value of the row Key.', ";

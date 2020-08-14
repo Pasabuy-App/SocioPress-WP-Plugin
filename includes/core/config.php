@@ -23,6 +23,9 @@
 	//define('SP_POSTS_TABLE', SP_PREFIX.'posts');
 	define('SP_CONFIGS_TABLE', SP_PREFIX.'configs');
 
+	define('SP_MESSAGES_TABLE', SP_PREFIX.'messages');
+	define('SP_MESSAGES_FIELDS', '(content, sender, recepient, date_created, date_seen, status)');
+
 
 	//Initializing table fields to be called
 	//define('POST_FIELDS', 'ID, user_id, post_type');
