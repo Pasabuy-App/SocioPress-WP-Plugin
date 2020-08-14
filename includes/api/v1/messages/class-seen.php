@@ -62,8 +62,8 @@
             }
 
             // Step 5: Validate message
-            $validate = $wpdb->get_row("SELECT ID FROM $table_mess WHERE ID = '$mess_id' AND recepient = '$wpid' ");
-            $delete = $wpdb->get_row("SELECT child_val as status FROM $table_revs WHERE ID = (SELECT status FROM $table_mess WHERE ID = '$mess_id' AND recepient = '$wpid') ");
+            $validate = $wpdb->get_row("SELECT ID FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid' ");
+            $delete = $wpdb->get_row("SELECT child_val as status FROM $table_revs WHERE ID = (SELECT status FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid') ");
             if ( !$validate || $delete->status === '0') {
                 return array(
                         "status" => "failed",
@@ -72,7 +72,7 @@
             }
 
             // Step 6: Query
-            $update_mess = $wpdb->query("UPDATE $table_mess SET date_seen = '$date' WHERE ID = '$mess_id' AND recepient = '$wpid'");
+            $update_mess = $wpdb->query("UPDATE $table_mess SET date_seen = '$date' WHERE ID = '$mess_id' AND sender = '$wpid'");
             
             // Step 7: Check result
             if ($update_mess < 1) {
