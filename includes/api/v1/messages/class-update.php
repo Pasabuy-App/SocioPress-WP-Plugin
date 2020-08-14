@@ -9,11 +9,11 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_Insert_Message {
+  	class SP_Update_Message {
 
           public static function listen(){
             return rest_ensure_response( 
-                SP_Insert_Message::list_open()
+                SP_Update_Message::list_open()
             );
           }
     
@@ -25,10 +25,8 @@
             $table_revs = SP_REVS_TABLE;
             $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
-            $fields_mess = SP_MESSAGES_FIELDS;
             $wpid = $_POST['wpid'];
-            $sender = $_POST['sender'];
-            $recepient = $_POST['recepient'];
+            $mess_id = $_POST['mess_id'];
             $content = $_POST['content'];
 
             // Step 1: Check if prerequisites plugin are missing
@@ -51,7 +49,7 @@
             }
 
 			//  Step 3: Check if required parameters are passed
-            if (!isset($_POST['content']) || !isset($_POST['sender']) || !isset($_POST['recepient']) ) {
+            if (!isset($_POST['content']) || !isset($_POST['mess_id']) ) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -59,51 +57,32 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST['content']) || empty($_POST['sender']) || empty($_POST['recepient']) ) {
+            if (empty($_POST['content']) || empty($_POST['mess_id']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
 
-            if (!is_numeric($_POST['sender']) || !is_numeric($_POST['recepient']) ) {
+            // Step 5: Validate message
+            $validate = $wpdb->get_row("SELECT ID FROM $table_mess  WHERE ID = '$mess_id' ");
+            if ( !$validate ) {
                 return array(
-                    "status" => "failed",
-                    "message" => "ID is not in valid format.",
-                );
-            }
-            // Step 5: Valdiate user
-            $senders = WP_User::get_data_by( 'ID', $sender );
-            $recepients = WP_User::get_data_by( 'ID', $recepient );
-            if ( !$senders || !$recepients ) {
-                return array(
-                    "status" => "failed",
-                    "message" => "User does not exist.",
+                        "status" => "failed",
+                        "message" => "This message does not exists.",
                 );
             }
 
-            // Step 6: Insert data to array
-            $child_key = array( 
-                'content'     =>$content,
-                'status'    =>'1'
-            );
-
-            // Step 7: Query
+            // Step 6: Query
             $wpdb->query("START TRANSACTION");
-                $id = array();
                 // Insert data to mp revisions
-                foreach ( $child_key as $key => $child_val) {
-                    $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '0', '$key', '$child_val', '$wpid', '$date' ) ");
-                    $id[] = $wpdb->insert_id;  // Last ID insert to Array
-                }
-                // Insert data to mp messages
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '$sender', '$recepient', '$id[1]', '$date' ) ");
+                $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");
                 $last_id = $wpdb->insert_id;
-                // Update parent id in np revision
-                $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");
+                // Update mp message content from last id
+                $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");
             
-            // Step 8: Check result
-            if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
+            // Step 7: Check result
+            if ($last_id < 1 || $update_mess < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(
                     "status" => "failed",
@@ -113,9 +92,8 @@
                 $wpdb->query("COMMIT");
                 return array(
                     "status" => "success",
-                    "message" => "Data has been submitted successfully."
+                    "message" => "Data has been updated successfully."
                 );
             }
-
         }
     }

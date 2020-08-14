@@ -29,6 +29,7 @@
 
     // Messagegs Folder
     require plugin_dir_path(__FILE__) . '/v1/messages/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/messages/class-update.php';
 
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
@@ -140,6 +141,11 @@
         register_rest_route( 'sociopress/v1/messages', 'insert', array(
             'methods' => 'POST',
             'callback' => array('SP_Insert_Message','listen'),
+        ));
+        
+        register_rest_route( 'sociopress/v1/messages', 'update', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Update_Message','listen'),
         ));
         
     }
