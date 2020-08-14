@@ -39,7 +39,7 @@
                 );
             }
 
-			//  Step 2: Validate user
+			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
                 
                 return array(
@@ -48,7 +48,7 @@
                 );
             }
 
-			//  Step 3: Check if required parameters are passed
+			// Step 3: Check if required parameters are passed
             if (!isset($_POST['content']) || !isset($_POST['mess_id']) ) {
                 return array(
                     "status" => "unknown",

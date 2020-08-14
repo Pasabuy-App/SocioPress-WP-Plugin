@@ -35,7 +35,7 @@
                 );
             }
 
-            // Step2 : Check if wpid and snky is valid
+            // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
                         "status" => "unknown",
@@ -43,7 +43,7 @@
                 );
 			}
 
-            // Step3 : Sanitize all request
+            // Step 3: Check if required parameters are passed
             if (!isset($_POST["user_id"]) ) {
 				return array(
 						"status" => "unknown",
@@ -51,7 +51,7 @@
                 ); 
             }
 
-            // Step4 : Sanitize all variable is empty
+           // Step 4: Check if parameters passed are empty
             if (empty($_POST["user_id"]) ) {
                 return array(
                         "status" => "failed",
@@ -59,7 +59,7 @@
                 );
             }
 			
-            // Step5 : Validation of post id
+            // Step5 : Validation post
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE ID = '$user_id' ");
             if ( !$get_id ) {
                 return array(
@@ -92,7 +92,7 @@
                 wp_posts
             ");*/
             
-            // Step7 : Check if no result
+            // Step 7: Check if no result
             if (!$result)
             {
                 return array(

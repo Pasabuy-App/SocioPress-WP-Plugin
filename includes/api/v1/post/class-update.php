@@ -24,7 +24,7 @@
 			
             $user = SP_Update_Post::catch_post();
 			
-            // Step1 : Check if prerequisites plugin are missing
+            // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
@@ -33,15 +33,15 @@
                 );
             }
 
-            // Step2 : Check if wpid and snky is valid
+            // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
                         "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification issues!",
+                        "message" => "Please contact your administrator. Verification Issues!",
                 );
 			}
 
-            // Step3 : Sanitize all request
+            // Step 3: Check if required parameters are passed
             if (!isset($_POST["title"]) 
                 || !isset($_POST["content"])
                 || !isset($_POST["post_id"])
@@ -52,7 +52,7 @@
                 ); 
             }
 
-            // Step4 : Sanitize all variable is empty
+            // Step 4: Check if parameters passed are empty
             if (empty($_POST["title"]) 
                 || empty($_POST["content"])
                 || empty($_POST["post_id"])
@@ -63,7 +63,7 @@
                 );
             }
 			
-            // Step5 : Validation of post id
+            // Step5 : Validation post
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '{$user["post_id"]}' ");
             if ( !$get_id ) {
                 return array(
@@ -87,17 +87,17 @@
                 'post_status'   =>$user["post_status"] 
             );
 
-            // Step6 : Query
+            // Step 6: Query
             $result = wp_update_post( $update_post );
 			
-            // Step7 : Check result if failed
+            // Step 7: Check result if failed
             if ($result < 1) {
                 return array(
                         "status" => "failed",
                         "message" => "An error occured while submitting data to database.",
                 );
             }
-            // Step8 : Return a success status and message 
+            // Step 8: Return a success status and message 
             return array(
                 "status" => "success",
                 "message" => "Data has been updated successfully.",

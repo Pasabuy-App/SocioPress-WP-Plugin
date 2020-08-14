@@ -21,7 +21,7 @@
         // REST API for getting the user data
         public static function get_profile_data(){
 
-            // Step1 : Check if prerequisites plugin are missing
+            // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
@@ -30,7 +30,7 @@
                 );
             }
 
-            // Step2 : Check if wpid and snky is valid
+            // Step 2: Valdiate user
             if (DV_Verification::is_verified() == false) {
                 return array(
                         "status" => "unknown",
@@ -38,10 +38,10 @@
                 );
             }
 
-            // Step3 : Find user in db using wpid
+            // Step 3: Find user in db using wpid
             $wp_user = get_user_by("ID", $_POST['wpid']);
                     
-            // Step4 : Return success status and complete object.
+            // Step 4: Return success status and complete object.
             return array(
                 "status" => "success",
                 "data" => array(
