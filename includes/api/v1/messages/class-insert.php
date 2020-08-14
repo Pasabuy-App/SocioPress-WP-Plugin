@@ -28,7 +28,6 @@
             $fields_mess = SP_MESSAGES_FIELDS;
             $wpid = $_POST['wpid'];
             $sender = $_POST['sender'];
-            $recepient = $_POST['recepient'];
             $content = $_POST['content'];
 
             // Step 1: Check if prerequisites plugin are missing
@@ -51,7 +50,7 @@
             }
 
 			//  Step 3: Check if required parameters are passed
-            if (!isset($_POST['content']) || !isset($_POST['sender']) || !isset($_POST['recepient']) ) {
+            if (!isset($_POST['content']) || !isset($_POST['sender'])) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -59,14 +58,14 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST['content']) || empty($_POST['sender']) || empty($_POST['recepient']) ) {
+            if (empty($_POST['content']) || empty($_POST['sender']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
 
-            if (!is_numeric($_POST['sender']) || !is_numeric($_POST['recepient']) ) {
+            if (!is_numeric($_POST['sender']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "ID is not in valid format.",
@@ -74,8 +73,7 @@
             }
             // Step 5: Valdiate user
             $senders = WP_User::get_data_by( 'ID', $sender );
-            $recepients = WP_User::get_data_by( 'ID', $recepient );
-            if ( !$senders || !$recepients ) {
+            if ( !$senders ) {
                 return array(
                     "status" => "failed",
                     "message" => "User does not exist.",
@@ -97,7 +95,7 @@
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
                 }
                 // Insert data to mp messages
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '$sender', '$recepient', '$id[1]', '$date' ) ");
+                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '$sender', '$wpid', '$id[1]', '$date' ) ");
                 $last_id = $wpdb->insert_id;
                 // Update parent id in np revision
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");
