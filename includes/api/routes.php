@@ -31,6 +31,7 @@
     require plugin_dir_path(__FILE__) . '/v1/messages/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-seen.php';
+    require plugin_dir_path(__FILE__) . '/v1/messages/class-delete.php';
 
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
@@ -152,6 +153,11 @@
         register_rest_route( 'sociopress/v1/messages', 'seen', array(
             'methods' => 'POST',
             'callback' => array('SP_Seen_Message','listen'),
+        ));
+        
+        register_rest_route( 'sociopress/v1/messages', 'delete', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Delete_Message','listen'),
         ));
         
     }

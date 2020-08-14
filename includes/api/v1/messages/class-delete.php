@@ -9,11 +9,11 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_Seen_Message {
+  	class SP_Delete_Message {
 
           public static function listen(){
             return rest_ensure_response( 
-                SP_Seen_Message::list_open()
+                SP_Delete_Message::list_open()
             );
           }
     
@@ -22,6 +22,8 @@
 			// Initialize WP global variable
             global $wpdb;
             $date = SP_Globals:: date_stamp();
+            $table_revs = SP_REVS_TABLE;
+            $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
             $wpid = $_POST['wpid'];
             $mess_id = $_POST['mess_id'];
@@ -72,7 +74,9 @@
             }
 
             // Step 6: Query
-            $update_mess = $wpdb->query("UPDATE $table_mess SET date_seen = '$date' WHERE ID = '$mess_id' AND recepient = '$wpid'");
+            $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'status', '0', '$wpid', '$date' ) ");
+            $last_id = $wpdb->insert_id;
+            $update_mess = $wpdb->query("UPDATE $table_mess SET status = '$last_id' WHERE ID = '$mess_id' AND recepient = '$wpid'");
             
             // Step 7: Check result
             if ($update_mess < 1) {
@@ -83,7 +87,7 @@
             }else{
                 return array(
                     "status" => "success",
-                    "message" => "Data has been updated successfully."
+                    "message" => "Data has been deleted successfully."
                 );
             }
         }
