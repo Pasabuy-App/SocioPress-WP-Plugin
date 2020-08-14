@@ -27,6 +27,9 @@
     require plugin_dir_path(__FILE__) . '/v1/post/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-count.php';
 
+    // Messagegs Folder
+    require plugin_dir_path(__FILE__) . '/v1/messages/class-insert.php';
+
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     
@@ -114,18 +117,30 @@
                 'methods' => 'POST',
                 'callback' => array('SP_Insert_Post','listen'),
             ));
+
             register_rest_route( 'sociopress/v1/post', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Update_Post','listen'),
             ));
+
             register_rest_route( 'sociopress/v1/post', 'delete', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Delete_Post','listen'),
             ));
+
             register_rest_route( 'sociopress/v1/post/user', 'count', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Count_Post','listen'),
             ));
+
+        /*
+         * MESSAGES RESTAPI
+        */
+    
+        register_rest_route( 'sociopress/v1/messages', 'insert', array(
+            'methods' => 'POST',
+            'callback' => array('SP_Insert_Message','listen'),
+        ));
         
     }
     add_action( 'rest_api_init', 'sociopress_route' );

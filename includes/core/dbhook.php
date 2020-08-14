@@ -69,9 +69,9 @@
 				$sql .= "`content` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
 				$sql .= "`sender` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
 				$sql .= "`recepient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
+				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT '1 active or 0 inactive, use to delete.', ";
 				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this message is created.', ";
 				$sql .= "`date_seen` datetime DEFAULT NULL COMMENT 'The date this message is seen.', ";
-				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT '1 active or 0 inactive, use to delete.', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);

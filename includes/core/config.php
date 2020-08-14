@@ -17,14 +17,14 @@
 	define('SP_ACTIVITY_FIELDS', '(wpid, stid, icon, title, info, created_by, date_open, date_created)');
 	
 	define('SP_REVS_TABLE', SP_PREFIX.'revisions');
-	define('SP_REVS_TABLE_FIELDS', '(revs_type, parent_id, child_key, child_val,  date_created)');
+	define('SP_REVS_TABLE_FIELDS', '(revs_type, parent_id, child_key, child_val, created_by, date_created)');
 
 	//Initializing table names
 	//define('SP_POSTS_TABLE', SP_PREFIX.'posts');
 	define('SP_CONFIGS_TABLE', SP_PREFIX.'configs');
 
 	define('SP_MESSAGES_TABLE', SP_PREFIX.'messages');
-	define('SP_MESSAGES_FIELDS', '(content, sender, recepient, date_created, date_seen, status)');
+	define('SP_MESSAGES_FIELDS', '(content, sender, recepient, status, date_created )');
 
 
 	//Initializing table fields to be called

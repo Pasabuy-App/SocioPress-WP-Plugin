@@ -11,6 +11,10 @@
 	*/
 
   	class SP_Globals {
+
+        public static function date_stamp(){
+            return date("Y-m-d h:i:s");
+		}
          
         public static function create($table_name, $data){
             global $wpdb;
