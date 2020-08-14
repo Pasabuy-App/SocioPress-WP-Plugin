@@ -65,13 +65,15 @@
                 );
             }
 
+            // Step 5: Check if parameter is valid
             if (!is_numeric($_POST['recepient']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "ID is not in valid format.",
                 );
             }
-            // Step 5: Valdiate user
+
+            // Step 6: Valdiate user
             $recepients = WP_User::get_data_by( 'ID', $recepient );
             if ( !$recepients ) {
                 return array(
@@ -80,13 +82,13 @@
                 );
             }
 
-            // Step 6: Insert data to array
+            // Step 7: Insert data to array
             $child_key = array( 
                 'content'     =>$content,
                 'status'    =>'1'
             );
 
-            // Step 7: Query
+            // Step 8: Query
             $wpdb->query("START TRANSACTION");
                 $id = array();
                 // Insert data to mp revisions
@@ -100,7 +102,7 @@
                 // Update parent id in np revision
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");
             
-            // Step 8: Check result
+            // Step 9: Check result
             if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(
