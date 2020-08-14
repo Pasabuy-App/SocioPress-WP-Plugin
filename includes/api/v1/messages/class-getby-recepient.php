@@ -58,7 +58,8 @@
 				//Step 4: Get results from database 
 				$result= $wpdb->get_results("SELECT
 					sp_messages.id, 
-					(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content) as content
+					(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content) as content,
+					sp_messages.date_created
 				FROM 
 					sp_messages
 				WHERE 
@@ -73,9 +74,7 @@
 				// Step 6: Return a success message and a complete object
 				return array(
 						"status" => "success",
-						"data" => array(
-							'list' => $result, 
-							'last_id' => $last_id
+						"data" => array( $result, $last_id
 					)
 				);
 			}else{
@@ -97,7 +96,8 @@
 				//Step 7: Get results from database 
 				$result= $wpdb->get_results("SELECT
 					sp_messages.id,
-					(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content ) AS content 
+					(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content ) AS content,
+					sp_messages.date_created
 				FROM
 					sp_messages 
 				WHERE
@@ -122,9 +122,7 @@
 				//Step 8: Return a success message and a complete object
 				return array(
 						"status" => "success",
-						"data" => array(
-							'list' => $result, 
-							'last_id' => $last_id
+						"data" => array( $result, $last_id
 					)
 				);
 
