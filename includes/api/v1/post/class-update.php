@@ -81,7 +81,7 @@
             }
             
             $update_post = array( 
-                'ID'            => $user["post_id"], 
+                'ID'            =>$user["post_id"], 
                 'post_title'    =>$user["title"], 
                 'post_content'  =>$user["content"], 
                 'post_status'   =>$user["post_status"] 
