@@ -26,6 +26,8 @@
     require plugin_dir_path(__FILE__) . '/v1/post/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-count.php';
+    require plugin_dir_path(__FILE__) . '/v1/post/class-share-post.php';
+    require plugin_dir_path(__FILE__) . '/v1/post/class-share-post-link.php';
 
     // Messagegs Folder
     require plugin_dir_path(__FILE__) . '/v1/messages/class-insert.php';
@@ -135,6 +137,11 @@
             register_rest_route( 'sociopress/v1/post/user', 'count', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Count_Post','listen'),
+            ));
+
+            register_rest_route( 'sociopress/v1/post', 'share', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Share_Post','listen'),
             ));
 
         /*

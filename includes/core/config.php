@@ -12,10 +12,10 @@
 	
 	//Defining plugin prefix
 	define('SP_PREFIX', 'sp_');
-	define('WP_PREFIX', 'wp_');
+	define('WP_PREFIXS', 'wp_');
 
 	// Wordpress Tables
-	define('WP_POSTS', WP_PREFIX.'posts');
+	define('WP_POSTS', WP_PREFIXS.'posts');
 
 	//Activity Configs
 	define('SP_ACTIVITY_TABLE', SP_PREFIX.'activities');
