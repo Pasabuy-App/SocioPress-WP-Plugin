@@ -16,26 +16,15 @@
 		global $wpdb;
 
 		//Passing from global defined variable to local variable
-		//$tbl_posts = SP_POSTS_TABLE;
-		$tbl_act = SP_ACT_TABLE;
+		$tbl_act = SP_ACTIVITY_TABLE;
 		$tbl_configs = SP_CONFIGS_TABLE;
 		$tbl_revs = SP_REVS_TABLE;
 		$tbl_mess = SP_MESSAGES_TABLE;
+		$tbl_market = SP_MARKET_TABLE;
 
-		//Database table creation for posts
-		/*if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_posts'" ) != $tbl_posts) {
-			$sql = "CREATE TABLE `".$tbl_posts."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`user_id` int(11) NOT NULL, ";
-				$sql .= "`post_type` VARCHAR(50) NULL, ";
-				$sql .= "`post_timestamp` datetime NOT NULL, ";
-				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
-			$result = $wpdb->get_results($sql);
-		}*/
 
 		//Database table creation for activities
-		/*if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
 			$sql = "CREATE TABLE `".$tbl_act."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
@@ -48,7 +37,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
-		}*/
+		}
 
 		//Database table creation for configs
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
@@ -92,6 +81,18 @@
 			$result = $wpdb->get_results($sql);
 		}
 
+		//Database table creation for market
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_market'" ) != $tbl_market) {
+			$sql = "CREATE TABLE `".$tbl_market."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`post_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Id of this post with revision ID', ";
+				$sql .= "`stage` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Stage of this post with revision ID', ";
+				$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID created this Revision.', ";
+				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this Revision is created.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
 
 	}
 
