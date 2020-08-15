@@ -28,34 +28,32 @@
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
             
             // Step 2: Validate
             if (DV_Verification::is_verified() == false) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification Issues!",
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
 			}
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST["post_id"]) 
-                ) {
+            if (!isset($_POST["post_id"]) ) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+					"status"  => "unknown",
+					"message" => "Please contact your administrator. Request unknown!",
                 ); 
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST["post_id"]) 
-            ) {
+            if (empty($_POST["post_id"]) ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
+                    "status"  => "failed",
+                    "message" => "Required fields cannot be empty.",
                 );
             }
             
@@ -63,16 +61,16 @@
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' ");
             if ( !$get_id ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "No post found.",
+                    "status"  => "failed",
+                    "message" => "No post found.",
                 );
             }
             
             $validate = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "This post has already been deleted.",
+                    "status"  => "failed",
+                    "message" => "This post has already been deleted.",
                 );
             }
             
@@ -83,13 +81,14 @@
             // Step 7: Check result if failed
             if ($result < 1) {
                 return array(
-                        "status" => "failed",
-                        "message" => "An error occured while submitting data to database.",
+                    "status"  => "failed",
+                    "message" => "An error occured while submitting data to database.",
                 );
             }
+
             // Step 8: Return a success status and message 
             return array(
-                "status" => "success",
+                "status"  => "success",
                 "message" => "Data has been deleted successfully.",
             );
 

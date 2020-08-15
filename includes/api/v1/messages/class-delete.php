@@ -21,6 +21,7 @@
 
 			// Initialize WP global variable
             global $wpdb;
+            
             $date = SP_Globals:: date_stamp();
             $table_revs = SP_REVS_TABLE;
             $field_revs = SP_REVS_TABLE_FIELDS;
@@ -68,14 +69,15 @@
             $delete = $wpdb->get_row("SELECT child_val as status FROM $table_revs WHERE ID = (SELECT status FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid') ");
             if ( !$validate || $delete->status === '0') {
                 return array(
-                        "status" => "failed",
-                        "message" => "This message does not exists.",
+                    "status" => "failed",
+                    "message" => "This message does not exists.",
                 );
             }
 
             // Step 6: Query
             $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'status', '0', '$wpid', '$date' ) ");
             $last_id = $wpdb->insert_id;
+
             $update_mess = $wpdb->query("UPDATE $table_mess SET status = '$last_id' WHERE ID = '$mess_id' AND sender = '$wpid'");
             
             // Step 7: Check result
@@ -84,7 +86,9 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
+
             }else{
+
                 return array(
                     "status" => "success",
                     "message" => "Data has been deleted successfully."

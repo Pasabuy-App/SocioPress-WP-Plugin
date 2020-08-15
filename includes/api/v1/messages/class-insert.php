@@ -26,16 +26,14 @@
             $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
             $fields_mess = SP_MESSAGES_FIELDS;
-            $wpid = $_POST['wpid'];
-            $recepient = $_POST['recepient'];
-            $content = $_POST['content'];
+          
 
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing.",
                 );
             }
@@ -44,7 +42,7 @@
 			if (DV_Verification::is_verified() == false) {
                 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues.",
                 );
             }
@@ -52,7 +50,7 @@
 			// Step 3: Check if required parameters are passed
             if (!isset($_POST['content']) || !isset($_POST['recepient'])) {
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
                 );
             }
@@ -60,7 +58,7 @@
             // Step 4: Check if parameters passed are empty
             if (empty($_POST['content']) || empty($_POST['recepient']) ) {
                 return array(
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
@@ -68,37 +66,44 @@
             // Step 5: Check if parameter is valid
             if (!is_numeric($_POST['recepient']) ) {
                 return array(
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "ID is not in valid format.",
                 );
             }
 
+            $user = SP_Insert_Message::catch_post();
+
             // Step 6: Valdiate user
-            $recepients = WP_User::get_data_by( 'ID', $recepient );
+            $recepients = WP_User::get_data_by( 'ID', $user['recepient'] );
             if ( !$recepients ) {
                 return array(
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "User does not exist.",
                 );
             }
 
             // Step 7: Insert data to array
             $child_key = array( 
-                'content'     =>$content,
-                'status'    =>'1'
+                'content' => $content,
+                'status'  => '1'
             );
 
             // Step 8: Query
             $wpdb->query("START TRANSACTION");
                 $id = array();
+                
                 // Insert data to mp revisions
                 foreach ( $child_key as $key => $child_val) {
+
                     $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '0', '$key', '$child_val', '$wpid', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
+
                 }
+
                 // Insert data to mp messages
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '$wpid', '$recepient', '$id[1]', '$date' ) ");
+                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '{$user["user_id"]}', '{$user["recepient"]}', '$id[1]', '$date' ) ");
                 $last_id = $wpdb->insert_id;
+
                 // Update parent id in np revision
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");
             
@@ -109,6 +114,7 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
+
             }else{
                 $wpdb->query("COMMIT");
                 return array(
@@ -116,6 +122,18 @@
                     "message" => "Data has been submitted successfully."
                 );
             }
+
+        }
+
+        public static function catch_post(){
+            
+            $cur_user = array();
+
+            $cur_user['user_id']   = $_POST['wpid'];
+            $cur_user['recepient'] = $_POST['recepient'];
+            $cur_user['content']   = $_POST['content'];
+
+            return  $cur_user;
 
         }
     }

@@ -10,8 +10,15 @@
 		* This is the primary gateway of all the rest api request.
 	*/
   	class SP_Posts {
+
+		
+        public static function listen(){
+            return rest_ensure_response( 
+                SP_Posts:: list_open()
+            );
+        }
          
-        public static function filter_posts(){
+        public static function list_open(){
             
             // Initialize WP global variable
             global $wpdb;

@@ -110,7 +110,7 @@
 
             register_rest_route( 'sociopress/v1/feeds', 'posts', array(
                 'methods' => 'POST',
-                'callback' => array('SP_Posts', 'filter_posts'),
+                'callback' => array('SP_Posts', 'listen'),
             ));
 
         /*

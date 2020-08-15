@@ -30,7 +30,7 @@
             if ($plugin !== true) {
 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing.",
                 );
             }
@@ -39,7 +39,7 @@
 			if (DV_Verification::is_verified() == false) {
                 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues.",
                 );
 			}
@@ -48,7 +48,7 @@
             $recepients = WP_User::get_data_by( 'ID', $recepient );
             if ( !$recepients ) {
                 return array(
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "User does not exist.",
                 );
             }
@@ -73,17 +73,20 @@
 
 				// Step 6: Return a success message and a complete object
 				return array(
-						"status" => "success",
-						"data" => array( $result, $last_id
+					"status" => "success",
+					"data" => array( 
+						$result, 
+						$last_id
 					)
 				);
+
 			}else{
 				
             	// Step 4: Check if parameter is valid
 				if ( !is_numeric($_POST["lid"])) {
 					return array(
-							"status" => "failed",
-							"message" => "Parameters not in valid format.",
+						"status" => "failed",
+						"message" => "Parameters not in valid format.",
 					);
 				}
 
@@ -111,18 +114,22 @@
 				//Step 7: Check if array count is 0 , return error message if true
 				if (count($result) < 1) {
 					return array(
-							"status" => "failed",
+							"status"  => "failed",
 							"message" => "No more posts.",
 					);
+
 				} else {
+					
 					//Pass the last id
 					$last_id = min($result);
 				}
 
 				//Step 8: Return a success message and a complete object
 				return array(
-						"status" => "success",
-						"data" => array( $result, $last_id
+					"status" => "success",
+					"data" => array( 
+						$result, 
+						$last_id
 					)
 				);
 

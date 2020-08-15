@@ -22,8 +22,6 @@
             // Initialize WP global variable
 			global $wpdb;
 			
-            $user = SP_Insert_Post::catch_post();
-			
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
@@ -69,9 +67,11 @@
                 && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
-                    "message" => "Invalid type.",
+                    "message" => "Invalid post type.",
                 );
             }
+            
+            $user = SP_Insert_Post::catch_post();
 			
 			$insert_post = array(
 				'post_author'	=>$user["created_by"],
@@ -89,10 +89,11 @@
             // Step 7: Check result if failed
             if ($result < 1) {
                 return array(
-                        "status" => "failed",
-                        "message" => "An error occured while submitting data to database.",
+                    "status" => "failed",
+                    "message" => "An error occured while submitting data to database.",
                 );
             }
+
             // Step 8: Return a success status and message 
             return array(
                 "status" => "success",
@@ -105,13 +106,13 @@
         {
               $cur_user = array();
                
-                $cur_user['created_by'] = $_POST["wpid"];
-                $cur_user['title'] = $_POST["title"];
-                $cur_user['content'] = $_POST["content"];
-                $cur_user['post_status'] = 'publish';
+                $cur_user['created_by']     = $_POST["wpid"];
+                $cur_user['title']          = $_POST["title"];
+                $cur_user['content']        = $_POST["content"];
+                $cur_user['post_status']    = 'publish';
                 $cur_user['comment_status'] = 'open';
-                $cur_user['ping_status'] = 'open';
-                $cur_user['post_type'] = $_POST["type"];
+                $cur_user['ping_status']    = 'open';
+                $cur_user['post_type']      = $_POST["type"];
   
               return  $cur_user;
         }

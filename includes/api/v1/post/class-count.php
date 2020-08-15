@@ -30,32 +30,32 @@
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification issues!",
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
 			}
 
             // Step 3: Check if required parameters are passed
             if (!isset($_POST["user_id"]) ) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+					"status"  => "unknown",
+					"message" => "Please contact your administrator. Request unknown!",
                 ); 
             }
 
            // Step 4: Check if parameters passed are empty
             if (empty($_POST["user_id"]) ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
+                    "status"  => "failed",
+                    "message" => "Required fields cannot be empty.",
                 );
             }
 			
@@ -63,8 +63,8 @@
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE ID = '$user_id' ");
             if ( !$get_id ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "No post found.",
+                    "status"  => "failed",
+                    "message" => "No post found.",
                 );
             }
             
@@ -80,31 +80,19 @@
                 wp_pos.post_author
             ");
 
-            /* Select Query
-            $result = $wpdb->get_results("SELECT
-                wp_posts.id, 
-                wp_posts.post_author, 
-                wp_posts.post_date, 
-                wp_posts.post_title, 
-	            wp_posts.post_content,
-	            wp_posts.post_type
-            FROM
-                wp_posts
-            ");*/
-            
             // Step 7: Check if no result
             if (!$result)
             {
                 return array(
-                        "status" => "failed",
-                        "message" => "No results found.",
+                    "status"  => "failed",
+                    "message" => "No results found.",
                 );
             }
             
             // Step8 : Return Result 
             return array(
-                    "status" => "success",
-                    "data" => $result
+                "status" => "success",
+                "data"   => $result
             );
 
 		}

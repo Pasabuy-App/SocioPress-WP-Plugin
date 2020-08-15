@@ -12,6 +12,12 @@
 	
 	//Defining Global Variables
 	define('SP_PREFIX', 'sp_');
+	define('WP_PREFIX', 'wp_');
+
+	// wordpresss tables 
+	define('WP_POSTS', WP_PREFIX.'posts');
+
+
 
 	define('SP_ACTIVITY_TABLE', SP_PREFIX.'activities');
 	define('SP_ACTIVITY_FIELDS', '(wpid, stid, icon, title, info, created_by, date_open, date_created)');

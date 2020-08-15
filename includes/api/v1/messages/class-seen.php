@@ -21,6 +21,7 @@
 
 			// Initialize WP global variable
             global $wpdb;
+
             $date = SP_Globals:: date_stamp();
             $table_mess = SP_MESSAGES_TABLE;
             $wpid = $_POST['wpid'];
@@ -31,7 +32,7 @@
             if ($plugin !== true) {
 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing.",
                 );
             }
@@ -40,7 +41,7 @@
 			if (DV_Verification::is_verified() == false) {
                 
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues.",
                 );
             }
@@ -48,7 +49,7 @@
 			// Step 3: Check if required parameters are passed
             if (!isset($_POST['mess_id']) ) {
                 return array(
-                    "status" => "unknown",
+                    "status"  => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
                 );
             }
@@ -56,7 +57,7 @@
             // Step 4: Check if parameters passed are empty
             if (empty($_POST['mess_id']) ) {
                 return array(
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
@@ -65,9 +66,10 @@
             $validate = $wpdb->get_row("SELECT ID FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid' ");
             $delete = $wpdb->get_row("SELECT child_val as status FROM $table_revs WHERE ID = (SELECT status FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid') ");
             if ( !$validate || $delete->status === '0') {
+
                 return array(
-                        "status" => "failed",
-                        "message" => "This message does not exists.",
+                    "status"  => "failed",
+                    "message" => "This message does not exists.",
                 );
             }
 
@@ -80,7 +82,9 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
+
             }else{
+
                 return array(
                     "status" => "success",
                     "message" => "Data has been updated successfully."

@@ -22,25 +22,25 @@
 			// Initialize WP global variable
 			global $wpdb;
 			
-			$table_post = 'wp_posts';
+			$table_post = WP_POSTS;
 
-			 // Step1 : Check if prerequisites plugin are missing
-			 $plugin = SP_Globals::verify_prerequisites();
-			 if ($plugin !== true) {
-				 return array(
-						 "status" => "unknown",
-						 "message" => "Please contact your administrator. ".$plugin." plugin missing!",
-				 );
-			 }
+			// Step1 : Check if prerequisites plugin are missing
+			$plugin = SP_Globals::verify_prerequisites();
+			if ($plugin !== true) {
+				return array(
+					 "status" => "unknown",
+					 "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+				);
+			}
 			 
-			 // Step2 : Check if wpid and snky is valid
-			 if (DV_Verification::is_verified() == false) {
-				 return array(
-						 "status" => "unknown",
-						 "message" => "Please contact your administrator. Verification Issues!",
-				 );
-			 }
-
+			// Step2 : Check if wpid and snky is valid
+			if (DV_Verification::is_verified() == false) {
+			 return array(
+					 "status" => "unknown",
+					 "message" => "Please contact your administrator. Verification Issues!",
+			 );
+			}
+			
 			if( !isset($_POST['lid'])){
 				
 				//Step 3: Get results from database 
@@ -76,7 +76,6 @@
 				}
 
 				// Step 1: Pass the processed ids in a variable
-				// $id = $_POST['ID'];
 				$get_last_id = $_POST['lid'];
 
 				//Step 2: Get 5 new posts
@@ -100,7 +99,7 @@
 				//Step 4: Check if array count is 0 , return error message if true
 				if (count($result) < 1) {
 					return array(
-							"status" => "failed",
+							"status" => "success",
 							"message" => "No more posts.",
 					);
 				} else {
@@ -118,5 +117,4 @@
 				);
 			}
 		}
-
     }
