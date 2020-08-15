@@ -9,11 +9,11 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_Share_Post {
+  	class SP_Share_Post_link {
 
         public static function listen(){
             return rest_ensure_response( 
-                SP_Share_Post:: list_open()
+                SP_Share_Post_link:: list_open()
             );
         }
          
@@ -32,11 +32,11 @@
 			 
 			// Step2 : Check if wpid and snky is valid
 			if (DV_Verification::is_verified() == false) {
-			 	return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Verification Issues!",
-			 	);
-			}
+                return array(
+                   "status" => "unknown",
+                   "message" => "Please contact your administrator. Verification Issues!",
+                );
+           }
             
             if (!isset($_POST['pid'])) {
                 return array(

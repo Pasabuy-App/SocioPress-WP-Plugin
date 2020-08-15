@@ -141,6 +141,11 @@
 
             register_rest_route( 'sociopress/v1/post', 'share', array(
                 'methods' => 'POST',
+                'callback' => array('SP_Share_Post_link','listen'),
+            ));
+
+            register_rest_route( 'sociopress/v1/post/share', 'insert', array(
+                'methods' => 'POST',
                 'callback' => array('SP_Share_Post','listen'),
             ));
 
