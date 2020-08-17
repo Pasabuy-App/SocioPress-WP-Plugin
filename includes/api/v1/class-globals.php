@@ -29,9 +29,9 @@
                 return 'DataVice';
             }
 
-            // if(!class_exists('MP_Process') ){
-            //     return 'MobilePOS';
-            // }
+            if(!class_exists('MP_Process') ){
+                return 'MobilePOS';
+            }
 
             return true;
 

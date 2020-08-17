@@ -39,6 +39,7 @@
 
     // Reviews Folder
     require plugin_dir_path(__FILE__) . '/v1/reviews/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/reviews/class-user-reviews.php';
 
 
     // User Authentication
@@ -191,6 +192,11 @@
                 'methods' => 'POST',
                 'callback' => array('SP_Insert_Reviews','listen'),
             ));
-        
+
+            register_rest_route( 'sociopress/v1/reviews/user', 'list', array(
+                'methods' => 'POST',
+                'callback' => array('SP_List_Reviews','listen'),
+            ));
+            
     }
     add_action( 'rest_api_init', 'sociopress_route' );
