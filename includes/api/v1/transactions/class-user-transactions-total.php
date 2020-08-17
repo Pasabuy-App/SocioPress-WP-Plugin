@@ -9,24 +9,26 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_List_Reviews {
+  	class SP_Transactions_List_Total {
           public static function listen(){
             return rest_ensure_response( 
-                SP_List_Reviews::list_reviews()
+                SP_Transactions_List_Total::total_transactions()
             );
           }
     
-        public static function list_reviews(){
+        public static function total_transactions(){
             
 			// Initialize WP global variable
             global $wpdb;
 
             $table_revision = SP_REVS_TABLE;
             $table_revision_fields= SP_REVS_TABLE_FIELDS;
-
+            
             $table_reviews= SP_REVIEWS_TABLE;
             $table_reviews_fields = SP_REVIEWS_FIELDS;
 
+            $table_orders = MP_ORDERS_TABLE;
+           
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
 
@@ -46,25 +48,20 @@
 
             //If uid is not set, it means we are trying to get reviews of the logged user
             isset($_POST['uid']) ? $user_id = $_POST['uid'] : $user_id = $_POST['wpid'];
-
-            $date = SP_Globals::date_stamp();
             
+            $date = SP_Globals::date_stamp();
 
-            $sql =  $wpdb->prepare("SELECT
-                t1.wpid,
-                AVG(t2.child_val) as `ave_rating`
-            FROM
-                sp_reviews t1
-                INNER JOIN sp_revisions t2 ON t2.parent_id = t1.ID
-            WHERE t1.wpid = %d AND t2.child_key = 'ratings'", $user_id);
+            $sql =  $wpdb->prepare("SELECT COUNT(ID) as transac
+            FROM $table_orders
+            WHERE wpid = %d OR created_by = %d", $user_id, $user_id);
 
             $results = $wpdb->get_row( $sql , OBJECT );
 
             
-            if ($results->wpid == NULL) {
+            if (empty($results->transac)) {
                 return array(
                     "status" => "success",
-                    "message" => "This user does not have reviews yet."
+                    "message" => "This user does not have transactions yet."
                 );
             }
         

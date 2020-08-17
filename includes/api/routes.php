@@ -41,6 +41,11 @@
     require plugin_dir_path(__FILE__) . '/v1/reviews/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/reviews/class-user-reviews.php';
 
+    //Transactions Folder
+    require plugin_dir_path(__FILE__) . '/v1/transactions/class-user-transactions.php';
+    require plugin_dir_path(__FILE__) . '/v1/transactions/class-user-transactions-total.php';
+
+
 
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
@@ -197,6 +202,21 @@
                 'methods' => 'POST',
                 'callback' => array('SP_List_Reviews','listen'),
             ));
+
+        /*
+          * REVIEWS RESTAPI
+        */
+
+            register_rest_route( 'sociopress/v1/transactions/user', 'list', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Transactions_List','listen'),
+            ));
+
+            register_rest_route( 'sociopress/v1/transactions/user/list', 'total', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Transactions_List_Total','listen'),
+            ));
+
             
     }
     add_action( 'rest_api_init', 'sociopress_route' );
