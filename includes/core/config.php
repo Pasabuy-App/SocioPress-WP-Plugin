@@ -36,6 +36,15 @@
 	//Market Configs
 	define('SP_MARKET_TABLE', SP_PREFIX.'market');
 
+	//Reacts Config
+	define('SP_REACTS_TABLE', SP_PREFIX.'reacts');
+
+	//Reviews Config
+	define('SP_REVIEWS_TABLE', SP_PREFIX.'reviews');
+	define('SP_REVIEWS_FIELDS', '( wpid, created_by )');
+
+
+
 	//Init feeds limit
 	define('INITIAL_FEEDS', 12);
 	define('SUCCEEDING_FEEDS', 5);

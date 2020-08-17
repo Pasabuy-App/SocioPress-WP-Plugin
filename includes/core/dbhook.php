@@ -21,6 +21,10 @@
 		$tbl_revs = SP_REVS_TABLE;
 		$tbl_mess = SP_MESSAGES_TABLE;
 		$tbl_market = SP_MARKET_TABLE;
+		$tbl_reacts = SP_REACTS_TABLE;
+		$tbl_reviews = SP_REVIEWS_TABLE;
+
+
 
 
 		//Database table creation for activities
@@ -57,7 +61,7 @@
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`content` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
 				$sql .= "`sender` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
-				$sql .= "`recepient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
+				$sql .= "`recipient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT '1 active or 0 inactive, use to delete.', ";
 				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this message is created.', ";
 				$sql .= "`date_seen` datetime DEFAULT NULL COMMENT 'The date this message is seen.', ";
@@ -70,7 +74,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
 			$sql = "CREATE TABLE `".$tbl_revs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`revs_type` enum('none','configs','activity','messages') NOT NULL COMMENT 'Target table', ";
+				$sql .= "`revs_type` enum('none','configs','activity','messages', 'reviews') NOT NULL COMMENT 'Target table', ";
 				$sql .= "`parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of this Revision', ";
 				$sql .= "`child_key` varchar(50) NOT NULL COMMENT 'Column name on the table', ";
 				$sql .= "`child_val` longtext NOT NULL COMMENT 'Text Value of the row Key.', ";
@@ -93,6 +97,37 @@
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 		}
+
+		//REACTS ON POST = SECOND WAVE
+		//Database table creation for reacts
+		// if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_reacts'" ) != $tbl_reacts) {
+		// 	$sql = "CREATE TABLE `".$tbl_reacts."` (";
+		// 		$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+		// 		$sql .= "`post_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Post id from WP_Post', ";
+		// 		$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Status of this react with revision ID', ";
+		// 		$sql .= "`react` bigint(20) NOT NULL DEFAULT 0 COMMENT 'React type on post with revision ID', ";
+		// 		$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID created this Revision.', ";
+		// 		$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this Revision is created.', ";
+		// 		$sql .= "PRIMARY KEY (`ID`) ";
+		// 		$sql .= ") ENGINE = InnoDB; ";
+		// 	$result = $wpdb->get_results($sql);
+		// }
+
+		//Database table creation for market
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_reviews'" ) != $tbl_reviews) {
+			$sql = "CREATE TABLE `".$tbl_reviews."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User recipient of this review with revision ID', ";
+				$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID who created this review with Revision id.', ";
+				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this Revision is created.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+
+
+
 
 	}
 

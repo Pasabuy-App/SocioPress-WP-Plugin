@@ -11,7 +11,8 @@
 	*/
 
     //Require the USocketNet class which have the core function of this plguin. 
-    // Activty Folder
+    
+    // Activity Folder
     require plugin_dir_path(__FILE__) . '/v1/activity/class-insert.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-listing.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-select.php'; // home feeds
@@ -29,12 +30,16 @@
     require plugin_dir_path(__FILE__) . '/v1/post/class-share-post.php';
     require plugin_dir_path(__FILE__) . '/v1/post/class-share-post-link.php';
 
-    // Messagegs Folder
+    // Messages Folder
     require plugin_dir_path(__FILE__) . '/v1/messages/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-seen.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-getby-recepient.php';
+
+    // Reviews Folder
+    require plugin_dir_path(__FILE__) . '/v1/reviews/class-insert.php';
+
 
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
@@ -152,31 +157,40 @@
         /*
          * MESSAGES RESTAPI
         */
-    
-        register_rest_route( 'sociopress/v1/messages', 'insert', array(
-            'methods' => 'POST',
-            'callback' => array('SP_Insert_Message','listen'),
-        ));
         
-        register_rest_route( 'sociopress/v1/messages', 'update', array(
-            'methods' => 'POST',
-            'callback' => array('SP_Update_Message','listen'),
-        ));
-        
-        register_rest_route( 'sociopress/v1/messages', 'seen', array(
-            'methods' => 'POST',
-            'callback' => array('SP_Seen_Message','listen'),
-        ));
-        
-        register_rest_route( 'sociopress/v1/messages', 'delete', array(
-            'methods' => 'POST',
-            'callback' => array('SP_Delete_Message','listen'),
-        ));
-        
-        register_rest_route( 'sociopress/v1/messages/get', 'recepient', array(
-            'methods' => 'POST',
-            'callback' => array('SP_GetBy_Recepient','listen'),
-        ));
+            register_rest_route( 'sociopress/v1/messages', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Insert_Message','listen'),
+            ));
+            
+            register_rest_route( 'sociopress/v1/messages', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Update_Message','listen'),
+            ));
+            
+            register_rest_route( 'sociopress/v1/messages', 'seen', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Seen_Message','listen'),
+            ));
+            
+            register_rest_route( 'sociopress/v1/messages', 'delete', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Delete_Message','listen'),
+            ));
+            
+            register_rest_route( 'sociopress/v1/messages/get', 'recepient', array(
+                'methods' => 'POST',
+                'callback' => array('SP_GetBy_Recepient','listen'),
+            ));
+
+        /*
+          * REVIEWS RESTAPI
+        */
+
+            register_rest_route( 'sociopress/v1/reviews', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Insert_Reviews','listen'),
+            ));
         
     }
     add_action( 'rest_api_init', 'sociopress_route' );
