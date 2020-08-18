@@ -23,6 +23,7 @@
 			global $wpdb;
 			
             $post_id = $_POST["post_id"];
+            $table_posts = WP_POSTS;
 			
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -57,8 +58,8 @@
                 );
             }
             
-            // Step 5: Validation post
-            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' ");
+            // Step 5: Validation post and get id
+            $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '$post_id' ");
             if ( !$get_id ) {
                 return array(
                     "status"  => "failed",
@@ -66,7 +67,7 @@
                 );
             }
             
-            $validate = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '$post_id' and post_status = 'trash'");
+            $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '$post_id' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
                     "status"  => "failed",
@@ -75,7 +76,6 @@
             }
             
             // Step 6: Query
-            //$result = wp_delete_post( $get_id->ID, true); // If custom post, it change post_status to trash but if post type is post it will be deleted.
             $result = wp_trash_post( $get_id->ID); // Change post_status to trash and add revision
 			
             // Step 7: Check result if failed

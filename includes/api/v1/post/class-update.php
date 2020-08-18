@@ -23,6 +23,7 @@
 			global $wpdb;
 			
             $user = SP_Update_Post::catch_post();
+            $table_posts = WP_POSTS;
 			
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -63,8 +64,8 @@
                 );
             }
 			
-            // Step5 : Validation post
-            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '{$user["post_id"]}' ");
+            // Step 5: Validation post
+            $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' ");
             if ( !$get_id ) {
                 return array(
                         "status" => "failed",
@@ -72,7 +73,7 @@
                 );
             }
             
-            $validate = $wpdb->get_row("SELECT ID FROM wp_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
+            $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
                         "status" => "failed",

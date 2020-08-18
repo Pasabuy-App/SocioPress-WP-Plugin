@@ -22,10 +22,10 @@
 			// Initialize WP global variable
 			global $wpdb;
 
-			$table_post = 'wp_posts';
+			$table_post = WP_POSTS;
 			$id = $_POST['wpid'];
 			
-			// Step1 : Check if prerequisites plugin are missing
+			// Step 1: Check if prerequisites plugin are missing
 			$plugin = SP_Globals::verify_prerequisites();
 			if ($plugin !== true) {
 				return array(
@@ -34,7 +34,7 @@
 				);
 			 }
 			 
-			// Step2 : Check if wpid and snky is valid
+			// Step 2: Check if wpid and snky is valid
 			if (DV_Verification::is_verified() == false) {
 				return array(
 						"status" => "unknown",
@@ -44,7 +44,7 @@
 
 			if(!isset($_POST['lid'])){
 
-				//Step 6: Get results from database 
+				//Step 3: Get results from database 
 				$result= $wpdb->get_results("SELECT
 					post.id,
 					post.post_content AS content,
@@ -59,10 +59,10 @@
 					post.id DESC
 				LIMIT 12", OBJECT);
 				
-				//Step 7: Pass the last id or the minimum id
+				//Step 4: Pass the last id or the minimum id
 				$last_id = min($result);
 
-				//Step 8: Return a success message and a complete object
+				//Step 5: Return a success message and a complete object
 				return array(
 						"status" => "success",
 						"data" => array($result, $last_id
@@ -70,6 +70,7 @@
 				);
 			}else{
 				
+				// Step 3: Check if post is numeric value
 				if ( !is_numeric($_POST["lid"])) {
 					return array(
 							"status" => "failed",
@@ -83,7 +84,7 @@
 				// Step 5: Get 5 new posts
 				$add_feeds = $get_last_id - 7;
 				
-				//Step 6: Get results from database 
+				// Step 6: Get results from database 
 				$result= $wpdb->get_results("SELECT 
 					post.id,
 					post.post_content AS content,

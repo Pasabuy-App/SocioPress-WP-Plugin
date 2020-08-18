@@ -21,6 +21,8 @@
             
             // Initialize WP global variable
 			global $wpdb;
+            
+            $user = SP_Insert_Post::catch_post();
 			
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -31,7 +33,7 @@
                 );
             }
             
-            // Step 2: Valdiate user
+            // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
                         "status" => "unknown",
@@ -70,8 +72,6 @@
                     "message" => "Invalid post type.",
                 );
             }
-            
-            $user = SP_Insert_Post::catch_post();
 			
 			$insert_post = array(
 				'post_author'	=>$user["created_by"],

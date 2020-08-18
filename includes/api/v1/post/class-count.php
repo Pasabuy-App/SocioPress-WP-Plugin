@@ -24,9 +24,9 @@
 			
             $post_type = $_POST["post_type"];
             $user_id = $_POST["user_id"];
-            $table_posts = 'wp_posts';
+            $table_posts = WP_POSTS;
 			
-            // Step1 : Check if prerequisites plugin are missing
+            // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
@@ -59,7 +59,7 @@
                 );
             }
 			
-            // Step5 : Validation post
+            // Step 5: Validation post
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE post_author = '$user_id' ");
             if ( !$get_id ) {
                 return array(
@@ -68,7 +68,7 @@
                 );
             }
             
-            // Step6 : Query
+            // Step 6: Query
             $result = $wpdb->get_results("SELECT
                 post.post_author AS user_id,
                 COUNT( post.post_author ) AS count 
@@ -91,7 +91,7 @@
                 );
             }
             
-            // Step8 : Return Result 
+            // Step 8: Return Result 
             return array(
                 "status" => "success",
                 "data"   => $result
