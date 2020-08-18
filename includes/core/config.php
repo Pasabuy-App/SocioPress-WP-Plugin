@@ -41,7 +41,7 @@
 
 	//Reviews Config
 	define('SP_REVIEWS_TABLE', SP_PREFIX.'reviews');
-	define('SP_REVIEWS_FIELDS', '( wpid, created_by )');
+	define('SP_REVIEWS_FIELDS', '( wpid, created_by, date_created )');
 
 
 

@@ -74,7 +74,7 @@
             
             $wpdb->query("START TRANSACTION");
 
-                $wpdb->query("INSERT INTO $table_reviews $table_reviews_fields VALUES ('$ratings_recipient', '$wpid' ) ");
+                $wpdb->query("INSERT INTO $table_reviews $table_reviews_fields VALUES ('$ratings_recipient', '$wpid', '$date'  ) ");
                 $parent_id = $wpdb->insert_id;
 
                 $ratings_query = $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('$revs_type', '$parent_id', 'ratings', '$ratings', '$wpid', '$date' ) ");
