@@ -60,7 +60,7 @@
             }
 			
             // Step5 : Validation post
-            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE ID = '$user_id' ");
+            $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE post_author = '$user_id' ");
             if ( !$get_id ) {
                 return array(
                     "status"  => "failed",
@@ -70,16 +70,18 @@
             
             // Step6 : Query
             $result = $wpdb->get_results("SELECT
-                wp_pos.post_author AS user_id,
-                COUNT(wp_pos.post_author) AS count
+                post.post_author AS user_id,
+                COUNT( post.post_author ) AS count 
             FROM
-                $table_posts AS wp_pos
-            WHERE 
-                wp_pos.post_status = 'publish' and wp_pos.post_author = '$user_id'
-            GROUP BY 
-                wp_pos.post_author
+                $table_posts AS post 
+            WHERE
+                post.post_status = 'publish'
+                AND post.post_author = '$user_id' 
+                AND post.post_type = 'status' OR post.post_type = 'move' OR  post.post_type = 'sell'
+            GROUP BY
+                post.post_author
             ");
-
+            
             // Step 7: Check if no result
             if (!$result)
             {

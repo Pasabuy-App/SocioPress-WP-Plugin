@@ -119,7 +119,7 @@
           // Front Page for custom post type
           function frontpage_admin_menu() {
 
-            add_menu_page('New Post','New Post','read','front-sections','','dashicons-admin-home',4
+            add_menu_page('Feeds','Feeds','read','front-sections','','dashicons-admin-home',4
             );
 
           }

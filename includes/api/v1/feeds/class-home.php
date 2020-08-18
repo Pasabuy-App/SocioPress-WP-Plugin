@@ -45,13 +45,15 @@
 				
 				//Step 3: Get results from database 
 				$result= $wpdb->get_results("SELECT 
-					id
+					post.id,
+					post.post_content AS content,
+					post.post_date AS date_created
 				FROM 
-					$table_post
+					$table_post AS post
 				WHERE 
-					post_status = 'publish'
+					post.post_status = 'publish'
 				ORDER BY 
-					id DESC
+					post.id DESC
 				LIMIT 12", OBJECT);
 				
 				//Step 4: Pass the last id or the minimum id
@@ -60,9 +62,7 @@
 				//Step 5: Return a success message and a complete object
 				return array(
 						"status" => "success",
-						"data" => array(
-							'list' => $result, 
-							'last_id' => $last_id
+						"data" => array($result, $last_id
 						)
 					);
 			}else{
@@ -83,17 +83,19 @@
 
 				//Step 3: Get results from database 
 				$result= $wpdb->get_results("SELECT 
-					id
+					post.id,
+					post.post_content AS content,
+					post.post_date AS date_created
 				FROM 
-					$table_post 
+					$table_post AS post
 				WHERE 
-					id BETWEEN $add_feeds 
+					post.id BETWEEN $add_feeds 
 				AND 
 					($get_last_id - 1) 
 				AND  
-					post_status = 'publish'
+					post.post_status = 'publish'
 				ORDER BY 
-					id DESC 
+					post.id DESC 
 				LIMIT 12", OBJECT);
 
 				//Step 4: Check if array count is 0 , return error message if true
@@ -110,9 +112,7 @@
 				//Step 5: Return a success message and a complete object
 				return array(
 						"status" => "success",
-						"data" => array(
-							'list' => $result, 
-							'last_id' => $last_id
+						"data" => array($result, $last_id
 					)
 				);
 			}
