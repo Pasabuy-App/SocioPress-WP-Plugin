@@ -32,7 +32,7 @@
                 );
             }
 
-			//  Step2 : Validate if user is exist
+			//  Step2 : Validate user
 			if (DV_Verification::is_verified() == false) {
                 
                 return array(
@@ -52,19 +52,39 @@
 			if ( !is_numeric($_POST["atid"])  ) {
 				return array(
 					"status" => "failed",
-					"message" => "Parameters not in valid format!",
+					"message" => "Parameters not in valid format.",
 				);
 			}
 
+            $date = SP_Globals::date_stamp();
             $activity_id = $_POST['atid'];
-            $wpid = $_POST['wpid'];
-
-            $user_date = TP_Globals::get_user_date($_POST['wpid']);
+            $user_id = 0;
             
-            // Query
+            // Step 5: Check if user or store
+            if(!isset($_POST['stid'])){
+                $user = 'wpid';
+                $user_id = $_POST['wpid'];
+            }else{
+                if ( !is_numeric($_POST['stid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "ID is not in valid format.",
+                    );
+                }
+                if (empty($_POST['stid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+                $user = 'stid';
+                $user_id = $_POST['stid'];
+            }
+            
+            // Step 6: Query
             $result = $wpdb->get_row("SELECT
                 ac_act.ID,
-                ac_act.wpid,
+                ac_act.$user,
                 ac_act.icon,
                 ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = ac_act.`title` ) AS `activity_title`,
                 ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = ac_act.`info` ) AS `activity_info`,
@@ -72,41 +92,34 @@
             FROM
                 $table_activity ac_act 
             WHERE
-                ac_act.wpid = $wpid AND ac_act.ID = $activity_id
+                ac_act.$user = '$user_id' AND ac_act.ID = '$activity_id'
             GROUP BY
                 ac_act.ID DESC 
                 LIMIT 12");
 
+            // Step 7: Check result
             if (!$result) {
-
                 return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Request Activity Unknown!",
+					"status" => "success",
+					"message" => "There is no activity found with this value.",
                 );
-                
             }else{
-                // Insert date open 
-                $update_date_open = $wpdb->query("UPDATE sp_activities SET date_open = '$user_date' WHERE ID = $activity_id ");
+                // Step 8: Insert date open 
+                $update_date_open = $wpdb->query("UPDATE $table_activity SET date_open = '$date' WHERE ID = $activity_id ");
 
-				// step 9 : check if update for date_open is successfuly updated!
+				// Step 9: Check if update for date_open is successfuly updated!
                 if($update_date_open  < 1 ){
                     return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
+                        "status" => "error",
+                        "message" => "An error occured while submitting data to server."
                     );
-
                 }else{
-
                     // step 10 : return success result  
                     return array(
                         "status" => "success",
                         "data" => $result
                     );
                 }
-                
-            }
-            
-
-				
+            }	
         }
     }

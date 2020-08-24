@@ -34,7 +34,7 @@
 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
@@ -43,7 +43,7 @@
                 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues.",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 
@@ -51,7 +51,7 @@
             if (!isset($_POST['title']) || !isset($_POST['info']) || !isset($_POST['icon'])  ) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Missing paramiters.",
+                    "message" => "Please contact your administrator. Missing paramiters!",
                 );
             }
 
