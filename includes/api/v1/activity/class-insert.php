@@ -24,7 +24,6 @@
 
             $table_revision = SP_REVS_TABLE;
             $table_revision_fields= SP_REVS_TABLE_FIELDS;
-
             $table_activity = SP_ACTIVITY_TABLE;
             $table_activity_fields = SP_ACTIVITY_FIELDS;
 
@@ -48,7 +47,9 @@
             }
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST['title']) || !isset($_POST['info']) || !isset($_POST['icon'])  ) {
+            if (!isset($_POST['title']) 
+                || !isset($_POST['info']) 
+                || !isset($_POST['icon'])  ) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Missing paramiters!",
@@ -56,7 +57,9 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST['title']) || empty($_POST['info']) || empty($_POST['icon'])  ) {
+            if (empty($_POST['title']) 
+                || empty($_POST['info']) 
+                || empty($_POST['icon'])  ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -64,37 +67,37 @@
             }
 
             // Step 5: Check if parameters are valid
-            if ($_POST['icon'] != 'warn' && $_POST['icon'] != 'info' && $_POST['icon'] != 'error' ) {
+            if ($_POST['icon'] != 'warn' 
+                && $_POST['icon'] != 'info' 
+                && $_POST['icon'] != 'error' ) {
                 return array(
                     "status" => "failed",
                     "message" => "Icon is not in valid format.",
                 );
             }
-
+            
             $user = SP_Insert_Activity::catch_post();
             $date = SP_Globals::date_stamp();
             $stid = 0;
-            $wpid = 0;
+            $wpid = $user['user_id'];
             
             // Step 6: Check if user or store
-            if(!isset($_POST['stid'])){
-                $wpid = $user['user_id'];
-            }else{
-                if ( !is_numeric($_POST['stid']) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "ID is not in valid format.",
-                    );
-                }
+            if( isset($_POST['stid']) ){
                 if (empty($_POST['stid']) ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                     );
                 }
+                if ( !is_numeric($_POST['stid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "ID is not in valid format.",
+                    );
+                }
                 $stid = $_POST['stid'];
+                $wpid = 0;
             }
-            $created_by = $user['user_id'];
             
             // Step 7: Query
             $wpdb->query("START TRANSACTION");
@@ -105,7 +108,7 @@
                 $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('activity', 0, 'info', '{$user["activity_info"]}', '{$user["user_id"]}', '$date' ) ");
                 $info_last_id = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $table_activity $table_activity_fields VALUES ('$wpid', '$stid', '{$user["activity_icon"]}', '$title_last_id', '$info_last_id', '$created_by', null, '$date' ) ");
+                $wpdb->query("INSERT INTO $table_activity $table_activity_fields VALUES ('$wpid', '$stid', '{$user["activity_icon"]}', '$title_last_id', '$info_last_id', '{$user["user_id"]}', null, '$date' ) ");
                 $activity_last_id = $wpdb->insert_id;
 
                 $update_parent_id = $wpdb->query("UPDATE $table_revision SET `parent_id` = $activity_last_id WHERE ID IN ($title_last_id, $info_last_id) ");
@@ -121,7 +124,7 @@
                 $wpdb->query("COMMIT");
                 return array(
                     "status" => "success",
-                    "message" => "Data has been submitted successfully."
+                    "message" => "Data has been added successfully."
                 );
             }
 

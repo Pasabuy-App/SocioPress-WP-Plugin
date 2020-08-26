@@ -40,34 +40,26 @@
 					"message" => "Please contact your administrator. Verification Issues!",
 			 	);
 			}
-			
-			if( !isset($_POST['lid'])){
-				
-				// Step 3: Get results from database 
-				$result= $wpdb->get_results("SELECT 
-					post.id,
-					post.post_content AS content,
-					post.post_date AS date_created
-				FROM 
-					$table_post AS post
-				WHERE 
-					post.post_status = 'publish'
-				ORDER BY 
-					post.id DESC
-				LIMIT 12", OBJECT);
-				
-				// Step 4: Pass the last id or the minimum id
-				$last_id = min($result);
-				
-				// Step 5: Return a success message and a complete object
-				return array(
-						"status" => "success",
-						"data" => array($result, $last_id
-						)
-					);
-			}else{
 
-				// Step 3: Check if post is numeric value
+			// Step 3: Query
+			$sql = "SELECT 
+				post.id,
+				post.post_content AS content,
+				post.post_date AS date_created
+			FROM 
+				$table_post AS post 
+			WHERE 
+				post.post_status = 'publish' ";
+			
+			if( isset($_POST['lid']) ){
+
+				// Step 4: Validate parameter
+                if (empty($_POST['lid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
 				if(!is_numeric($_POST["lid"])){
 					return array(
 							"status" => "failed",
@@ -75,46 +67,33 @@
 					);
 				}
 
-				// Step 4: Pass the post in variable
+				// Step 5: Pass the post in variable and continuation of query
 				$get_last_id = $_POST['lid'];
-
-				// Step 5: Get 5 new posts
 				$add_feeds = $get_last_id - 7;
+				$sql .= " AND post.id BETWEEN $add_feeds AND  ($get_last_id - 1) ";
 
-				// Step 6: Get results from database 
-				$result= $wpdb->get_results("SELECT 
-					post.id,
-					post.post_content AS content,
-					post.post_date AS date_created
-				FROM 
-					$table_post AS post
-				WHERE 
-					post.id BETWEEN $add_feeds 
-				AND 
-					($get_last_id - 1) 
-				AND  
-					post.post_status = 'publish'
-				ORDER BY 
-					post.id DESC 
-				LIMIT 12", OBJECT);
-
-				//Step 7: Check if array count is 0 , return error message if true
-				if (count($result) < 1) {
-					return array(
-							"status" => "success",
-							"message" => "No more posts.",
-					);
-				} else {
-					//Pass the last id
-					$last_id = min($result);
-				}
-
-				//Step 8: Return a success message and a complete object
+			}
+			
+			// Step 6: Get results from database 
+			$sql .= " ORDER BY post.id DESC LIMIT 12 "; 
+			$result= $wpdb->get_results( $sql, OBJECT);
+			
+			// Step 7: Check if array count is 0 , return error message if true
+			if (count($result) < 1) {
 				return array(
 						"status" => "success",
-						"data" => array($result, $last_id
-					)
+						"message" => "No more posts.",
 				);
 			}
+
+			// Step 8: Pass the last id
+			$last_id = min($result); 
+
+			//Step 9: Return a success message and a complete object
+			return array(
+					"status" => "success",
+					"data" => array($result, $last_id
+				)
+			);
 		}
     }

@@ -47,7 +47,8 @@
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
 				);
-			}
+            }
+            
 			// Step 4: Check if ID and Last ID is in valid format (integer)
 			if ( !is_numeric($_POST["atid"])  ) {
 				return array(
@@ -58,23 +59,21 @@
 
             $date = SP_Globals::date_stamp();
             $activity_id = $_POST['atid'];
-            $user_id = 0;
+            $user = 'wpid';
+            $user_id = $_POST['wpid'];
             
-            // Step 5: Check if user or store
-            if(!isset($_POST['stid'])){
-                $user = 'wpid';
-                $user_id = $_POST['wpid'];
-            }else{
-                if ( !is_numeric($_POST['stid']) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "ID is not in valid format.",
-                    );
-                }
+            // Step 5: Check if user or store and validate parameter
+            if( isset($_POST['stid']) ){
                 if (empty($_POST['stid']) ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
+                    );
+                }
+                if ( !is_numeric($_POST['stid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "ID is not in valid format.",
                     );
                 }
                 $user = 'stid';
@@ -103,23 +102,23 @@
 					"status" => "success",
 					"message" => "There is no activity found with this value.",
                 );
-            }else{
-                // Step 8: Insert date open 
-                $update_date_open = $wpdb->query("UPDATE $table_activity SET date_open = '$date' WHERE ID = $activity_id ");
+            }
+            
+            // Step 8: Insert date open 
+            $update_date_open = $wpdb->query("UPDATE $table_activity SET date_open = '$date' WHERE ID = $activity_id ");
 
-				// Step 9: Check if update for date_open is successfuly updated!
-                if($update_date_open  < 1 ){
-                    return array(
-                        "status" => "error",
-                        "message" => "An error occured while submitting data to server."
-                    );
-                }else{
-                    // step 10 : return success result  
-                    return array(
-                        "status" => "success",
-                        "data" => $result
-                    );
-                }
-            }	
+			// Step 9: Check if update for date_open is successfuly updated!
+            if($update_date_open  < 1 ){
+                return array(
+                    "status" => "error",
+                    "message" => "An error occured while submitting data to server."
+                );
+            }
+                
+            // step 10 : return success result  
+            return array(
+                "status" => "success",
+                "data" => $result
+            );	
         }
     }

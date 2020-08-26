@@ -40,7 +40,21 @@
                 );
             }
 
-            // Step 3: Pass the processed ids in a variable
+            // Step 3: Check if the parameters is valid for icon
+            if ( isset($_POST['icon']) 
+                && $_POST['icon'] != NULL 
+                && is_numeric($_POST['icon'])){
+                if ($_POST['icon'] != 'warn' 
+                    && $_POST['icon'] != 'info' 
+                    && $_POST['icon'] != 'error' ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Icon is not in valid format.",
+                    );
+                }
+            }
+
+            // Step 4: Pass the processed ids in a variable
             $id = $_POST['wpid'];
             isset($_POST['icon']) ? $icon = $_POST['icon'] : $icon = NULL;
             isset($_POST['stid']) ? $stid = $_POST['stid'] : $stid = NULL;
@@ -49,39 +63,26 @@
             $icon = $pid  == '0' || $icon == NULL ? NULL: $icon = $icon;
             $stid = $stid  == '0' || $stid == NULL ? NULL: $stid = $stid;
             $user_id = 0;
-
-            // Step 4: Check if the parameters is valid for icon
-            if ( isset($_POST['icon']) && $_POST['icon'] != NULL && is_numeric($_POST['icon'])){
-                if ($_POST['icon'] != 'warn' && $_POST['icon'] != 'info' && $_POST['icon'] != 'error' ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Icon is not in valid format.",
-                    );
-                }
-            }
+            $user = 'wpid';
             
-            // Step 5: Check if user or store
+            // Step 5: Check if store
             if (isset($_POST['stid'])) {
                 if ($stid != NULL) {
                     $user = 'stid';
-                }else{
-                    $user = 'wpid';
-                }
-            }else{
-                $user = 'wpid';
+                } 
             }
 
-            $sql = "SELECT
-                sp_act.ID,
-                sp_act.$user,
-                sp_act.icon,";
+            // Step 6: Query
+            $sql = "SELECT sp_act.ID, sp_act.$user, sp_act.icon,";
 
+            // Step 7: Check open post is set
             if (isset($_POST['open'])) {
                 if ($open != NULL) {
                     $sql .= "sp_act.date_open, ";
                 }
             }
             
+            // Step 8: Continuation of query
             $sql .= " ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`title` ) AS `activity_title`,
                 ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`info` ) AS `activity_info`,
                 sp_act.date_created 
@@ -90,40 +91,33 @@
             WHERE
                 sp_act.wpid = '$id' ";
 
+            // Step 9: Check icon, stid, open post are set
             if (isset($_POST['icon'])) {
                 if ($icon != NULL) {
                     $sql .= " AND sp_act.icon = '$icon' ";
                 }
             }
-
             if (isset($_POST['stid'])) {
                 if ($stid != NULL) {
                     $sql .= " AND sp_act.stid = '$stid' ";
                 }
             }
-
             if (isset($_POST['open'])) {
                 if ($open != NULL || $open === '1') {
                     $sql .= " AND sp_act.date_open != '' ";
                 }
             }
 
-            if (!isset($_POST['lid'])){
-                    
-                $sql .= "GROUP BY sp_act.ID DESC  LIMIT 3 ";
-                $result = $wpdb->get_results($sql, OBJECT);
+            // Step 10: Check last id is set
+            if ( isset($_POST['lid']) ){
 
-                if(!$result){
+                // Step 11: Check last id
+                if (empty($_POST['lid']) ) {
                     return array(
-                        "status" => "success",
-                        "message" => "There is no activity found with this value.",
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
                     );
                 }
-    
-				// Step 5: Pass the last id or the minimum id
-                $last_id = min($result);
-            }else{
-                    
                 if(!is_numeric($_POST["lid"])){
                     return array(
                         "status" => "failed",
@@ -133,21 +127,34 @@
                 
                 $lid = $_POST['lid'];
                 $add_feeds = $lid - 7;
-                $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) GROUP BY sp_act.ID DESC  LIMIT 3 ";
+                $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
                 $result = $wpdb->get_results($sql, OBJECT);
     
-                //Step 7: Check if array count is 0 , return error message if true
-                if (count($result) < 1) {
-                    return array(
-                        "status" => "success",
-                        "message" => "No more activity to see.",
-                    );
-                } else {
-                    $last_id = min($result);
-                }
             }
+                    
+            $sql .= "GROUP BY sp_act.ID DESC  LIMIT 12 ";
+            $result = $wpdb->get_results($sql, OBJECT);
+
+            // Step 12: Check result
+            if(!$result){
+                return array(
+                    "status" => "success",
+                    "message" => "There is no activity found with this value.",
+                );
+            }
+            
+            //Step 13: Check if array count is 0 , return error message if true
+            if (count($result) < 1) {
+                return array(
+                    "status" => "success",
+                    "message" => "No more activity to see.",
+                );
+            }
+
+            // Step 14: Pass the last id or the minimum id
+            $last_id = min($result);
     
-            //Step 8: Return a success message and a complete object
+            //Step 15: Return a success message and a complete object
             return array(
                 "status" => "success",
                 "data" => array( $result, $last_id
