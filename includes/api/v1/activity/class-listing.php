@@ -36,7 +36,7 @@
 			if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 
@@ -125,17 +125,19 @@
                     );
                 }
                 
+				// Step 12: Pass the post in variable and continuation of query
                 $lid = $_POST['lid'];
                 $add_feeds = $lid - 7;
                 $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
                 $result = $wpdb->get_results($sql, OBJECT);
     
             }
-                    
+                  
+            // Step 13: Continuation of query
             $sql .= "GROUP BY sp_act.ID DESC  LIMIT 12 ";
             $result = $wpdb->get_results($sql, OBJECT);
 
-            // Step 12: Check result
+            // Step 14: Check result
             if(!$result){
                 return array(
                     "status" => "success",
@@ -143,7 +145,7 @@
                 );
             }
             
-            //Step 13: Check if array count is 0 , return error message if true
+            //Step 15: Check if array count is 0 , return error message if true
             if (count($result) < 1) {
                 return array(
                     "status" => "success",
@@ -151,10 +153,10 @@
                 );
             }
 
-            // Step 14: Pass the last id or the minimum id
+            // Step 16: Pass the last id or the minimum id
             $last_id = min($result);
     
-            //Step 15: Return a success message and a complete object
+            // Step 17: Return a success message and a complete object
             return array(
                 "status" => "success",
                 "data" => array( $result, $last_id

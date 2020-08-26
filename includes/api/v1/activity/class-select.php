@@ -37,7 +37,7 @@
                 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 

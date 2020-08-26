@@ -89,7 +89,7 @@
 			// Step 8: Pass the last id
 			$last_id = min($result); 
 
-			//Step 9: Return a success message and a complete object
+			// Step 9: Return a success message and a complete object
 			return array(
 					"status" => "success",
 					"data" => array($result, $last_id

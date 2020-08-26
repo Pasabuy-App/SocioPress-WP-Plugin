@@ -120,13 +120,13 @@
                     "status" => "error",
                     "message" => "An error occured while submitting data to server."
                 );
-            }else{
-                $wpdb->query("COMMIT");
-                return array(
-                    "status" => "success",
-                    "message" => "Data has been added successfully."
-                );
             }
+
+            $wpdb->query("COMMIT");
+            return array(
+                "status" => "success",
+                "message" => "Data has been added successfully."
+            );
 
         }
         

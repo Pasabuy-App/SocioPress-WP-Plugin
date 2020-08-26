@@ -21,7 +21,6 @@
 
 			// Initialize WP global variable
             global $wpdb;
-            $date = SP_Globals:: date_stamp();
             $table_revs = SP_REVS_TABLE;
             $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
@@ -43,12 +42,13 @@
                 
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification issues.",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 
 			// Step 3: Check if required parameters are passed
-            if (!isset($_POST['content']) || !isset($_POST['recepient'])) {
+            if  (!isset($_POST['content']) 
+                || !isset($_POST['recepient']) ) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -56,7 +56,8 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST['content']) || empty($_POST['recepient']) ) {
+            if ( empty($_POST['content']) 
+                || empty($_POST['recepient']) ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -64,7 +65,7 @@
             }
 
             // Step 5: Check if parameter is valid
-            if (!is_numeric($_POST['recepient']) ) {
+            if ( !is_numeric($_POST['recepient']) ) {
                 return array(
                     "status"  => "failed",
                     "message" => "ID is not in valid format.",
@@ -72,8 +73,10 @@
             }
 
             $user = SP_Insert_Message::catch_post();
+            $date = SP_Globals:: date_stamp();
+            $id = array();
 
-            // Step 6: Valdiate user
+            // Step 6: Valdiate user using user id
             $recepients = WP_User::get_data_by( 'ID', $user['recepient'] );
             if ( !$recepients ) {
                 return array(
@@ -90,11 +93,9 @@
 
             // Step 8: Query
             $wpdb->query("START TRANSACTION");
-                $id = array();
                 
                 // Insert data to mp revisions
                 foreach ( $child_key as $key => $child_val) {
-
                     $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '0', '$key', '$child_val', '$wpid', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
 
@@ -115,13 +116,13 @@
                     "message" => "An error occured while submitting data to server."
                 );
 
-            }else{
-                $wpdb->query("COMMIT");
-                return array(
-                    "status" => "success",
-                    "message" => "Data has been submitted successfully."
-                );
             }
+
+            $wpdb->query("COMMIT");
+            return array(
+                "status" => "success",
+                "message" => "Data has been submitted successfully."
+            );
 
         }
 
