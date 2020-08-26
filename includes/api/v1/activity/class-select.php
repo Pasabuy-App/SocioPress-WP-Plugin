@@ -80,7 +80,7 @@
                 $user_id = $_POST['stid'];
             }
             
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $result = $wpdb->get_row("SELECT
                 ac_act.ID,
                 ac_act.$user,
@@ -96,7 +96,7 @@
                 ac_act.ID DESC 
                 LIMIT 12");
 
-            // Step 7: Check result
+            // Step 7: Check if no rows found
             if (!$result) {
                 return array(
 					"status" => "success",
@@ -107,7 +107,7 @@
             // Step 8: Insert date open 
             $update_date_open = $wpdb->query("UPDATE $table_activity SET date_open = '$date' WHERE ID = $activity_id ");
 
-			// Step 9: Check if update for date_open is successfuly updated!
+			// Step 9: Check if any queries above failed
             if($update_date_open  < 1 ){
                 return array(
                     "status" => "error",
@@ -115,7 +115,7 @@
                 );
             }
                 
-            // step 10 : return success result  
+            // step 10 : Commit if no errors found 
             return array(
                 "status" => "success",
                 "data" => $result

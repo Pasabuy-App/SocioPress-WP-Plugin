@@ -72,7 +72,7 @@
                 } 
             }
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $sql = "SELECT sp_act.ID, sp_act.$user, sp_act.icon,";
 
             // Step 7: Check open post is set
@@ -111,7 +111,7 @@
             // Step 10: Check last id is set
             if ( isset($_POST['lid']) ){
 
-                // Step 11: Check last id
+            // Step 11: Check last id
                 if (empty($_POST['lid']) ) {
                     return array(
                         "status" => "failed",
@@ -125,7 +125,7 @@
                     );
                 }
                 
-				// Step 12: Pass the post in variable and continuation of query
+			// Step 12: Pass the post in variable and continuation of query
                 $lid = $_POST['lid'];
                 $add_feeds = $lid - 7;
                 $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
@@ -137,7 +137,7 @@
             $sql .= "GROUP BY sp_act.ID DESC  LIMIT 12 ";
             $result = $wpdb->get_results($sql, OBJECT);
 
-            // Step 14: Check result
+            // Step 14: Check if no rows found
             if(!$result){
                 return array(
                     "status" => "success",
@@ -156,7 +156,7 @@
             // Step 16: Pass the last id or the minimum id
             $last_id = min($result);
     
-            // Step 17: Return a success message and a complete object
+            // Step 17: Commit if no errors found
             return array(
                 "status" => "success",
                 "data" => array( $result, $last_id

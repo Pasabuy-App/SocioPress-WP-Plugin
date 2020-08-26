@@ -71,10 +71,10 @@
                 );
             }
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $update_mess = $wpdb->query("UPDATE $table_mess SET date_seen = '$date' WHERE ID = '$mess_id' AND sender = '$wpid'");
             
-            // Step 7: Check result
+            // Step 7: Check if any queries above failed
             if ($update_mess < 1) {
                 return array(
                     "status" => "failed",
@@ -82,7 +82,7 @@
                 );
             }
 
-            // Step 8: Commit query
+            // Step 8: Commit if no errors found
             return array(
                 "status" => "success",
                 "message" => "Data has been added successfully."

@@ -73,12 +73,12 @@
                 );
             }
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'status', '0', '$wpid', '$date' ) "); // Add status = 0 to table revision
             $last_id = $wpdb->insert_id;
             $update_mess = $wpdb->query("UPDATE $table_mess SET status = '$last_id' WHERE ID = '$mess_id' AND sender = '$wpid'"); // Update status to table message using id and sender id
             
-            // Step 7: Check result
+            // Step 7: Check if any queries above failed
             if ($update_mess < 1) {
                 return array(
                     "status" => "failed",
@@ -87,7 +87,7 @@
 
             }
 
-            // Step 8: Commit query
+            // Step 8: Commit if no errors found
             return array(
                 "status" => "success",
                 "message" => "Data has been deleted successfully."

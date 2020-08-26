@@ -43,7 +43,7 @@
 			
 			$id = $_POST['wpid'];
 
-			// Step 3: Query
+			// Step 3: Start mysql transaction
 			$sql ="SELECT post.id, post.post_content AS content, post.post_date AS date_created
 			FROM 
 				$table_post AS post
@@ -90,12 +90,12 @@
 			// Step 8: Pass the last id
 			$last_id = min($result); 
 
-			// Step 9: Return a success message and a complete object
+			// Step 9: Commit if no errors found
 			return array(
 				"status" => "success",
 				"data" => array($result, $last_id
 				)
 			);
-			
+
 		}	
     }

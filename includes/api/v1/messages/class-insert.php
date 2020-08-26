@@ -89,7 +89,7 @@
                 'status'  => '1'
             );
 
-            // Step 8: Query
+            // Step 8: Start mysql transaction
             $wpdb->query("START TRANSACTION");
                 
                 foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
@@ -102,7 +102,7 @@
 
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");// Update parent id in np revision
             
-            // Step 9: Check result
+            // Step 9: Check if any queries above failed
             if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(

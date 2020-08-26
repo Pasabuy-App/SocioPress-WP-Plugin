@@ -52,7 +52,7 @@
                 );
 			}
 			
-			// Step 4: Query
+			// Step 4: Start mysql transaction
 			$sql = "SELECT
 				sp_messages.id, 
 				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content) as content,
@@ -103,7 +103,7 @@
 			// Step 10: Pass the last id or the minimum id
 			$last_id = min($result);
 
-			// Step 11: Return a success message and a complete object
+			// Step 11: Commit if no errors found
 			return array(
 				"status" => "success",
 				"data" => array( 

@@ -24,7 +24,6 @@
 
             $table_revision = SP_REVS_TABLE;
             $table_revision_fields= SP_REVS_TABLE_FIELDS;
-
             $table_reviews= SP_REVIEWS_TABLE;
             $table_reviews_fields = SP_REVIEWS_FIELDS;
 
@@ -34,13 +33,12 @@
 
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
             // Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -94,16 +92,16 @@
                    
                 }
 
-             // Step 7: Check result if failed
+             // Step 7: Check if any queries above failed
             if ( $parent_id < 1 || $ratings_query < 1){
                 $wpdb->query("ROLLBACK");
                 return array(
                     "status" => "error",
                     "message" => "An error occured while submitting data to server."
                 );
-
             }
             
+            // Step 8: Commit query
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",

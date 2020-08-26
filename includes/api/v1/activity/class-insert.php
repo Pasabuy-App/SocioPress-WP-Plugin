@@ -99,7 +99,7 @@
                 $wpid = 0;
             }
             
-            // Step 7: Query
+            // Step 7: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
                 $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('activity', 0, 'title', '{$user["activity_title"]}', '{$user["user_id"]}', '$date' ) ");
@@ -113,7 +113,7 @@
 
                 $update_parent_id = $wpdb->query("UPDATE $table_revision SET `parent_id` = $activity_last_id WHERE ID IN ($title_last_id, $info_last_id) ");
             
-            // Step 8: Check result
+            // Step 8: Check if any queries above failed
             if ($title_last_id < 1 || $info_last_id < 1 || $activity_last_id < 1 || $update_parent_id < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(
@@ -122,6 +122,7 @@
                 );
             }
 
+            // Step 9: Commit if no errors found
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",

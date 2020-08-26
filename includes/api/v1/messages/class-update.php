@@ -76,7 +76,7 @@
                 );
             }
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
                 $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");// Insert data into mp revisions
@@ -84,7 +84,7 @@
 
                 $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");// Update mp message content from last id
             
-            // Step 7: Check result
+            // Step 7: Check if any queries above failed
             if ($last_id < 1 || $update_mess < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(
@@ -93,7 +93,7 @@
                 );
             }
                 
-            // Step 8: Commit query
+            // Step 8: Commit if no errors found
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",
