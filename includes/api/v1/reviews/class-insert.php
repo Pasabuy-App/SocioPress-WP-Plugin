@@ -41,7 +41,7 @@
 			if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification Issues!",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
             }
 
@@ -51,7 +51,7 @@
                 || !isset($_POST['msg'])  ) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Request Unknown!",
+                    "message" => "Please contact your administrator. Request unknown!",
                 );
             }
 

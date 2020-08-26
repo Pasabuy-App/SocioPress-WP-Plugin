@@ -34,10 +34,9 @@
 
 			//  Step2 : Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification Issues!",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
             }
 
@@ -45,7 +44,7 @@
 			if ( !isset($_POST["atid"])) {
 				return array(
 					"status" => "unknown",
-					"message" => "Please contact your administrator. Request unknown!",
+                    "message" => "Please contact your administrator. Request unknown!",
 				);
             }
             

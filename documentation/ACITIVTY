@@ -1,15 +1,15 @@
-#### ACTIVITY INSERT => sociopress/v1/activity/insert
+#### ACTIVITY INSERT => /sociopress/v1/activity/insert
 
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=title (value=Ttitle of Activity), key=info (value=Info of Acivity), key=icon (value=Icon of Activity) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=stid (value=Store ID (Optional) ), key=title (value=Title of Activity), key=info (value=Info of Acivity), key=icon (value=Icon of Activity) 
 
 RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. ".$plugin." plugin missing.' data: null
-- code: 'unknown' message: 'Please contact your administrator. Verification issues.' data: null
-- code: 'unknown' message: 'Please contact your administrator. Missing paramiters.' data: null
-- code: 'unknown' message: 'Please contact your administrator. Missing paramiters.' data: null
+- code: 'unknown' message: 'Please contact your administrator. ".$plugin." plugin missing!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Verification Issues!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Missing parameters.' data: null
+- code: 'unknown' message: 'Please contact your administrator. Missing parameters.' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'Icon is not in valid format.' data: null
 - code: 'failed' message: 'ID is not in valid format.' data: null

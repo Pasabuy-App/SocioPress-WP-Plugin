@@ -40,7 +40,7 @@
 			if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification Issues!",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
             }
 
@@ -111,7 +111,7 @@
                 );
             }
 
-            // Step 10: Commit query
+            // Step 10: Commit if no errors found
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",

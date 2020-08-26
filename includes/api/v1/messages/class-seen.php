@@ -37,7 +37,7 @@
 			if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification Issues!",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
             }
 
