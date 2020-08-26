@@ -156,7 +156,7 @@
             // Step 16: Pass the last id or the minimum id
             $last_id = min($result);
     
-            // Step 17: Commit if no errors found
+            // Step 17: Return result
             return array(
                 "status" => "success",
                 "data" => array( $result, $last_id

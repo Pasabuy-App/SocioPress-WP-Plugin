@@ -90,7 +90,7 @@
 			// Step 8: Pass the last id
 			$last_id = min($result); 
 
-			// Step 9: Commit if no errors found
+			// Step 9: Return result
 			return array(
 				"status" => "success",
 				"data" => array($result, $last_id

@@ -87,7 +87,7 @@
 
             }
 
-            // Step 8: Commit if no errors found
+            // Step 8: Return result
             return array(
                 "status" => "success",
                 "message" => "Data has been deleted successfully."

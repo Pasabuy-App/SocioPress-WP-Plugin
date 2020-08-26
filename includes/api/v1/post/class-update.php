@@ -86,10 +86,10 @@
                 'post_status'   =>$user["post_status"] 
             );
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $result = wp_update_post( $update_post );
 			
-            // Step 7: Check result if failed
+            // Step 7: Check if any queries above failed
             if ($result < 1) {
                 return array(
                         "status" => "failed",
@@ -97,7 +97,7 @@
                 );
             }
             
-            // Step 8: Return a success status and message 
+            // Step 8: Return result
             return array(
                 "status" => "success",
                 "message" => "Data has been updated successfully.",

@@ -79,7 +79,7 @@
             $wpid = $_POST['wpid'];
             $revs_type = 'reviews';
             
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
                 $wpdb->query("INSERT INTO $table_reviews $table_reviews_fields VALUES ('$ratings_recipient', '$wpid', '$date'  ) "); // Insert rating into reviews
@@ -101,7 +101,7 @@
                 );
             }
             
-            // Step 8: Commit query
+            // Step 8: Commit if no errors found
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",

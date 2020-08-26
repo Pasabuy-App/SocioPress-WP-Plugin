@@ -32,13 +32,12 @@
             if ($plugin !== true) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
             // Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -50,7 +49,7 @@
 
             $date = SP_Globals::date_stamp();
             
-            // Step 4: Query
+            // Step 4: Start mysql transaction
             $sql =  $wpdb->prepare("SELECT
                 t1.wpid,
                 AVG(t2.child_val) as `ave_rating`
@@ -61,7 +60,7 @@
 
             $results = $wpdb->get_row( $sql , OBJECT );
             
-            // Step 5: Check result
+            // Step 5: Check if no rows found
             if ($results->wpid == NULL) {
                 return array(
                     "status" => "success",

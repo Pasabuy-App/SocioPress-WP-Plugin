@@ -33,7 +33,7 @@
 				);
 			}
 			 
-			// Step 2: Check if wpid and snky is valid
+			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
                 return array(
                    "status" => "unknown",
@@ -60,10 +60,10 @@
             // Step 5: Store post to variable
             $post_id = $_POST['pid'];
 
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $get_post =  $wpdb->get_row("SELECT * FROM $table_post WHERE ID = $post_id");
 
-            // Step 7: Check result
+            // Step 7: Check if no rows found
             if ( !$get_post ) {
                 return array(
                     "status"  => "success",

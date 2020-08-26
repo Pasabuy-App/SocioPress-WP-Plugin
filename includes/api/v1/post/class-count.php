@@ -69,7 +69,7 @@
                 );
             }
             
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $result = $wpdb->get_results("SELECT
                 post.post_author AS user_id,
                 COUNT( post.post_author ) AS count 
@@ -84,15 +84,14 @@
             ");
             
             // Step 7: Check if no result
-            if (!$result)
-            {
+            if (!$result) {
                 return array(
                     "status"  => "success",
                     "message" => "No data found.",
                 );
             }
             
-            // Step 8: Return Result 
+            // Step 8: Return result
             return array(
                 "status" => "success",
                 "data"   => $result

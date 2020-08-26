@@ -33,16 +33,15 @@
             if ($plugin !== true) {
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
             // Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues.",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
 
@@ -51,14 +50,14 @@
             
             $date = SP_Globals::date_stamp();
 
-            // Step 4: Query
+            // Step 4: Start mysql transaction
             $sql =  $wpdb->prepare("SELECT COUNT(ID) as transac
             FROM $table_orders
             WHERE wpid = %d OR created_by = %d", $user_id, $user_id);
 
             $results = $wpdb->get_row( $sql , OBJECT );
             
-            // Step 5: Check result
+            // Step 5: Check if no rows found
             if ( !($results->transac) ) {
                 return array(
                     "status" => "success",

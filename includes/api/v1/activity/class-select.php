@@ -115,7 +115,7 @@
                 );
             }
                 
-            // step 10 : Commit if no errors found 
+            // step 10 : Return result
             return array(
                 "status" => "success",
                 "data" => $result

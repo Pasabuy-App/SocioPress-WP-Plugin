@@ -75,10 +75,10 @@
                 );
             }
             
-            // Step 6: Query
+            // Step 6: Start mysql transaction
             $result = wp_trash_post( $get_id->ID); // Change post_status to trash and add revision
 			
-            // Step 7: Check result if failed
+            // Step 7: Check if any queries above failed
             if ($result < 1) {
                 return array(
                     "status"  => "failed",
@@ -86,7 +86,7 @@
                 );
             }
 
-            // Step 8: Return a success status and message 
+            // Step 8: Return result
             return array(
                 "status"  => "success",
                 "message" => "Data has been deleted successfully.",
