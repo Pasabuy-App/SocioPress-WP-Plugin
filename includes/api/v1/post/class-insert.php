@@ -42,10 +42,9 @@
 			}
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST["title"]) 
+            if ( !isset($_POST["title"]) 
 				|| !isset($_POST["content"])
-				|| !isset($_POST["type"])
-                ) {
+				|| !isset($_POST["type"]) ) {
 				return array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request unknown!",
@@ -53,10 +52,9 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST["title"]) 
+            if ( empty($_POST["title"]) 
 				|| empty($_POST["content"])
-				|| empty($_POST["type"])
-            ) {
+				|| empty($_POST["type"]) ) {
                 return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",

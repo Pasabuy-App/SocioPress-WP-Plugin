@@ -22,7 +22,6 @@
             // Initialize WP global variable
 			global $wpdb;
 			
-            $user = SP_Update_Post::catch_post();
             $table_posts = WP_POSTS;
 			
             // Step 1: Check if prerequisites plugin are missing
@@ -43,10 +42,9 @@
 			}
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST["title"]) 
+            if ( !isset($_POST["title"]) 
                 || !isset($_POST["content"])
-                || !isset($_POST["post_id"])
-                ) {
+                || !isset($_POST["post_id"]) ) {
 				return array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request unknown!",
@@ -54,29 +52,29 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST["title"]) 
+            if ( empty($_POST["title"]) 
                 || empty($_POST["content"])
-                || empty($_POST["post_id"])
-            ) {
+                || empty($_POST["post_id"]) ) {
                 return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                 );
             }
 			
+            $user = SP_Update_Post::catch_post();
+
             // Step 5: Validation post
             $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' ");
             if ( !$get_id ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "No post found.",
+                        "status" => "success",
+                        "message" => "No data found.",
                 );
             }
-            
             $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
-                        "status" => "failed",
+                        "status" => "success",
                         "message" => "This post is deleted.",
                 );
             }
@@ -98,6 +96,7 @@
                         "message" => "An error occured while submitting data to database.",
                 );
             }
+            
             // Step 8: Return a success status and message 
             return array(
                 "status" => "success",

@@ -22,7 +22,6 @@
             // Initialize WP global variable
 			global $wpdb;
 			
-            $post_id = $_POST["post_id"];
             $table_posts = WP_POSTS;
 			
             // Step 1: Check if prerequisites plugin are missing
@@ -43,7 +42,7 @@
 			}
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST["post_id"]) ) {
+            if ( !isset($_POST["post_id"]) ) {
 				return array(
 					"status"  => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
@@ -51,26 +50,27 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if (empty($_POST["post_id"]) ) {
+            if ( empty($_POST["post_id"]) ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
             
-            // Step 5: Validation post and get id
+            $post_id = $_POST["post_id"];
+
+            // Step 5: Validation post and get id using post id
             $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '$post_id' ");
             if ( !$get_id ) {
                 return array(
-                    "status"  => "failed",
-                    "message" => "No post found.",
+                    "status"  => "success",
+                    "message" => "No data found.",
                 );
             }
-            
             $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '$post_id' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
-                    "status"  => "failed",
+                    "status"  => "success",
                     "message" => "This post has already been deleted.",
                 );
             }

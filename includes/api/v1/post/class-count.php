@@ -22,8 +22,6 @@
             // Initialize WP global variable
 			global $wpdb;
 			
-            $post_type = $_POST["post_type"];
-            $user_id = $_POST["user_id"];
             $table_posts = WP_POSTS;
 			
             // Step 1: Check if prerequisites plugin are missing
@@ -39,12 +37,12 @@
             if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
+                    "message" => "Please contact your administrator. Verification Issues!",
                 );
 			}
 
             // Step 3: Check if required parameters are passed
-            if (!isset($_POST["user_id"]) ) {
+            if ( !isset($_POST["user_id"]) ) {
 				return array(
 					"status"  => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
@@ -52,18 +50,21 @@
             }
 
            // Step 4: Check if parameters passed are empty
-            if (empty($_POST["user_id"]) ) {
+            if ( empty($_POST["user_id"]) ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
             }
 			
-            // Step 5: Validation post
+            $post_type = $_POST["post_type"];
+            $user_id = $_POST["user_id"];
+
+            // Step 5: Validation post using user id
             $get_id = $wpdb->get_row("SELECT ID FROM wp_posts WHERE post_author = '$user_id' ");
             if ( !$get_id ) {
                 return array(
-                    "status"  => "failed",
+                    "status"  => "success",
                     "message" => "No post found.",
                 );
             }
@@ -86,8 +87,8 @@
             if (!$result)
             {
                 return array(
-                    "status"  => "failed",
-                    "message" => "No results found.",
+                    "status"  => "success",
+                    "message" => "No data found.",
                 );
             }
             
