@@ -29,16 +29,14 @@
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
 			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -81,12 +79,10 @@
             // Step 6: Query
             $wpdb->query("START TRANSACTION");
 
-                // Insert data to mp revisions
-                $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");
+                $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");// Insert data into mp revisions
                 $last_id = $wpdb->insert_id;
 
-                // Update mp message content from last id
-                $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");
+                $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");// Update mp message content from last id
             
             // Step 7: Check result
             if ($last_id < 1 || $update_mess < 1) {
@@ -95,9 +91,9 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
-
             }
                 
+            // Step 8: Commit query
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",

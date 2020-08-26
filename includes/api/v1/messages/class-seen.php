@@ -27,16 +27,14 @@
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
 			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -82,10 +80,10 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
-
             }
 
-               return array(
+            // Step 8: Commit query
+            return array(
                 "status" => "success",
                 "message" => "Data has been updated successfully."
             );

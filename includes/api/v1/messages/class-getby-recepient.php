@@ -25,16 +25,14 @@
 			// Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
 			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -69,7 +67,7 @@
 			// Step 5: Check last id post is set
 			if( isset($_POST['lid']) ){
 
-				// Step 6: Validate parameter
+			// Step 6: Validate parameter
                 if (empty($_POST['lid']) ) {
                     return array(
                         "status" => "failed",
@@ -83,7 +81,7 @@
 					);
 				}
 
-				// Step 7: Pass the post in variable and continuation of query
+			// Step 7: Pass the post in variable and continuation of query
 				$get_last_id = $_POST['lid'];
 				$add_feeds = $get_last_id - 7;
 				$sql .= " AND sp_messages.id BETWEEN $add_feeds AND ($get_last_id - 1) ";
@@ -97,8 +95,8 @@
 			// Step 9: Check if array count is 0 , return error message if true
 			if (count($result) < 1) {
 				return array(
-						"status"  => "success",
-						"message" => "No more posts.",
+					"status"  => "success",
+					"message" => "No more message.",
 				);
 			}
 				

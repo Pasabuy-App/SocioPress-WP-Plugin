@@ -21,25 +21,23 @@
 
 			// Initialize WP global variable
             global $wpdb;
+
             $table_revs = SP_REVS_TABLE;
             $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
             $fields_mess = SP_MESSAGES_FIELDS;
-          
 
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status"  => "unknown",
-                    "message" => "Please contact your administrator. ".$plugin." plugin missing.",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
 			// Step 2: Validate user
 			if (DV_Verification::is_verified() == false) {
-                
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
@@ -47,7 +45,7 @@
             }
 
 			// Step 3: Check if required parameters are passed
-            if  (!isset($_POST['content']) 
+            if  ( !isset($_POST['content']) 
                 || !isset($_POST['recepient']) ) {
                 return array(
                     "status"  => "unknown",
@@ -94,19 +92,15 @@
             // Step 8: Query
             $wpdb->query("START TRANSACTION");
                 
-                // Insert data to mp revisions
-                foreach ( $child_key as $key => $child_val) {
+                foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
                     $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '0', '$key', '$child_val', '$wpid', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
-
                 }
-
-                // Insert data to mp messages
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '{$user["user_id"]}', '{$user["recepient"]}', '$id[1]', '$date' ) ");
+                
+                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '{$user["user_id"]}', '{$user["recepient"]}', '$id[1]', '$date' ) "); // Insert data into mp messages
                 $last_id = $wpdb->insert_id;
 
-                // Update parent id in np revision
-                $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");
+                $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");// Update parent id in np revision
             
             // Step 9: Check result
             if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
@@ -115,9 +109,9 @@
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
-
             }
 
+            // Step 10: Commit query
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",
