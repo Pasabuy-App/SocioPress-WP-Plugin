@@ -30,7 +30,6 @@
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing!",
@@ -116,7 +115,7 @@
             if ($title_last_id < 1 || $info_last_id < 1 || $activity_last_id < 1 || $update_parent_id < 1) {
                 $wpdb->query("ROLL BACK");
                 return array(
-                    "status" => "error",
+                    "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
             }

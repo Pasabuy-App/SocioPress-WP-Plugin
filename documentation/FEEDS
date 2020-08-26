@@ -1,0 +1,69 @@
+#### HOME FEEDS => /sociopress/v1/feeds/home
+
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=lid (value=Last ID (Optional))
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. ".$plugin." plugin missing!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Verification issues!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Parameters not in valid format.' data: null
+- code: 'success' message: 'No more post.' data: null
+
+IF SUCCESS:
+```
+{
+    "status": "success",
+    "data": [
+        [
+            {
+                "id": "137",
+                "content": "contents update",
+                "date_created": "2020-08-18 02:34:17"
+            }
+        ],
+        {
+            "id": "137",
+            "content": "contents update",
+            "date_created": "2020-08-18 02:34:17"
+        }
+    ]
+}
+```
+
+#### PROFILE FEEDS => /sociopress/v1/feeds/profile
+
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=lid (value=Last ID (Optional))
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. ".$plugin." plugin missing!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Verification issues!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Parameters not in valid format.' data: null
+- code: 'success' message: 'No more post.' data: null
+
+IF SUCCESS:
+```
+{
+    "status": "success",
+    "data": [
+        [
+            {
+                "id": "137",
+                "content": "contents update",
+                "date_created": "2020-08-18 02:34:17"
+            }
+        ],
+        {
+            "id": "137",
+            "content": "contents update",
+            "date_created": "2020-08-18 02:34:17"
+        }
+    ]
+}
+```

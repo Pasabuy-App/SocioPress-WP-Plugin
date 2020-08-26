@@ -96,7 +96,7 @@
             if ( $parent_id < 1 || $ratings_query < 1){
                 $wpdb->query("ROLLBACK");
                 return array(
-                    "status" => "error",
+                    "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
             }
@@ -105,7 +105,7 @@
             $wpdb->query("COMMIT");
             return array(
                 "status" => "success",
-                "message" => "Data has been submitted successfully."
+                "message" => "Data has been added successfully."
             );
 
         }

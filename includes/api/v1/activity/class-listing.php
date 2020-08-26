@@ -25,7 +25,6 @@
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing!",
@@ -121,7 +120,7 @@
                 if(!is_numeric($_POST["lid"])){
                     return array(
                         "status" => "failed",
-                        "message" => "Parameters not in valid format!",
+                        "message" => "Parameters not in valid format.",
                     );
                 }
                 

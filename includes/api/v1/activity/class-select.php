@@ -25,7 +25,6 @@
             // Step1 : Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
-
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing!",

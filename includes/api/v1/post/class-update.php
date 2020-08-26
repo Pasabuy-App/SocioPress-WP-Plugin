@@ -68,7 +68,7 @@
             if ( !$get_id ) {
                 return array(
                         "status" => "success",
-                        "message" => "No data found.",
+                        "message" => "No post found.",
                 );
             }
             $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
