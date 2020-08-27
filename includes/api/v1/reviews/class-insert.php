@@ -72,6 +72,13 @@
                 );
             }
 
+            if ($_POST['rat'] !== '1' && $_POST['rat'] !== '2' && $_POST['rat'] !== '3' && $_POST['rat'] !== '4' && $_POST['rat'] !== '5' ) {
+                return array(
+                    "status" => "failed",
+                    "message" => "Rate must be 1 to 5 only.",
+                );
+            }
+
             $date = SP_Globals::date_stamp();
             $remarks =  trim($_POST['msg']);
             $ratings = trim($_POST['rat']);
