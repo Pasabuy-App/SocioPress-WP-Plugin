@@ -158,10 +158,7 @@
             // Step 17: Return result
             return array(
                 "status" => "success",
-                "data" => array( $result, $last_id
-                )
+                "data" => array( $result, $last_id )
             );
-
         }
-
     }

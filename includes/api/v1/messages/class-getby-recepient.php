@@ -38,7 +38,6 @@
                     "message" => "Please contact your administrator. Verification issues!",
                 );
 			}
-			
 
 			$sender = $_POST['wpid'];
 			$recepient = $_POST['recepient'];
@@ -111,7 +110,5 @@
 					$last_id
 				)
 			);
-
 		}
-		
     }

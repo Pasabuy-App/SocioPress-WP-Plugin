@@ -26,43 +26,37 @@
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
             
             // Step 2: Valdiate user
             if (DV_Verification::is_verified() == false) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification issues!",
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
 			}
 
             // Step 3: Check if required parameters are passed
-            if ( !isset($_POST["title"]) 
-				|| !isset($_POST["post"])
-				|| !isset($_POST["type"]) ) {
+            if ( !isset($_POST["title"])  || !isset($_POST["post"]) || !isset($_POST["type"]) ) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request unknown!",
                 ); 
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST["title"]) 
-				|| empty($_POST["post"])
-				|| empty($_POST["type"]) ) {
+            if ( empty($_POST["title"])  || empty($_POST["post"]) || empty($_POST["type"]) ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
+                    "status" => "failed",
+                    "message" => "Required fields cannot be empty.",
                 );
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move') 
-                && !($_POST["type"] === 'sell')
-                && !($_POST["type"] === 'status') ) {
+            if ( !($_POST["type"] === 'move') && !($_POST["type"] === 'sell') && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
                     "message" => "Invalid post type.",
@@ -114,5 +108,4 @@
   
               return  $cur_user;
         }
-
     }

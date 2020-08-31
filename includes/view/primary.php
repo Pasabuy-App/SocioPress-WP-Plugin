@@ -7,24 +7,25 @@
 	}
 
     /**
-	 * @package sociopress-wp-plugin
-     * @version 0.1.0
+	    * @package sociopress-wp-plugin
+      * @version 0.1.0
     */
 
-    #region for move registration post type
+      #region for move registration post type
+
       /*
       * Adding a menu to contain the custom post types for frontpage
       */
 
-      // Front Page for custom post type
-      function frontpage_admin_menu() {
-        add_menu_page('Feeds','Feeds','read','front-sections','','dashicons-admin-home',4
-        );
-      }
-      add_action( 'admin_menu', 'frontpage_admin_menu' );
+    // Front Page for custom post type
+    function frontpage_admin_menu() {
+      add_menu_page('Feeds','Feeds','read','front-sections','','dashicons-admin-home',4
+      );
+    }
+    add_action( 'admin_menu', 'frontpage_admin_menu' );
 
       /*
-      * Creating a Custom Post type for Features Section
+        * Creating a Custom Post type for Features Section
       */
 
       function register_cpt_features() {
@@ -121,7 +122,5 @@
           register_post_type( 'sell', $args_sell );
           register_post_type( 'status', $args_status );
     }
-          
-          add_action( 'init', 'register_cpt_features' );
-
+    add_action( 'init', 'register_cpt_features' );
     #endregion

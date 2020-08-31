@@ -45,16 +45,16 @@
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT post.id, post.post_content AS content, post.post_date AS date_created
-			FROM 
-				$table_post AS post
-			WHERE 
-				post.post_author = $id 
-			AND 
-				post.post_status = 'publish' ";
+				FROM 
+					$table_post AS post
+				WHERE 
+					post.post_author = $id 
+				AND 
+					post.post_status = 'publish' ";
 
 			if( isset($_POST['lid']) ){
 				
-			// Step 4: Validate parameter
+				// Step 4: Validate parameter
                 if (empty($_POST['lid']) ) {
                     return array(
                         "status" => "failed",
@@ -68,7 +68,7 @@
 					);
 				}
 
-			// Step 5: Pass the post in variable and continuation of query
+				// Step 5: Pass the post in variable and continuation of query
 				$get_last_id = $_POST['lid'];
 				$add_feeds = $get_last_id - 7;
 				$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
@@ -96,6 +96,5 @@
 				"data" => array($result, $last_id
 				)
 			);
-
 		}	
     }

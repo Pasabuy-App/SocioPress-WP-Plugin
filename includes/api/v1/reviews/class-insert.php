@@ -11,11 +11,11 @@
 	*/
   	class SP_Insert_Reviews {
           
-          public static function listen(){
+        public static function listen(){
             return rest_ensure_response( 
                 SP_Insert_Reviews::insert_reviews()
             );
-          }
+        }
     
         public static function insert_reviews(){
             
@@ -114,8 +114,5 @@
                 "status" => "success",
                 "message" => "Data has been added successfully."
             );
-
         }
-        
-
     }

@@ -43,8 +43,6 @@
 	define('SP_REVIEWS_TABLE', SP_PREFIX.'reviews');
 	define('SP_REVIEWS_FIELDS', '( wpid, created_by, date_created )');
 
-
-
 	//Init feeds limit
 	define('INITIAL_FEEDS', 12);
 	define('SUCCEEDING_FEEDS', 5);

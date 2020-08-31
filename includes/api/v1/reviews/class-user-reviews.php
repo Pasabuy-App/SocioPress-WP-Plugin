@@ -11,11 +11,11 @@
 	*/
   	class SP_List_Reviews {
           
-          public static function listen(){
+        public static function listen(){
             return rest_ensure_response( 
                 SP_List_Reviews::list_reviews()
             );
-          }
+        }
     
         public static function list_reviews(){
             
@@ -74,9 +74,5 @@
                 "data" => $results
         
             );
-       
-       
         }
-        
-
     }

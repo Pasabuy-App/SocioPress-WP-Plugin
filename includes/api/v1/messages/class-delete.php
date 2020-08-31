@@ -92,6 +92,5 @@
                 "status" => "success",
                 "message" => "Data has been deleted successfully."
             );
-
         }
     }

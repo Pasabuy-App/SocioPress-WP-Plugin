@@ -24,13 +24,11 @@
 		$tbl_reacts = SP_REACTS_TABLE;
 		$tbl_reviews = SP_REVIEWS_TABLE;
 
-
-
-
 		//Database table creation for activities
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
 			$sql = "CREATE TABLE `".$tbl_act."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
 				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
 				$sql .= "`icon` enum('info','warn','error') DEFAULT 'info' COMMENT 'General type of activity.', ";
@@ -47,6 +45,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
 			$sql = "CREATE TABLE `".$tbl_configs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`config_desc` varchar(255) NOT NULL COMMENT 'Config Description', ";
 				$sql .= "`config_key` varchar(50) NOT NULL COMMENT 'Config KEY', ";
 				$sql .= "`config_value` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Config VALUES', ";
@@ -59,6 +58,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_mess'" ) != $tbl_mess) {
 			$sql = "CREATE TABLE `".$tbl_mess."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`content` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
 				$sql .= "`sender` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
 				$sql .= "`recipient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
@@ -74,6 +74,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
 			$sql = "CREATE TABLE `".$tbl_revs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`revs_type` enum('none','configs','activity','messages', 'reviews') NOT NULL COMMENT 'Target table', ";
 				$sql .= "`parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Parent ID of this Revision', ";
 				$sql .= "`child_key` varchar(50) NOT NULL COMMENT 'Column name on the table', ";
@@ -89,6 +90,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_market'" ) != $tbl_market) {
 			$sql = "CREATE TABLE `".$tbl_market."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`post_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Id of this post with revision ID', ";
 				$sql .= "`stage` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Stage of this post with revision ID', ";
 				$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID created this Revision.', ";
@@ -117,6 +119,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_reviews'" ) != $tbl_reviews) {
 			$sql = "CREATE TABLE `".$tbl_reviews."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User recipient of this review with revision ID', ";
 				$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID who created this review with Revision id.', ";
 				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this Revision is created.', ";
@@ -124,11 +127,5 @@
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 		}
-
-
-
-
-
 	}
-
 	add_action( 'activated_plugin', 'sp_dbhook_activate');

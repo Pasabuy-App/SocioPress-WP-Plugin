@@ -11,11 +11,11 @@
 	*/
   	class SP_Update_Message {
 
-          public static function listen(){
+        public static function listen(){
             return rest_ensure_response( 
                 SP_Update_Message::list_open()
             );
-          }
+        }
     
         public static function list_open(){
 
@@ -44,8 +44,7 @@
             }
 
 			// Step 3: Check if required parameters are passed
-            if ( !isset($_POST['content']) 
-                || !isset($_POST['mess_id']) ) {
+            if ( !isset($_POST['content']) || !isset($_POST['mess_id']) ) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -53,8 +52,7 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST['content']) 
-                || empty($_POST['mess_id']) ) {
+            if ( empty($_POST['content']) || empty($_POST['mess_id']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -99,6 +97,5 @@
                 "status" => "success",
                 "message" => "Data has been updated successfully."
             );
-            
         }
     }

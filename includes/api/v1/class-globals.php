@@ -66,8 +66,6 @@
             
         }
 
-
-
         public static function validate_user(){
             
             //User verification
@@ -84,7 +82,5 @@
             } else {
                     return true;
             }
-            
         }
-        
     }

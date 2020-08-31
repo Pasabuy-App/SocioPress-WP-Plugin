@@ -87,6 +87,5 @@
                 "status" => "success",
                 "message" => "Data has been added successfully."
             );
-
         }
     }

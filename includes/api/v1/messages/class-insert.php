@@ -11,11 +11,11 @@
 	*/
   	class SP_Insert_Message {
 
-          public static function listen(){
+        public static function listen(){
             return rest_ensure_response( 
                 SP_Insert_Message::list_open()
             );
-          }
+        }
     
         public static function list_open(){
 
@@ -45,8 +45,7 @@
             }
 
 			// Step 3: Check if required parameters are passed
-            if  ( !isset($_POST['content']) 
-                || !isset($_POST['recepient']) ) {
+            if  ( !isset($_POST['content']) || !isset($_POST['recepient']) ) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -54,8 +53,7 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST['content']) 
-                || empty($_POST['recepient']) ) {
+            if ( empty($_POST['content']) || empty($_POST['recepient']) ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Required fields cannot be empty.",

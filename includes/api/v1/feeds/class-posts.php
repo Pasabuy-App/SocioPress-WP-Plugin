@@ -9,12 +9,13 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-  	class SP_Posts {
+
+	class SP_Posts {
 
 		
         public static function listen(){
             return rest_ensure_response( 
-                SP_Posts:: list_open()
+                self:: list_open()
             );
         }
          
@@ -32,11 +33,9 @@
 			
 			//Check if post type filter is set
 			if (!isset($_POST["pt"])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
-					)
+				return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request unknown!",
 				);
 			}
 
@@ -64,21 +63,17 @@
 
 				//Check if rows are found
 				if (!$posts) {
-					return rest_ensure_response( 
-						array(
-							"status" => "failed",
-							"message" => "No posts found",
-						)
+					return array(
+						"status" => "failed",
+						"message" => "No posts found",
 					);
 				}
 
-				return rest_ensure_response( 
-					array(
-						"status" => "success",
-						"data" => array(
-							'list' => $posts, 
-							'last_id' => $last_id->ID
-						)
+				return array(
+					"status" => "success",
+					"data" => array(
+						'list' => $posts, 
+						'last_id' => $last_id->ID
 					)
 				);
 			
@@ -87,11 +82,9 @@
 			} else {
 
 				if ( !is_numeric($_POST["lid"])) {
-					return rest_ensure_response( 
-						array(
-							"status" => "failed",
-							"message" => "Parameters not in valid format!",
-						)
+					return array(
+						"status" => "failed",
+						"message" => "Parameters not in valid format!",
 					);
 				}
 
@@ -109,29 +102,24 @@
 				);
 
 				if (count($posts) < 1) {
-					return rest_ensure_response( 
-						array(
-							"status" => "failed",
-							"message" => "No more posts to see",
-						)
+					return array(
+						"status" => "failed",
+						"message" => "No more posts to see",
 					);
+
 				} else {
 					//Pass the last id
 					$last_id = min($posts);
+
 				}
 
-				return rest_ensure_response( 
-					array(
-						"status" => "success",
-						"data" => array(
-							'list' => $posts, 
-							'last_id' => $last_id->ID
-						)
+				return array(
+					"status" => "success",
+					"data" => array(
+						'list' => $posts, 
+						'last_id' => $last_id->ID
 					)
 				);
-
 			}
-
 		}
-
     }

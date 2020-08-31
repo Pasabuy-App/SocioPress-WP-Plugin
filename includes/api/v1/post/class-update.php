@@ -28,16 +28,16 @@
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. ".$plugin." plugin missing!",
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification issues!",
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
 			}
 
@@ -46,18 +46,16 @@
                 || !isset($_POST["content"])
                 || !isset($_POST["post_id"]) ) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request unknown!",
                 ); 
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST["title"]) 
-                || empty($_POST["content"])
-                || empty($_POST["post_id"]) ) {
+            if ( empty($_POST["title"]) || empty($_POST["content"]) || empty($_POST["post_id"]) ) {
                 return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
+                    "status" => "failed",
+                    "message" => "Required fields cannot be empty.",
                 );
             }
 			
@@ -67,15 +65,15 @@
             $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' ");
             if ( !$get_id ) {
                 return array(
-                        "status" => "success",
-                        "message" => "No post found.",
+                    "status" => "success",
+                    "message" => "No post found.",
                 );
             }
             $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
-                        "status" => "success",
-                        "message" => "This post is deleted.",
+                    "status" => "success",
+                    "message" => "This post is deleted.",
                 );
             }
             
@@ -102,7 +100,6 @@
                 "status" => "success",
                 "message" => "Data has been updated successfully.",
             );
-
 		}
 
         // Catch Post 
@@ -121,5 +118,4 @@
   
               return  $cur_user;
         }
-
     }

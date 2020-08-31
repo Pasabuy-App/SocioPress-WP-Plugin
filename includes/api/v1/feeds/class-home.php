@@ -95,6 +95,5 @@
 					"data" => array($result, $last_id
 				)
 			);
-			
 		}
     }

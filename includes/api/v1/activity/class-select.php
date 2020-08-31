@@ -17,6 +17,7 @@
         }
     
 		public static function get_activity_byid(){
+            
             global $wpdb;
 
             $table_revision = SP_REVS_TABLE;
