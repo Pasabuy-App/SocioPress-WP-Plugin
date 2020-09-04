@@ -70,7 +70,7 @@
             }
             
             // Step 6: Start mysql transaction
-            $result = $wpdb->get_results("SELECT
+            $result = $wpdb->get_row("SELECT
                 post.post_author AS user_id,
                 COUNT( post.post_author ) AS count 
             FROM
