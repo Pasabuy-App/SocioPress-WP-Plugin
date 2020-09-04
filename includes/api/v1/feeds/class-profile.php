@@ -50,7 +50,7 @@
 				WHERE 
 					post.post_author = $id 
 				AND 
-					post.post_status = 'publish' AND post.post_type = 'status' OR post.post_type = 'move' OR  post.post_type = 'sell' ";
+					post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
 
 			if( isset($_POST['lid']) ){
 				
