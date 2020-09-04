@@ -40,16 +40,21 @@
 					"message" => "Please contact your administrator. Verification issues!",
 			 	);
 			}
-
+			
 			// Step 3: Start mysql transaction
 			$sql = "SELECT 
 				post.id,
+				user.display_name AS name,
+				user.user_status AS status,
+				post.post_title AS title,
 				post.post_content AS content,
-				post.post_date AS date_created
+				post.post_date AS date_post, 
+				post.post_type AS type
 			FROM 
-				$table_post AS post 
+				$table_post AS post
+			INNER JOIN wp_users AS user ON post.post_author = user.ID
 			WHERE 
-				post.post_status = 'publish' ";
+				post.post_status = 'publish' AND post.post_type = 'status' OR post.post_type = 'move' OR  post.post_type = 'sell' ";
 			
 			if( isset($_POST['lid']) ){
 
@@ -92,8 +97,7 @@
 			// Step 9: Return result
 			return array(
 					"status" => "success",
-					"data" => array($result, $last_id
-				)
+					"data" => $result
 			);
 		}
     }

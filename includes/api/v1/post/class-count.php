@@ -56,8 +56,7 @@
                     "message" => "Required fields cannot be empty.",
                 );
             }
-			
-            $post_type = $_POST["post_type"];
+            //$post_type = $_POST["post_type"];
             $user_id = $_POST["user_id"];
 
             // Step 5: Validation post using user id

@@ -83,7 +83,6 @@
                         "fname" => $wp_user->first_name,
                         "lname" => $wp_user->last_name,
                         "avatar" => $wp_user->avatar,
-                        "contact" => $user_contact[0]->value,
                         "street" => $user_address->street,
                         "brgy"  => $user_address->brgy,
                         "city"  => $user_address->city,
