@@ -44,13 +44,14 @@
 			$id = $_POST['wpid'];
 
 			// Step 3: Start mysql transaction
-			$sql ="SELECT post.id, post.post_content AS content, post.post_date AS date_created, post.post_type AS type
-				FROM 
-					$table_post AS post
-				WHERE 
-					post.post_author = $id 
-				AND 
-					post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
+			$sql ="SELECT 
+				post.id, post.post_content AS content, post.post_date AS date_created, IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type 
+			FROM 
+				$table_post AS post
+			WHERE 
+				post.post_author = $id 
+			AND 
+				post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
 
 			if( isset($_POST['lid']) ){
 				

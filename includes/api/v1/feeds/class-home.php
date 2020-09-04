@@ -49,12 +49,15 @@
 				post.post_title AS title,
 				post.post_content AS content,
 				post.post_date AS date_post, 
-				post.post_type AS type
+				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type 
 			FROM 
 				$table_post AS post
-			INNER JOIN wp_users AS user ON post.post_author = user.ID
+			INNER JOIN 
+				wp_users AS user ON post.post_author = user.ID
 			WHERE 
-				post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
+				post.post_status = 'publish' 
+			AND 
+				post.post_type IN ('status', 'move', 'sell')  ";
 			
 			if( isset($_POST['lid']) ){
 
