@@ -45,7 +45,8 @@
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT 
-				post.id, post.post_content AS content, post.post_date AS date_created, IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type 
+				post.id, post.post_content AS content, post.post_date AS date_created, 
+				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type 
 			FROM 
 				$table_post AS post
 			WHERE 
