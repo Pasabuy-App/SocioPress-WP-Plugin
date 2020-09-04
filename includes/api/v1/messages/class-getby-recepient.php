@@ -50,6 +50,7 @@
                     "message" => "User does not exist.",
                 );
 			}
+
 			
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
@@ -61,7 +62,7 @@
 			WHERE 
 				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.status) = '1' 
 			AND 
-				sp_messages.recepient = '$recepient' AND sp_messages.sender = '$sender' ";
+				sp_messages.recipient = '$recepient' AND sp_messages.sender = '$sender' ";
 
 			// Step 5: Check last id post is set
 			if( isset($_POST['lid']) ){

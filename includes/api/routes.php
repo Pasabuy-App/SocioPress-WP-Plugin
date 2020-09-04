@@ -36,6 +36,7 @@
     require plugin_dir_path(__FILE__) . '/v1/messages/class-seen.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/messages/class-getby-recepient.php';
+    require plugin_dir_path(__FILE__) . '/v1/messages/class-listing.php';
 
     // Reviews Folder
     require plugin_dir_path(__FILE__) . '/v1/reviews/class-insert.php';
@@ -187,6 +188,11 @@
             register_rest_route( 'sociopress/v1/messages/get', 'recepient', array(
                 'methods' => 'POST',
                 'callback' => array('SP_GetBy_Recepient','listen'),
+            ));
+
+            register_rest_route( 'sociopress/v1/messages', 'list', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Listing_Message','listen'),
             ));
 
         /*

@@ -13,7 +13,7 @@
 
         public static function listen(){
             return rest_ensure_response( 
-                SP_Insert_Message::list_open()
+                self::list_open()
             );
         }
     
@@ -83,7 +83,7 @@
 
             // Step 7: Insert data to array
             $child_key = array( 
-                'content' => $content,
+                'content' => $user['content'],
                 'status'  => '1'
             );
 
@@ -91,30 +91,37 @@
             $wpdb->query("START TRANSACTION");
                 
                 foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
-                    $insert_revs = $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '0', '$key', '$child_val', '$wpid', '$date' ) ");
+                    $insert_revs = $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '0', '$key', '$child_val', '{$user["user_id"]}', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
                 }
                 
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('$id[0]', '{$user["user_id"]}', '{$user["recepient"]}', '$id[1]', '$date' ) "); // Insert data into mp messages
+                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('{$id[0]}', '{$user["user_id"]}', '{$user["recepient"]}', '{$id[1]}', '$date' ) "); // Insert data into mp messages
                 $last_id = $wpdb->insert_id;
+
+                $wpdb->query("UPDATE $table_mess SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id ");
 
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");// Update parent id in np revision
             
+                $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[0], 256) WHERE ID = $id[0]");
+                $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[1], 256) WHERE ID = $id[1]");
+
             // Step 9: Check if any queries above failed
             if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
-                $wpdb->query("ROLL BACK");
+                $wpdb->query("ROLLBACK");
                 return array(
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
+            }else{
+                // Step 10: Commit if no errors found
+                $wpdb->query("COMMIT");
+                return array(
+                    "status" => "success",
+                    "message" => "Data has been added successfully."
+                );
             }
 
-            // Step 10: Commit if no errors found
-            $wpdb->query("COMMIT");
-            return array(
-                "status" => "success",
-                "message" => "Data has been added successfully."
-            );
+            
 
         }
 

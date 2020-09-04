@@ -23,7 +23,7 @@
 	
 	//Revisions Config
 	define('SP_REVS_TABLE', SP_PREFIX.'revisions');
-	define('SP_REVS_TABLE_FIELDS', '(revs_type, parent_id, child_key, child_val, created_by, date_created)');
+	define('SP_REVS_TABLE_FIELDS', '`revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created`');
 
 	//Configs Config
 	//define('SP_POSTS_TABLE', SP_PREFIX.'posts');
@@ -31,7 +31,7 @@
 
 	//Message Configs
 	define('SP_MESSAGES_TABLE', SP_PREFIX.'messages');
-	define('SP_MESSAGES_FIELDS', '(content, sender, recepient, status, date_created )');
+	define('SP_MESSAGES_FIELDS', '(`content`, `sender`, `recipient`, `status`, `date_created` )');
 
 	//Market Configs
 	define('SP_MARKET_TABLE', SP_PREFIX.'market');

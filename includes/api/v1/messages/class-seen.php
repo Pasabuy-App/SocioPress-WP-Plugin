@@ -23,6 +23,7 @@
             global $wpdb;
 
             $table_mess = SP_MESSAGES_TABLE;
+            $table_revs = SP_REVS_TABLE;
 
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -61,12 +62,15 @@
             $wpid = $_POST['wpid'];
             $mess_id = $_POST['mess_id'];
 
+            $wpdb->query("START TRANSACTION");
+
             // Step 5: Validate message using message id and user id
             $validate = $wpdb->get_row("SELECT ID FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid' ");
             $delete = $wpdb->get_row("SELECT child_val as status FROM $table_revs WHERE ID = (SELECT status FROM $table_mess WHERE ID = '$mess_id' AND sender = '$wpid') ");
             if ( !$validate || $delete->status === '0') {
+            $wpdb->query("ROLLBACK");
                 return array(
-                    "status"  => "success",
+                    "status"  => "unknown",
                     "message" => "This message does not exists.",
                 );
             }
@@ -76,16 +80,18 @@
             
             // Step 7: Check if any queries above failed
             if ($update_mess < 1) {
+                $wpdb->query("ROLLBACK");
                 return array(
                     "status" => "failed",
                     "message" => "An error occured while submitting data to server."
                 );
+            }else{
+                $wpdb->query("COMMIT");
+                // Step 8: Return result
+                return array(
+                    "status" => "success",
+                    "message" => "Data has been added successfully."
+                );
             }
-
-            // Step 8: Return result
-            return array(
-                "status" => "success",
-                "message" => "Data has been added successfully."
-            );
         }
     }

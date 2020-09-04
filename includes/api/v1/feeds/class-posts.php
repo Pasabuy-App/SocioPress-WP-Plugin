@@ -100,18 +100,8 @@
 					AND ID BETWEEN $add_feeds AND ($get_last_id - 1)
 					ORDER BY ID DESC"
 				);
-
-				if (count($posts) < 1) {
-					return array(
-						"status" => "failed",
-						"message" => "No more posts to see",
-					);
-
-				} else {
-					//Pass the last id
-					$last_id = min($posts);
-
-				}
+			
+				$last_id = min($posts);
 
 				return array(
 					"status" => "success",

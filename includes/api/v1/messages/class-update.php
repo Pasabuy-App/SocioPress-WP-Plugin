@@ -36,12 +36,12 @@
             }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-            }
+			// if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status" => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+            // }
 
 			// Step 3: Check if required parameters are passed
             if ( !isset($_POST['content']) || !isset($_POST['mess_id']) ) {
@@ -77,8 +77,10 @@
             // Step 6: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
-                $wpdb->query("INSERT INTO $table_revs $field_revs VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");// Insert data into mp revisions
+                $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '$mess_id', 'content', '$content', '$wpid', '$date' ) ");// Insert data into mp revisions
                 $last_id = $wpdb->insert_id;
+
+                $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id");
 
                 $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");// Update mp message content from last id
             
@@ -93,9 +95,9 @@
                 
             // Step 8: Commit if no errors found
             $wpdb->query("COMMIT");
-            return array(
-                "status" => "success",
-                "message" => "Data has been updated successfully."
-            );
+                return array(
+                    "status" => "success",
+                    "message" => "Data has been updated successfully."
+                );
         }
     }
