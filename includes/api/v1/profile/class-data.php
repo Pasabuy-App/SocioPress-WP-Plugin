@@ -66,9 +66,6 @@
             WHERE
                 dc.`wpid` = '$wpid'");
 
-            $results = $wpdb->get_results($sql);
-
-
             // Verify user
                 $isVerified = '';
 
