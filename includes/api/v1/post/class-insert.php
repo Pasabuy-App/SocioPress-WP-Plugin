@@ -79,7 +79,9 @@
                         "message" => "Required fields cannot be empty.",
                     );
                 }
+
             }elseif ($_POST['type'] === 'sell') {
+
                 if (!isset($_POST['item_cat']) || !isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['item_dec']) || !isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
                     return array(
                         "status" => "unknown",
