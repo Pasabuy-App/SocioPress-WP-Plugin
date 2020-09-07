@@ -65,6 +65,36 @@
                 );
             }
 
+            if ($_POST['type'] === 'move') {
+                if (!isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+
+                if (empty($_POST['item_name']) || empty($_POST['vhl_type']) || empty($_POST['pck_loc']) || empty($_POST['dp_loc'])  ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+            }elseif ($_POST['type'] === 'sell') {
+                if (!isset($_POST['item_cat']) || !isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['item_dec']) || !isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+
+                if (empty($_POST['item_cat']) || empty($_POST['item_name']) || empty($_POST['vhl_type']) || empty($_POST['item_dec']) || empty($_POST['item_price']) || empty($_POST['pic_loc'])  ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+            }
+
 			$insert_post = array(
 				'post_author'	=> $user["created_by"],
 				'post_title'	=> $user["title"],
@@ -77,7 +107,24 @@
 
             // Step 6: Start mysql transaction
             $result = wp_insert_post($insert_post);
-            update_post_meta($result,awd );
+
+            if ($_POST['type'] === 'move') {
+
+                $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
+                $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
+                $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
+                $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
+            }
+
+            if ($_POST['type'] === 'sell') {
+                $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
+                $result2 = update_post_meta($result, 'item_category', $_POST['item_cat']  );
+                $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
+                $result4 = update_post_meta($result, 'item_description', $_POST['item_dec']  );
+                $result5 = update_post_meta($result, 'item_price', $_POST['item_price']  );
+                $result6 = update_post_meta($result, 'pickup_location', $_POST['pic_loc']  );
+
+            }
 
             // Step 7: Check if any queries above failed
             if ($result < 1) {

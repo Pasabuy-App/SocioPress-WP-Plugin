@@ -91,7 +91,7 @@
                     if ($verify_user->approve_status !== '1') {
                         $isVerified = 'Not Verified';
                     }else{
-                        $isVerified = 'Verified User';
+                        $isVerified = 'Verified';
                     }
                 }else{
                     $isVerified = 'Not Verified';
@@ -117,7 +117,7 @@
                         "brgy"  => $user_address->brgy,
                         "city"  => $user_address->city,
                         "prov"  => $user_address->province,
-                        "isVerified" => $isVerified
+                        "Verified" => $isVerified
                     )
             );
         }// End of function initialize()
