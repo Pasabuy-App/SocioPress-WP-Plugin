@@ -9,7 +9,7 @@
      * @version 0.1.0
      * This is where you provide all the constant config.
 	*/
-	
+
 	//Defining plugin prefix
 	define('SP_PREFIX', 'sp_');
 	define('WP_PREFIXS', 'wp_');
@@ -19,8 +19,8 @@
 
 	//Activity Configs
 	define('SP_ACTIVITY_TABLE', SP_PREFIX.'activities');
-	define('SP_ACTIVITY_FIELDS', '(wpid, stid, icon, title, info, created_by, date_open, date_created)');
-	
+	define('SP_ACTIVITY_FIELDS', '(`wpid`, `stid`, `icon`, `title`, `info`, `date_open`, `date_created`)');
+
 	//Revisions Config
 	define('SP_REVS_TABLE', SP_PREFIX.'revisions');
 	define('SP_REVS_TABLE_FIELDS', '`revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created`');
@@ -47,7 +47,7 @@
 	define('INITIAL_FEEDS', 12);
 	define('SUCCEEDING_FEEDS', 5);
 
-	
+
 
 
 
