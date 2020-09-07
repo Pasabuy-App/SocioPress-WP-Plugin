@@ -4,21 +4,21 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
   	class SP_Insert_Reviews {
-          
+
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 SP_Insert_Reviews::insert_reviews()
             );
         }
-    
+
         public static function insert_reviews(){
-            
+
 			// Initialize WP global variable
             global $wpdb;
 
@@ -46,9 +46,7 @@
             }
 
             // Step 3: Check if required parameters are passed
-            if ( !isset($_POST['rid']) 
-                || !isset($_POST['rat']) 
-                || !isset($_POST['msg'])  ) {
+            if ( !isset($_POST['rid']) || !isset($_POST['rat']) || !isset($_POST['msg'])  ) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -56,8 +54,7 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST['rid']) 
-                || empty($_POST['rat'])  ) {
+            if ( empty($_POST['rid']) || empty($_POST['rat'])  ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -85,7 +82,7 @@
             $ratings_recipient = $_POST['rid'];
             $wpid = $_POST['wpid'];
             $revs_type = 'reviews';
-            
+
             // Step 6: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
@@ -93,10 +90,10 @@
                 $parent_id = $wpdb->insert_id;
 
                 $ratings_query = $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('$revs_type', '$parent_id', 'ratings', '$ratings', '$wpid', '$date' ) "); // Insert into revisions
-                
+
                 if ( !empty($remarks) ) { // Check remarks to insert into revision
                    $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('$revs_type', '$parent_id', 'remarks', '$remarks', '$wpid', '$date' ) ");
-                   
+
                 }
 
              // Step 7: Check if any queries above failed
@@ -107,7 +104,7 @@
                     "message" => "An error occured while submitting data to server."
                 );
             }
-            
+
             // Step 8: Commit if no errors found
             $wpdb->query("COMMIT");
             return array(

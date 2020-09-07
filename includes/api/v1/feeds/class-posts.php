@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,25 +12,25 @@
 
 	class SP_Posts {
 
-		
+
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 self:: list_open()
             );
         }
-         
+
         public static function list_open(){
-            
+
             // Initialize WP global variable
             global $wpdb;
-			
+
 			//Validate user session
 			$result = SP_Globals::validate_user();
-			
+
 			if ($result !== true) {
 				return $result;
 			}
-			
+
 			//Check if post type filter is set
 			if (!isset($_POST["pt"])) {
 				return array(
@@ -46,40 +46,15 @@
 			$fields = POST_FIELDS;
 			$table = POSTS_TABLE;
 			$initial_feeds = INITIAL_FEEDS;
-			$succeeding_feeds = SUCCEEDING_FEEDS; 
+			$succeeding_feeds = SUCCEEDING_FEEDS;
 
 			//Check if last ID is passed, if not, it means this is the initial feed listing
-			if(!isset($_POST['lid'])){
 
-				$posts = $wpdb->get_results("
-					SELECT $fields
-					FROM $table
-					WHERE post_type = '$post_type'
-					ORDER BY ID DESC
-					LIMIT $initial_feeds"
-				);
+			$sql = "SELECT $fields
+				FROM $table
+				WHERE post_type = '$post_type'";
 
-				$last_id = min($posts);
-
-				//Check if rows are found
-				if (!$posts) {
-					return array(
-						"status" => "failed",
-						"message" => "No posts found",
-					);
-				}
-
-				return array(
-					"status" => "success",
-					"data" => array(
-						'list' => $posts, 
-						'last_id' => $last_id->ID
-					)
-				);
-			
-
-			//Additional Feeds
-			} else {
+			if (isset($_POST['lid'])) {
 
 				if ( !is_numeric($_POST["lid"])) {
 					return array(
@@ -93,23 +68,18 @@
 				//Get 5 new posts
 				$add_feeds = $get_last_id - $succeeding_feeds;
 
-				$posts = $wpdb->get_results("
-					SELECT $fields
-					FROM $table
-					WHERE post_type = '$post_type'
-					AND ID BETWEEN $add_feeds AND ($get_last_id - 1)
-					ORDER BY ID DESC"
-				);
-			
-				$last_id = min($posts);
+				$sql .= " AND ID BETWEEN $add_feeds AND ($get_last_id - 1) ";
 
-				return array(
-					"status" => "success",
-					"data" => array(
-						'list' => $posts, 
-						'last_id' => $last_id->ID
-					)
-				);
 			}
+
+			$sql = " ORDER BY ID DESC
+			LIMIT $initial_feeds ";
+
+			$posts = $wpdb->get_results($sql);
+
+			return array(
+				"status" => "success",
+				"data" => array($posts)
+			);
 		}
     }
