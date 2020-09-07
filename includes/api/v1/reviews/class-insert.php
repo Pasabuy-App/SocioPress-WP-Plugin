@@ -89,11 +89,18 @@
                 $wpdb->query("INSERT INTO $table_reviews $table_reviews_fields VALUES ('$ratings_recipient', '$wpid', '$date'  ) "); // Insert rating into reviews
                 $parent_id = $wpdb->insert_id;
 
+                $wpdb->query("UPDATE $table_reviews SET hash_id = sha2($parent_id, 256) WHERE ID = $parent_id");
+
                 $ratings_query = $wpdb->query("INSERT INTO $table_revision ($table_revision_fields) VALUES ('$revs_type', '$parent_id', 'ratings', '$ratings', '$wpid', '$date' ) "); // Insert into revisions
+                $rev_id = $wpdb->insert_id;
+
+                $wpdb->query("UPDATE $table_revision SET hash_id = sha2($rev_id, 256) WHERE ID = $rev_id");
 
                 if ( !empty($remarks) ) { // Check remarks to insert into revision
-                   $wpdb->query("INSERT INTO $table_revision ($table_revision_fields) VALUES ('$revs_type', '$parent_id', 'remarks', '$remarks', '$wpid', '$date' ) ");
+                    $wpdb->query("INSERT INTO $table_revision ($table_revision_fields) VALUES ('$revs_type', '$parent_id', 'remarks', '$remarks', '$wpid', '$date' ) ");
+                    $rev_id2 = $wpdb->insert_id;
 
+                    $wpdb->query("UPDATE $table_revision SET hash_id = sha2($rev_id2, 256) WHERE ID = $rev_id2");
                 }
 
              // Step 7: Check if any queries above failed

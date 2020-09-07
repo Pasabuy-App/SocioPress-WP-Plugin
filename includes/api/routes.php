@@ -4,14 +4,14 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
 
-    //Require the USocketNet class which have the core function of this plguin. 
-    
+    //Require the USocketNet class which have the core function of this plguin.
+
     // Activity Folder
     require plugin_dir_path(__FILE__) . '/v1/activity/class-insert.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-listing.php'; // home feeds
@@ -43,19 +43,18 @@
     require plugin_dir_path(__FILE__) . '/v1/reviews/class-user-reviews.php';
 
     //Transactions Folder
-    require plugin_dir_path(__FILE__) . '/v1/transactions/class-user-transactions.php';
     require plugin_dir_path(__FILE__) . '/v1/transactions/class-user-transactions-total.php';
 
 
 
     // User Authentication
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
-    
+
     require plugin_dir_path(__FILE__) . '/v1/class-globals.php'; // globals
 
     // Init check if USocketNet successfully request from wapi.
     function sociopress_route()
-    {   
+    {
         /*
          * AUTHENTICATION RESTAPI
         */
@@ -63,7 +62,7 @@
             'methods' => 'POST',
             'callback' => array('SP_Authenticate','listen'),
         ));
-                   
+
         /*
          * ACTIVITY RESTAPI
         */
@@ -111,7 +110,7 @@
                 'methods' => 'POST',
                 'callback' => array('SP_Homefeed','listen'),
             ));
-        
+
             register_rest_route( 'sociopress/v1/feeds', 'get_act_addfeed', array(
                 'methods' => 'GET',
                 'callback' => array('SP_Activity','get_activity_feed'),
@@ -130,7 +129,7 @@
         /*
          * POST RESTAPI
         */
-    
+
             register_rest_route( 'sociopress/v1/post', 'insert', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Insert_Post','listen'),
@@ -164,27 +163,27 @@
         /*
          * MESSAGES RESTAPI
         */
-        
+
             register_rest_route( 'sociopress/v1/messages', 'insert', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Insert_Message','listen'),
             ));
-            
+
             register_rest_route( 'sociopress/v1/messages', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Update_Message','listen'),
             ));
-            
+
             register_rest_route( 'sociopress/v1/messages', 'seen', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Seen_Message','listen'),
             ));
-            
+
             register_rest_route( 'sociopress/v1/messages', 'delete', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Delete_Message','listen'),
             ));
-            
+
             register_rest_route( 'sociopress/v1/messages/get', 'recepient', array(
                 'methods' => 'POST',
                 'callback' => array('SP_GetBy_Recepient','listen'),
@@ -223,6 +222,6 @@
                 'callback' => array('SP_Transactions_List_Total','listen'),
             ));
 
-            
+
     }
     add_action( 'rest_api_init', 'sociopress_route' );

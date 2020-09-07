@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,12 +12,12 @@
   	class SP_Profile_data {
 
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 self::get_profile_data()
             );
-    
+
         }
-         
+
         // REST API for getting the user data
         public static function get_profile_data(){
             global $wpdb;
@@ -56,21 +56,46 @@
                 `add`.date_created
             FROM
                 dv_address `add`
-            WHERE wpid = $wpid"); 
+            WHERE wpid = $wpid");
 
             $user_contact = $wpdb->get_results("SELECT
-                -- dc.ID,
-                -- dc.stid,
-                -- IF ( dc.`status` = 1, 'Active', 'Inactive' ) as `status`,
-                -- dc.types,
                 dr.child_val AS `value`
-                -- dc.date_created 
             FROM
                 dv_contacts dc
-                INNER JOIN dv_revisions dr ON dr.ID = dc.revs 
+                INNER JOIN dv_revisions dr ON dr.ID = dc.revs
             WHERE
                 dc.`wpid` = '$wpid'");
-                    
+
+            $results = $wpdb->get_results($sql);
+
+
+            // Verify user
+                $isVerified = '';
+
+                $sql_user = "SELECT
+                    doc.hash_id as ID,
+                    prev.child_val as preview,
+                    IF ( sts.child_val = 1, 'Active', 'Inactive') as `status`,
+                    ( SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_status`,
+                    ( SELECT date_created FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_date`,
+                    ( SELECT created_by FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_by`
+                FROM
+                    dv_documents doc
+                LEFT JOIN dv_revisions sts ON sts.ID = doc.`status`
+                LEFT JOIN dv_revisions prev ON prev.ID = doc.`preview`
+                WHERE
+                    doc.wpid = $wpid
+                ";
+
+                $verify_user = $wpdb->get_row($sql_user);
+
+                if ($verify_user->approve_status !== '1') {
+                    $isVerified = 'Not Verified';
+                }else{
+                    $isVerified = 'Verified User';
+                }
+            // End verify user
+
             // Step 4: Return success status and complete object.
             return array(
                 "status" => "success",
@@ -87,6 +112,7 @@
                         "brgy"  => $user_address->brgy,
                         "city"  => $user_address->city,
                         "prov"  => $user_address->province,
+                        "isVerified" => $isVerified
                     )
             );
         }// End of function initialize()
