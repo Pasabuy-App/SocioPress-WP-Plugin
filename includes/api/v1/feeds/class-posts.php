@@ -79,7 +79,7 @@
 
 			return array(
 				"status" => "success",
-				"data" => array($posts)
+				"data" => $posts
 			);
 		}
     }

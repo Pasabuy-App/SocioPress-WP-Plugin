@@ -85,7 +85,7 @@
 			// Step 9: Return result
 			return array(
 				"status" => "success",
-				"data" => array($result)
+				"data" => $result
 			);
 		}
     }

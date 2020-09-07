@@ -4,24 +4,24 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
   	class SP_GetBy_Recepient {
-		  
+
         public static function listen(){
-            return rest_ensure_response( 
-                SP_GetBy_Recepient:: list_open()
+            return rest_ensure_response(
+                self:: list_open()
             );
         }
-         
+
         public static function list_open(){
 
 			// Initialize WP global variable
 			global $wpdb;
-			
+
 			// Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
@@ -47,21 +47,21 @@
             if ( !$recepients ) {
                 return array(
                     "status"  => "failed",
-                    "message" => "User does not exist.",
+                    "message" => "Recepient does not exist.",
                 );
 			}
 
-			
+
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
-				sp_messages.id, 
+				sp_messages.id,
 				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content) as content,
 				sp_messages.date_created
-			FROM 
+			FROM
 				sp_messages
-			WHERE 
-				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.status) = '1' 
-			AND 
+			WHERE
+				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.status) = '1'
+			AND
 				sp_messages.recipient = '$recepient' AND sp_messages.sender = '$sender' ";
 
 			// Step 5: Check last id post is set
@@ -88,28 +88,14 @@
 
 			}
 
-			// Step 8: Get results from database 
+			// Step 8: Get results from database
 			$sql .= " ORDER BY sp_messages.id DESC  LIMIT 12 ";
 			$result= $wpdb->get_results( $sql , OBJECT);
-
-			// Step 9: Check if array count is 0 , return error message if true
-			if (count($result) < 1) {
-				return array(
-					"status"  => "success",
-					"message" => "No more message.",
-				);
-			}
-				
-			// Step 10: Pass the last id or the minimum id
-			$last_id = min($result);
 
 			// Step 11: Return result
 			return array(
 				"status" => "success",
-				"data" => array( 
-					$result, 
-					$last_id
-				)
+				"data" => $result
 			);
 		}
     }

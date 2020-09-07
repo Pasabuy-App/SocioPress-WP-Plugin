@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,11 +12,11 @@
   	class SP_Update_Message {
 
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 SP_Update_Message::list_open()
             );
         }
-    
+
         public static function list_open(){
 
 			// Initialize WP global variable
@@ -83,7 +83,7 @@
                 $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id");
 
                 $update_mess = $wpdb->query("UPDATE $table_mess SET `content` = $last_id WHERE ID IN ($mess_id) ");// Update mp message content from last id
-            
+
             // Step 7: Check if any queries above failed
             if ($last_id < 1 || $update_mess < 1) {
                 $wpdb->query("ROLL BACK");
@@ -92,7 +92,7 @@
                     "message" => "An error occured while submitting data to server."
                 );
             }
-                
+
             // Step 8: Commit if no errors found
             $wpdb->query("COMMIT");
                 return array(

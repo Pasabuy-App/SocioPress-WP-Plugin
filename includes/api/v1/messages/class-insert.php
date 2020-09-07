@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,11 +12,11 @@
   	class SP_Insert_Message {
 
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 self::list_open()
             );
         }
-    
+
         public static function list_open(){
 
 			// Initialize WP global variable
@@ -77,31 +77,31 @@
             if ( !$recepients ) {
                 return array(
                     "status"  => "failed",
-                    "message" => "User does not exist.",
+                    "message" => "Recepient does not exist.",
                 );
             }
 
             // Step 7: Insert data to array
-            $child_key = array( 
+            $child_key = array(
                 'content' => $user['content'],
                 'status'  => '1'
             );
 
             // Step 8: Start mysql transaction
             $wpdb->query("START TRANSACTION");
-                
+
                 foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
                     $insert_revs = $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '0', '$key', '$child_val', '{$user["user_id"]}', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
                 }
-                
+
                 $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('{$id[0]}', '{$user["user_id"]}', '{$user["recepient"]}', '{$id[1]}', '$date' ) "); // Insert data into mp messages
                 $last_id = $wpdb->insert_id;
 
                 $wpdb->query("UPDATE $table_mess SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id ");
 
                 $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");// Update parent id in np revision
-            
+
                 $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[0], 256) WHERE ID = $id[0]");
                 $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[1], 256) WHERE ID = $id[1]");
 
@@ -121,12 +121,12 @@
                 );
             }
 
-            
+
 
         }
 
         public static function catch_post(){
-            
+
             $cur_user = array();
 
             $cur_user['user_id']   = $_POST['wpid'];
