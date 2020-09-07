@@ -13,7 +13,7 @@
 
         public static function listen(){
             return rest_ensure_response(
-                SP_Insert_Reviews::insert_reviews()
+                self::insert_reviews()
             );
         }
 
@@ -89,10 +89,10 @@
                 $wpdb->query("INSERT INTO $table_reviews $table_reviews_fields VALUES ('$ratings_recipient', '$wpid', '$date'  ) "); // Insert rating into reviews
                 $parent_id = $wpdb->insert_id;
 
-                $ratings_query = $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('$revs_type', '$parent_id', 'ratings', '$ratings', '$wpid', '$date' ) "); // Insert into revisions
+                $ratings_query = $wpdb->query("INSERT INTO $table_revision ($table_revision_fields) VALUES ('$revs_type', '$parent_id', 'ratings', '$ratings', '$wpid', '$date' ) "); // Insert into revisions
 
                 if ( !empty($remarks) ) { // Check remarks to insert into revision
-                   $wpdb->query("INSERT INTO $table_revision $table_revision_fields VALUES ('$revs_type', '$parent_id', 'remarks', '$remarks', '$wpid', '$date' ) ");
+                   $wpdb->query("INSERT INTO $table_revision ($table_revision_fields) VALUES ('$revs_type', '$parent_id', 'remarks', '$remarks', '$wpid', '$date' ) ");
 
                 }
 
