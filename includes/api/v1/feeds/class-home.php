@@ -50,6 +50,7 @@
 				post.post_content AS content,
 				post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
+
 			FROM
 				$table_post AS post
 			INNER JOIN
@@ -58,6 +59,9 @@
 				post.post_status = 'publish'
 			AND
 				post.post_type IN ('status', 'move', 'sell')  ";
+
+
+
 
 			if( isset($_POST['lid']) ){
 
@@ -85,11 +89,36 @@
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
 			$result= $wpdb->get_results( $sql, OBJECT);
+			foreach ($result as $key => $value) {
+				$keys = array(
+					'item_name',
+					'pickup_location',
+					'vehicle_type',
+					'drop_off_location'
+				);
+			}
+
+			$var = array();
+			for ($count=0; $count < count($keys) ; $count++) {
+				$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+			}
+
+			$values = array(
+				'item_name' => $var[0],
+				'pickup_location' => $var[1],
+				'vehicle_type' => $var[2],
+				'drop_off_location' => $var[3]
+			);
+			foreach ($result as $key => $value) {
+
+				$var = array_merge((array)$value, $values);
+
+			}
 
 			// Step 9: Return result
 			return array(
 				"status" => "success",
-				"data" => $result
+				"data" => $var
 			);
 		}
     }
