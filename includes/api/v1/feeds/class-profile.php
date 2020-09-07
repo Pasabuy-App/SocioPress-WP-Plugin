@@ -81,6 +81,68 @@
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
 			$result= $wpdb->get_results( $sql, OBJECT);
 
+			foreach ($result as $key => $value) {
+
+				if ($value->type === 'sell') {
+					$keys = array(
+						'item_name',
+						'item_category',
+						'vehicle_type',
+						'item_description',
+						'item_price',
+						'pickup_location'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$values = array(
+						'item_name' => $var[0],
+						'item_category' => $var[1],
+						'vehicle_type' => $var[2],
+						'item_description' => $var[3],
+						'item_price' => $var[4],
+						'pickup_location' => $var[5]
+					);
+
+					foreach ($result as $key => $value) {
+
+						$var = array_merge((array)$value, $values);
+
+					}
+
+				}else{
+					$keys = array(
+						'item_name',
+						'pickup_location',
+						'vehicle_type',
+						'drop_off_location'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$values = array(
+						'item_name' => $var[0],
+						'pickup_location' => $var[1],
+						'vehicle_type' => $var[2],
+						'drop_off_location' => $var[3]
+					);
+
+					foreach ($result as $key => $value) {
+
+						$var = array_merge((array)$value, $values);
+
+					}
+				}
+			}
+
+
+
 
 			// Step 9: Return result
 			return array(
