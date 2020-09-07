@@ -34,12 +34,12 @@
             }
 
             // Step 2: Validate user
-            if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-			}
+            // if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status" => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+			// }
 
             // Step 3: Check if required parameters are passed
             if ( !isset($_POST["title"])
@@ -59,7 +59,18 @@
                 );
             }
 
-            if ($_POST['type'] === 'move') {
+            $user = SP_Update_Post::catch_post();
+
+            // Step 5: Validation post
+            $get_id = $wpdb->get_row("SELECT ID, post_type FROM $table_posts  WHERE ID = '{$user["post_id"]}' ");
+            if ( !$get_id ) {
+                return array(
+                    "status" => "success",
+                    "message" => "No post found.",
+                );
+            }
+
+            if ($get_id->post_type === 'move') {
                 if (!isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "unknown",
@@ -74,7 +85,7 @@
                     );
                 }
 
-            }elseif ($_POST['type'] === 'sell') {
+            }elseif ($get_id->post_type === 'sell') {
 
                 if (!isset($_POST['item_cat']) || !isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['item_dec']) || !isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
                     return array(
@@ -91,16 +102,7 @@
                 }
             }
 
-            $user = SP_Update_Post::catch_post();
 
-            // Step 5: Validation post
-            $get_id = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' ");
-            if ( !$get_id ) {
-                return array(
-                    "status" => "success",
-                    "message" => "No post found.",
-                );
-            }
             $validate = $wpdb->get_row("SELECT ID FROM $table_posts  WHERE ID = '{$user["post_id"]}' and post_status = 'trash'");
             if ( $validate ) {
                 return array(
@@ -119,7 +121,7 @@
             // Step 6: Start mysql transaction
             $result = wp_update_post( $update_post );
 
-            if ($_POST['type'] === 'move') {
+            if ($get_id->post_type === 'move') {
 
                 $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
                 $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
@@ -127,7 +129,7 @@
                 $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
             }
 
-            if ($_POST['type'] === 'sell') {
+            if ($get_id->post_type === 'sell') {
                 $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
                 $result2 = update_post_meta($result, 'item_category', $_POST['item_cat']  );
                 $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
@@ -157,14 +159,14 @@
         {
               $cur_user = array();
 
-			    $cur_user['post_id'] = $_POST["post_id"];
-                $cur_user['created_by'] = $_POST["wpid"];
-                $cur_user['title'] = $_POST["title"];
-                $cur_user['content'] = $_POST["content"];
-                $cur_user['post_status'] = 'publish';
-                $cur_user['comment_status'] = 'open';
-                $cur_user['ping_status'] = 'open';
-                $cur_user['post_type'] = 'user_post';
+			   $cur_user['post_id'] = $_POST["post_id"];
+               $cur_user['created_by'] = $_POST["wpid"];
+               $cur_user['title'] = $_POST["title"];
+               $cur_user['content'] = $_POST["content"];
+               $cur_user['post_status'] = 'publish';
+               $cur_user['comment_status'] = 'open';
+               $cur_user['ping_status'] = 'open';
+               $cur_user['post_type'] = 'user_post';
 
               return  $cur_user;
         }
