@@ -32,12 +32,12 @@
             }
 
             // Step 2: Valdiate user
-            if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-            }
+            // if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status" => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+            // }
 
             // Step 3: Find user in db using wpid
             $wp_user = get_user_by("ID", $_POST['wpid']);
@@ -86,11 +86,19 @@
 
                 $verify_user = $wpdb->get_row($sql_user);
 
-                if ($verify_user->approve_status !== '1') {
-                    $isVerified = 'Not Verified';
+                if ($verify_user != NULL) {
+
+                    if ($verify_user->approve_status !== '1') {
+                        $isVerified = 'Not Verified';
+                    }else{
+                        $isVerified = 'Verified User';
+                    }
                 }else{
-                    $isVerified = 'Verified User';
+                    $isVerified = 'Not Verified';
+
                 }
+
+
             // End verify user
 
             // Step 4: Return success status and complete object.
