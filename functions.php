@@ -21,8 +21,8 @@
 
     #region WP Recommendation - Prevent direct initilization of the plugin.
     if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
-    
-    if ( ! function_exists( 'is_plugin_active' ) ) 
+
+    if ( ! function_exists( 'is_plugin_active' ) )
     {
         require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     }
@@ -34,7 +34,7 @@
     //Important config files and plugin updates.
     include_once ( SP_PLUGIN_PATH . '/includes/core/config.php' );
     include_once ( SP_PLUGIN_PATH . '/includes/core/update.php' );
-    
+
     // For registration post type
     include_once ( SP_PLUGIN_PATH . '/includes/view/primary.php' );
 
@@ -47,6 +47,18 @@
     //Include the REST API of USocketNet to be accessible.
     include_once ( SP_PLUGIN_PATH . '/includes/api/routes.php' );
 
-    
+    // function for post count
+    function customSetPostViews($postID) {
+        $countKey = 'post_views_count';
+        $count = get_post_meta($postID, $countKey, true);
+        if($count==''){
+            $count = 0;
+            delete_post_meta($postID, $countKey);
+            add_post_meta($postID, $countKey, '1');
+        }else{
+            $count++;
+            update_post_meta($postID, $countKey, $count);
+        }
+    }
 
 ?>

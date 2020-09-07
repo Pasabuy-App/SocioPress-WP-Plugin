@@ -33,6 +33,7 @@
 				);
 			}
 
+
 			// Step 2: Validate user
 			// if (DV_Verification::is_verified() == false) {
 			//  	return array(
@@ -50,7 +51,6 @@
 				post.post_content AS content,
 				post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
-
 			FROM
 				$table_post AS post
 			INNER JOIN
@@ -89,7 +89,6 @@
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
 			$result= $wpdb->get_results( $sql, OBJECT);
-
 			foreach ($result as $key => $value) {
 
 				if ($value->type === 'sell') {
@@ -107,13 +106,19 @@
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
 
+					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					customSetPostViews($value->id);
+
 					$values = array(
 						'item_name' => $var[0],
 						'item_category' => $var[1],
 						'vehicle_type' => $var[2],
 						'item_description' => $var[3],
 						'item_price' => $var[4],
-						'pickup_location' => $var[5]
+						'pickup_location' => $var[5],
+						'author' => $avatar[0],
+						'views' => $post_views_count[0]
+
 					);
 
 					foreach ($result as $key => $value) {
@@ -134,12 +139,19 @@
 					for ($count=0; $count < count($keys) ; $count++) {
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
+					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					customSetPostViews($value->id);
+
+					// Count view in post
+					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$values = array(
 						'item_name' => $var[0],
 						'pickup_location' => $var[1],
 						'vehicle_type' => $var[2],
-						'drop_off_location' => $var[3]
+						'drop_off_location' => $var[3],
+						'author' => $avatar[0],
+						'views' => $post_views_count[0]
 					);
 
 					foreach ($result as $key => $value) {
