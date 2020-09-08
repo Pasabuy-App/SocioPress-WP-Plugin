@@ -100,6 +100,7 @@
 
 					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
 					customSetPostViews($value->id);
+					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$values = array(
 						'item_name' => $var[0],
@@ -116,7 +117,7 @@
 						$vars[] = array_merge((array)$value, $values);
 
 
-				}else{
+				}elseif ($value->type === 'Request'){
 					$keys = array(
 						'item_name',
 						'pickup_location',
@@ -132,6 +133,7 @@
 					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
 
 					customSetPostViews($value->id);
+					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$values = array(
 						'item_name' => $var[0],
@@ -145,6 +147,8 @@
 
 						$vars[] = array_merge((array)$value, $values);
 
+				}elseif ($value->type === 'Status') {
+					$vars[] = $value;
 				}
 			}
 
