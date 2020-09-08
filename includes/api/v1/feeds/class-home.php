@@ -166,7 +166,7 @@
 			// Step 9: Return result
 			return array(
 				"status" => "success",
-				"data" => array($vars)
+				"data" => $vars
 			);
 		}
     }
