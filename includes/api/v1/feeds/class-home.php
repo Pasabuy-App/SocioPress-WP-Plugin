@@ -88,7 +88,13 @@
 
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
-			$result= $wpdb->get_results( $sql, OBJECT);
+			$result = $wpdb->get_results( $sql, OBJECT);
+
+			$vars = array();
+
+
+
+
 			foreach ($result as $key => $value) {
 
 				if ($value->type === 'sell') {
@@ -121,11 +127,8 @@
 
 					);
 
-					foreach ($result as $key => $value) {
+						$vars[] = array_merge((array)$value, $values);
 
-						$var = array_merge((array)$value, $values);
-
-					}
 
 				}else{
 					$keys = array(
@@ -154,18 +157,16 @@
 						'views' => $post_views_count[0]
 					);
 
-					foreach ($result as $key => $value) {
 
-						$var = array_merge((array)$value, $values);
+						$vars[] = array_merge((array)$value, $values);
 
-					}
 				}
 			}
 
 			// Step 9: Return result
 			return array(
 				"status" => "success",
-				"data" => array($var)
+				"data" => array($vars)
 			);
 		}
     }
