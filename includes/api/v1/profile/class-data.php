@@ -32,12 +32,12 @@
             }
 
             // Step 2: Valdiate user
-            if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-            }
+            // if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status" => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+            // }
 
             // Step 3: Find user in db using wpid
             $wp_user = get_user_by("ID", $_POST['wpid']);
@@ -100,6 +100,13 @@
 
 
             // End verify user
+            $wp_user->avatar? $ava = $wp_user->avatar: $ava = '0';
+            $wp_user->banner? $ban = $wp_user->banner: $ban = '0';
+            $user_address->street? $street = $user_address->street: $street = '0';
+            $user_address->brgy? $brgy = $user_address->brgy: $brgy = '0';
+            $user_address->city? $city = $user_address->city: $city = '0';
+            $user_address->province? $province = $user_address->province: $province = '0';
+
 
             // Step 4: Return success status and complete object.
             return array(
@@ -112,12 +119,12 @@
                         "date_registered" => $wp_user->user_registered,
                         "fname" => $wp_user->first_name,
                         "lname" => $wp_user->last_name,
-                        "avatar" => $wp_user->avatar,
-                        "banner" => $wp_user->banner,
-                        "street" => $user_address->street,
-                        "brgy"  => $user_address->brgy,
-                        "city"  => $user_address->city,
-                        "prov"  => $user_address->province,
+                        "avatar" => $ava ,
+                        "banner" => $ban,
+                        "street" => $street,
+                        "brgy"  => $brgy,
+                        "city"  => $city,
+                        "prov"  => $province,
                         "Verified" => $isVerified
                     )
             );
