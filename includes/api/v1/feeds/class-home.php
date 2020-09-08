@@ -97,7 +97,8 @@
 
 			foreach ($result as $key => $value) {
 
-				if ($value->type === 'sell') {
+				if ($value->type === 'Selling') {
+
 					$keys = array(
 						'item_name',
 						'item_category',
@@ -131,6 +132,7 @@
 
 
 				}else{
+
 					$keys = array(
 						'item_name',
 						'pickup_location',

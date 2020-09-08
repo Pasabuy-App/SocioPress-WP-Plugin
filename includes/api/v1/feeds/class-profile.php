@@ -83,7 +83,7 @@
 			$vars = array();
 			foreach ($result as $key => $value) {
 
-				if ($value->type === 'sell') {
+				if ($value->type === 'Selling') {
 					$keys = array(
 						'item_name',
 						'item_category',
