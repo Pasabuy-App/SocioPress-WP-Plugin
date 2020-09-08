@@ -100,6 +100,14 @@
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
 					$avatar = get_user_meta( $value->post_author,'avatar', $single = false );
+
+					$smp;
+					if (!$avatar) {
+						$smp = '';
+					}else{
+						$smp = $avatar;
+					}
+
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
@@ -111,7 +119,7 @@
 						'item_price' => $var[4],
 						'pickup_location' => $var[5],
 						'item_image' => $var[6],
-						'author' => $avatar[0],
+						'author' => $smp[0],
 						'views' => $post_views_count[0]
 					);
 
@@ -135,7 +143,12 @@
 					}
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
-
+					$smp;
+					if (!$avatar) {
+						$smp = '';
+					}else{
+						$smp = $avatar;
+					}
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
@@ -145,7 +158,7 @@
 						'vehicle_type' => $var[2],
 						'drop_off_location' => $var[3],
 						'item_image' => $var[4],
-						'author' => $avatar[0],
+						'author' => $smp[0],
 						'views' => $post_views_count[0]
 					);
 
@@ -159,6 +172,12 @@
 
 					customSetPostViews($value->id);
 
+					$smp;
+					if (!$avatar) {
+						$smp = '';
+					}else{
+						$smp = $avatar;
+					}
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$image = '';
@@ -169,7 +188,7 @@
 					}
 					 $values = array(
 						'item_image' => $image,
-						'author' => $avatar[0],
+						'author' => $smp[0],
 						'views' => $post_views_count[0]
 					);
 					$vars[] = array_merge((array)$value, $values);
