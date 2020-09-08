@@ -34,17 +34,18 @@
 			 }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-				return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Verification issues!",
-				);
-			}
+			// if (DV_Verification::is_verified() == false) {
+			// 	return array(
+			// 		"status" => "unknown",
+			// 		"message" => "Please contact your administrator. Verification issues!",
+			// 	);
+			// }
 
 			$id = $_POST['wpid'];
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT
+			post.post_author,
 				post.id, post.post_content AS content, post.post_date AS date_created,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
 			FROM
@@ -98,8 +99,7 @@
 					for ($count=0; $count < count($keys) ; $count++) {
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
-
-					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,'avatar', $single = false );
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
