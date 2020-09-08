@@ -111,6 +111,14 @@
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
+
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[6]['data'];
+					}
+
 					$values = array(
 						'item_name' => $var[0],
 						'item_category' => $var[1],
@@ -118,7 +126,7 @@
 						'item_description' => $var[3],
 						'item_price' => $var[4],
 						'pickup_location' => $var[5],
-						'item_image' => $var[6],
+						'item_image' => $image,
 						'author' => $smp,
 						'views' => $post_views_count[0]
 					);
@@ -152,12 +160,19 @@
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[4]['data'];
+					}
+
 					$values = array(
 						'item_name' => $var[0],
 						'pickup_location' => $var[1],
 						'vehicle_type' => $var[2],
 						'drop_off_location' => $var[3],
-						'item_image' => $var[4],
+						'item_image' => $image,
 						'author' => $smp,
 						'views' => $post_views_count[0]
 					);
