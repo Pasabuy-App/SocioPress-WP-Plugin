@@ -11,13 +11,13 @@
 	*/
   	class SP_Update_Post {
 
-        public static function listen(){
+        public static function listen(WP_REST_Request $request){
             return rest_ensure_response(
-                SP_Update_Post:: list_open()
+                SP_Update_Post:: list_open($request)
             );
         }
 
-        public static function list_open(){
+        public static function list_open($request){
 
             // Initialize WP global variable
 			global $wpdb;
@@ -127,6 +127,22 @@
                 $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
                 $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
                 $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
+
+                $files = $request->get_file_params();
+
+                if (isset($files['img'])) {
+
+                    $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
+
+                    if ($result['status'] === 'failed') {
+                        return array(
+                            "status" => $result['status'],
+                            "message" => $result['message']
+                        );
+
+                    }
+                    $result5 = update_post_meta($result, 'item_image', $image  );
+                }
             }
 
             if ($get_id->post_type === 'sell') {
@@ -137,6 +153,40 @@
                 $result5 = update_post_meta($result, 'item_price', $_POST['item_price']  );
                 $result6 = update_post_meta($result, 'pickup_location', $_POST['pic_loc']  );
 
+                $files = $request->get_file_params();
+
+                if (isset($files['img'])) {
+
+                    $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
+
+                    if ($result['status'] === 'failed') {
+                        return array(
+                            "status" => $result['status'],
+                            "message" => $result['message']
+                        );
+
+                    }
+                    $result5 = update_post_meta($result, 'item_image', $image  );
+                }
+
+            }
+
+            if ($_POST['type'] === 'status') {
+                $files = $request->get_file_params();
+
+                if (isset($files['img'])) {
+
+                    $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
+
+                    if ($result['status'] === 'failed') {
+                        return array(
+                            "status" => $result['status'],
+                            "message" => $result['message']
+                        );
+
+                    }
+                    $result5 = update_post_meta($result, 'item_image', $image  );
+                }
             }
 
             // Step 7: Check if any queries above failed

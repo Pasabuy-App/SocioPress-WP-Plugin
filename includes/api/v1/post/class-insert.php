@@ -34,12 +34,12 @@
             }
 
             // Step 2: Validate user
-           /*  if (DV_Verification::is_verified() == false) {
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-			} */
+			}
 
             // Step 3: Check if required parameters are passed
             if ( !isset($_POST["title"])  || !isset($_POST["content"]) || !isset($_POST["type"]) ) {
@@ -123,7 +123,7 @@
 
                     $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
 
-                    if ($result['status'] != 'success') {
+                    if ($result['status'] === 'failed') {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message']
@@ -148,7 +148,7 @@
 
                      $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
 
-                    if ($result['status'] != 'success') {
+                    if ($result['status'] === 'failed') {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message']
