@@ -45,6 +45,7 @@
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
 				post.id,
+				post.post_author,
 				user.display_name AS name,
 				user.user_status AS status,
 				post.post_title AS title,
@@ -88,7 +89,7 @@
 
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
-			return $result = $wpdb->get_results( $sql, OBJECT);
+			$result = $wpdb->get_results( $sql, OBJECT);
 
 			$vars = array();
 
@@ -115,7 +116,7 @@
 					}
 					customSetPostViews($value->id);
 
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$values = array(
@@ -148,7 +149,7 @@
 					for ($count=0; $count < count($keys) ; $count++) {
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
 					customSetPostViews($value->id);
 
@@ -171,7 +172,7 @@
 				}elseif ($value->type === 'Status') {
 					$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
 
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
 					customSetPostViews($value->id);
 

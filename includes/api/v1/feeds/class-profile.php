@@ -99,7 +99,7 @@
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
 
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
@@ -134,7 +134,7 @@
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
 
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
 					customSetPostViews($value->id);
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
@@ -155,7 +155,7 @@
 				}elseif ($value->type === 'Status') {
 					$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
 
-					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
 					customSetPostViews($value->id);
 
