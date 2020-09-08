@@ -132,7 +132,7 @@
 
                     $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
 
-                    if ($result['status'] === 'failed') {
+                    if ($image['status'] === 'failed') {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message']
@@ -168,7 +168,7 @@
 
                      $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
 
-                    if ($result['status'] === 'failed') {
+                    if ($image['status'] === 'failed') {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message']
@@ -186,7 +186,7 @@
 
                     $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
 
-                    if ($result['status'] === 'failed') {
+                    if ($image['status'] === 'failed') {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message']
