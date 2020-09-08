@@ -111,11 +111,20 @@
             $result = wp_insert_post($insert_post);
 
             if ($_POST['type'] === 'move') {
+                $data = array(
+                    'item_name' => $_POST['item_name'],
+                    'pickup_location' => $_POST['pck_loc'],
+                    'vehicle_type' => $_POST['vhl_type'],
+                    'drop_off_location' => $_POST['dp_loc']
+                );
+                // $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
+                // $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
+                // $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
+                // $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
 
-                $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
-                $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
-                $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
-                $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
+                foreach ($data as $key => $value) {
+                    $result1 = update_post_meta($result, $key, $value );
+                }
 
                 $files = $request->get_file_params();
 
@@ -135,12 +144,23 @@
             }
 
             if ($_POST['type'] === 'sell') {
-                $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
-                $result2 = update_post_meta($result, 'item_category', $_POST['item_cat']  );
-                $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
-                $result4 = update_post_meta($result, 'item_description', $_POST['item_dec']  );
-                $result5 = update_post_meta($result, 'item_price', $_POST['item_price']  );
-                $result6 = update_post_meta($result, 'pickup_location', $_POST['pic_loc']  );
+                $data = array(
+                    'item_name' => $_POST['item_name'],
+                    'item_category' => $_POST['item_cat'],
+                    'vehicle_type' => $_POST['vhl_type'],
+                    'item_description' => $_POST['item_dec'],
+                    'item_price' => $_POST['item_price'],
+                    'pickup_location' => $_POST['pic_loc']
+                );
+                foreach ($data as $key => $value) {
+                    $result1 = update_post_meta($result, $key, $value );
+                }
+
+                // $result2 = update_post_meta($result, 'item_category', $_POST['item_cat']  );
+                // $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
+                // $result4 = update_post_meta($result, 'item_description', $_POST['item_dec']  );
+                // $result5 = update_post_meta($result, 'item_price', $_POST['item_price']  );
+                // $result6 = update_post_meta($result, 'pickup_location', $_POST['pic_loc']  );
 
                 $files = $request->get_file_params();
 

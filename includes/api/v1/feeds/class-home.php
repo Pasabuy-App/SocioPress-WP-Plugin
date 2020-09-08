@@ -35,12 +35,12 @@
 
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-			//  	return array(
-			// 		"status" => "unknown",
-			// 		"message" => "Please contact your administrator. Verification issues!",
-			//  	);
-			// }
+			if (DV_Verification::is_verified() == false) {
+			 	return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Verification issues!",
+			 	);
+			}
 
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
@@ -88,7 +88,7 @@
 
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
-			$result = $wpdb->get_results( $sql, OBJECT);
+			return $result = $wpdb->get_results( $sql, OBJECT);
 
 			$vars = array();
 
