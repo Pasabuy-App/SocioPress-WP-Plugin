@@ -105,7 +105,8 @@
 						'vehicle_type',
 						'item_description',
 						'item_price',
-						'pickup_location'
+						'pickup_location',
+						'item_image'
 					);
 
 					$var = array();
@@ -124,6 +125,7 @@
 						'item_description' => $var[3],
 						'item_price' => $var[4],
 						'pickup_location' => $var[5],
+						'item_image' => $var[6],
 						'author' => $avatar[0],
 						'views' => $post_views_count[0]
 
@@ -138,7 +140,8 @@
 						'item_name',
 						'pickup_location',
 						'vehicle_type',
-						'drop_off_location'
+						'drop_off_location',
+						'item_image'
 					);
 
 					$var = array();
@@ -157,6 +160,7 @@
 						'pickup_location' => $var[1],
 						'vehicle_type' => $var[2],
 						'drop_off_location' => $var[3],
+						'item_image' => $var[4],
 						'author' => $avatar[0],
 						'views' => $post_views_count[0]
 					);
@@ -165,7 +169,17 @@
 						$vars[] = array_merge((array)$value, $values);
 
 				}elseif ($value->type === 'Status') {
-					$vars[] = $value;
+					$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
+					$image = '';
+					if (!$get_meta) {
+						$image = null;
+					}else{
+						$image = $get_meta['data'];
+					}
+					 $values = array(
+						'item_image' => $image
+					);
+					$vars[] = array_merge((array)$value, $values);
 				}
 			}
 
