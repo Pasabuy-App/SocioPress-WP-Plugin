@@ -34,12 +34,12 @@
 			 }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
+		/* 	if (DV_Verification::is_verified() == false) {
 				return array(
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Verification issues!",
 				);
-			}
+			} */
 
 			$id = $_POST['wpid'];
 
@@ -132,6 +132,7 @@
 					}
 
 					$avatar = get_user_meta( $_POST['wpid'],  $key = 'avatar', $single = false );
+
 					customSetPostViews($value->id);
 
 					$values = array(
@@ -157,7 +158,7 @@
 			// Step 9: Return result
 			return array(
 				"status" => "success",
-				"data" => $result
+				"data" => array($var)
 			);
 		}
     }
