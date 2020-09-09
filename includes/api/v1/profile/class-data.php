@@ -100,12 +100,12 @@
 
 
             // End verify user
-            !empty($wp_user)? $ava = $wp_user->avatar : $ava = '0';
-            !empty($wp_user)? $ban = $wp_user->banner : $ban = '0';
-            !empty($user_address)? $street = $user_address->street : $street = '0';
-            !empty($user_address)? $brgy = $user_address->brgy : $brgy = '0';
-            !empty($user_address)? $city = $user_address->city : $city = '0';
-            !empty($user_address)? $province = $user_address->province : $province = '0';
+            !empty($wp_user)? $ava = $wp_user->avatar : $ava = '';
+            !empty($wp_user)? $ban = $wp_user->banner : $ban = '';
+            !empty($user_address)? $street = $user_address->street : $street = '';
+            !empty($user_address)? $brgy = $user_address->brgy : $brgy = '';
+            !empty($user_address)? $city = $user_address->city : $city = '';
+            !empty($user_address)? $province = $user_address->province : $province = '';
 
 
             // Step 4: Return success status and complete object.
