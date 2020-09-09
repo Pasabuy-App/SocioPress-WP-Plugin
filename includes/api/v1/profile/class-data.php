@@ -39,9 +39,6 @@
                 );
             }
 
-            // Step 3: Find user in db using wpid
-            $wp_user = get_user_by("ID", $_POST['wpid']);
-
 
             $wpid = '';
 
@@ -58,8 +55,8 @@
                 $wpid = $_POST['wpid'];
             }
 
-
-
+            // Step 3: Find user in db using wpid
+            $wp_user = get_user_by("ID", $wpid);
 
             $user_address = $wpdb->get_row("SELECT
                 `add`.ID,
