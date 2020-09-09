@@ -45,11 +45,14 @@
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT
-			post.post_author,
-				post.id, post.post_content AS content, post_title as title, post.post_date AS date_created,
+				post.post_author,
+				user.display_name AS name,
+				post.id, post.post_content AS content, post_title as title, post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
 			FROM
 				$table_post AS post
+			INNER JOIN
+				wp_users AS user ON post.post_author = user.ID
 			WHERE
 				post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
 
