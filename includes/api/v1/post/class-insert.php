@@ -50,7 +50,7 @@
             }
 
             // Step 4: Check if parameters passed are empty
-            if ( empty($_POST["title"]) || empty($_POST["content"]) || empty($_POST["type"]) ) {
+            if ( empty($_POST["title"]) || empty($_POST["type"]) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
