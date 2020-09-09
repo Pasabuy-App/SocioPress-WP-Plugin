@@ -101,10 +101,8 @@
 				if ($value->type === 'Selling') {
 
 					$keys = array(
-						'item_name',
 						'item_category',
 						'vehicle_type',
-						'item_description',
 						'item_price',
 						'pickup_location',
 						'item_image'
@@ -136,10 +134,8 @@
 					}
 
 					$values = array(
-						'item_name' => $var[0],
 						'item_category' => $var[1],
 						'vehicle_type' => $var[2],
-						'item_description' => $var[3],
 						'item_price' => $var[4],
 						'pickup_location' => $var[5],
 						'item_image' => $image,
@@ -154,7 +150,6 @@
 				}else if($value->type === 'Request'){
 
 					$keys = array(
-						'item_name',
 						'pickup_location',
 						'vehicle_type',
 						'drop_off_location',
@@ -187,7 +182,6 @@
 					}
 
 					$values = array(
-						'item_name' => $var[0],
 						'pickup_location' => $var[1],
 						'vehicle_type' => $var[2],
 						'drop_off_location' => $var[3],
