@@ -66,14 +66,14 @@
             }
 
             if ($_POST['type'] === 'move') {
-                if (!isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
+                if ( !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
-                if (empty($_POST['item_name']) || empty($_POST['vhl_type']) || empty($_POST['pck_loc']) || empty($_POST['dp_loc'])  ) {
+                if ( empty($_POST['vhl_type']) || empty($_POST['pck_loc']) || empty($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
@@ -82,14 +82,14 @@
 
             }elseif ($_POST['type'] === 'sell') {
 
-                if (!isset($_POST['item_cat']) || !isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['item_dec']) || !isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
+                if (!isset($_POST['item_cat']) ||  !isset($_POST['vhl_type']) ||!isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
-                if (empty($_POST['item_cat']) || empty($_POST['item_name']) || empty($_POST['vhl_type']) || empty($_POST['item_dec']) || empty($_POST['item_price']) || empty($_POST['pic_loc'])  ) {
+                if (empty($_POST['item_cat'])|| empty($_POST['vhl_type'])  || empty($_POST['item_price']) || empty($_POST['pic_loc'])  ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
@@ -97,30 +97,29 @@
                 }
             }
 
-			$insert_post = array(
-				'post_author'	=> $user["created_by"],
-				'post_title'	=> $user["title"],
-				'post_content'	=> $user["content"],
-				'post_status'	=> $user["post_status"],
-				'comment_status'=> $user["comment_status"],
-				'ping_status'	=> $user["ping_status"],
-				'post_type'		=> $user["post_type"]
-			);
-
-            // Step 6: Start mysql transaction
-            $result = wp_insert_post($insert_post);
-
             if ($_POST['type'] === 'move') {
+
+                // Insert WPPost
+                    $insert_post = array(
+                        'post_author'	=> $user["created_by"],
+                        'post_title'	=> $user["title"],
+                        'post_content'	=> $user["content"],
+                        'post_status'	=> $user["post_status"],
+                        'comment_status'=> $user["comment_status"],
+                        'ping_status'	=> $user["ping_status"],
+                        'post_type'		=> $user["post_type"]
+                    );
+
+                    // Step 6: Start mysql transaction
+                    $result = wp_insert_post($insert_post);
+                // End Insert WPPost
+
+
                 $data = array(
-                    'item_name' => $_POST['item_name'],
                     'pickup_location' => $_POST['pck_loc'],
                     'vehicle_type' => $_POST['vhl_type'],
                     'drop_off_location' => $_POST['dp_loc']
                 );
-                // $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
-                // $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
-                // $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
-                // $result4 = update_post_meta($result, 'drop_off_location', $_POST['dp_loc']  );
 
                 foreach ($data as $key => $value) {
                     $result1 = update_post_meta($result, $key, $value );
@@ -134,8 +133,8 @@
 
                     if ($image['status'] === 'failed') {
                         return array(
-                            "status" => $result['status'],
-                            "message" => $result['message']
+                            "status" => $image['status'],
+                            "message" => $image['message']
                         );
 
                     }
@@ -144,23 +143,34 @@
             }
 
             if ($_POST['type'] === 'sell') {
+
+
+                // Insert WPPost
+                    $insert_post = array(
+                        'post_author'	=> $user["created_by"],
+                        'post_title'	=> $user["title"],
+                        'post_content'	=> $user["content"],
+                        'post_status'	=> $user["post_status"],
+                        'comment_status'=> $user["comment_status"],
+                        'ping_status'	=> $user["ping_status"],
+                        'post_type'		=> $user["post_type"]
+                    );
+
+                    // Step 6: Start mysql transaction
+                    $result = wp_insert_post($insert_post);
+                // End Insert WPPost
+
                 $data = array(
-                    'item_name' => $_POST['item_name'],
                     'item_category' => $_POST['item_cat'],
                     'vehicle_type' => $_POST['vhl_type'],
-                    'item_description' => $_POST['item_dec'],
                     'item_price' => $_POST['item_price'],
                     'pickup_location' => $_POST['pic_loc']
                 );
+
                 foreach ($data as $key => $value) {
                     $result1 = update_post_meta($result, $key, $value );
                 }
 
-                // $result2 = update_post_meta($result, 'item_category', $_POST['item_cat']  );
-                // $result3 = update_post_meta($result, 'vehicle_type', $_POST['vhl_type']  );
-                // $result4 = update_post_meta($result, 'item_description', $_POST['item_dec']  );
-                // $result5 = update_post_meta($result, 'item_price', $_POST['item_price']  );
-                // $result6 = update_post_meta($result, 'pickup_location', $_POST['pic_loc']  );
 
                 $files = $request->get_file_params();
 
@@ -170,8 +180,8 @@
 
                     if ($image['status'] === 'failed') {
                         return array(
-                            "status" => $result['status'],
-                            "message" => $result['message']
+                            "status" => $image['status'],
+                            "message" => $image['message']
                         );
 
                     }
@@ -180,6 +190,24 @@
             }
 
             if ($_POST['type'] === 'status') {
+
+
+                // Insert WPPost
+                    $insert_post = array(
+                        'post_author'	=> $user["created_by"],
+                        'post_title'	=> $user["title"],
+                        'post_content'	=> $user["content"],
+                        'post_status'	=> $user["post_status"],
+                        'comment_status'=> $user["comment_status"],
+                        'ping_status'	=> $user["ping_status"],
+                        'post_type'		=> $user["post_type"]
+                    );
+
+                    // Step 6: Start mysql transaction
+                    $result = wp_insert_post($insert_post);
+                // End Insert WPPost
+
+
                 $files = $request->get_file_params();
 
                 if (isset($files['img'])) {
@@ -188,8 +216,8 @@
 
                     if ($image['status'] === 'failed') {
                         return array(
-                            "status" => $result['status'],
-                            "message" => $result['message']
+                            "status" => $image['status'],
+                            "message" => $image['message']
                         );
 
                     }
