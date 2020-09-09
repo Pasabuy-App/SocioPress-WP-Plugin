@@ -35,12 +35,12 @@
 
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-			 	return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Verification issues!",
-			 	);
-			}
+			// if (DV_Verification::is_verified() == false) {
+			//  	return array(
+			// 		"status" => "unknown",
+			// 		"message" => "Please contact your administrator. Verification issues!",
+			//  	);
+			// }
 
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
@@ -130,14 +130,14 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[6]['data'];
+						$image = $var[4]['data'];
 					}
 
 					$values = array(
-						'item_category' => $var[1],
-						'vehicle_type' => $var[2],
-						'item_price' => $var[4],
-						'pickup_location' => $var[5],
+						'item_category' => $var[0],
+						'vehicle_type' => $var[1],
+						'item_price' => $var[2],
+						'pickup_location' => $var[3],
 						'item_image' => $image,
 						'author' => $smp,
 						'views' => $post_views_count[0]
@@ -178,13 +178,13 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[4]['data'];
+						$image = $var[3]['data'];
 					}
 
 					$values = array(
-						'pickup_location' => $var[1],
-						'vehicle_type' => $var[2],
-						'drop_off_location' => $var[3],
+						'pickup_location' => $var[0],
+						'vehicle_type' => $var[1],
+						'drop_off_location' => $var[2],
 						'item_image' => $image,
 						'author' => $smp,
 						'views' => $post_views_count[0]
