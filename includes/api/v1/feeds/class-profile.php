@@ -51,9 +51,30 @@
 			FROM
 				$table_post AS post
 			WHERE
-				post.post_author = $id
-			AND
 				post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
+
+
+			if (isset($_POST['user_id'])) {
+				if (empty($_POST['user_id']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+				}
+
+				if ( !is_numeric($_POST["user_id"])) {
+					return array(
+						"status" => "failed",
+						"message" => "Parameters not in valid format.",
+					);
+				}
+				$user_id = $_POST['user_id'];
+				$sql .= " AND post.post_author = $user_id ";
+			}else {
+				$user_id = $_POST['wpid'];
+
+				$sql .= " AND post.post_author = $user_id ";
+			}
 
 			if( isset($_POST['lid']) ){
 
@@ -77,6 +98,7 @@
 				$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
 
 			}
+
 
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
