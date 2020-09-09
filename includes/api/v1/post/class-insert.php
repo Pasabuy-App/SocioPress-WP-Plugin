@@ -66,14 +66,14 @@
             }
 
             if ($_POST['type'] === 'move') {
-                if ( !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
+                if ( !isset($_POST['vhl_type']) || !isset($_POST['pic_loc']) || !isset($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
-                if ( empty($_POST['vhl_type']) || empty($_POST['pck_loc']) || empty($_POST['dp_loc'])  ) {
+                if ( empty($_POST['vhl_type']) || empty($_POST['pic_loc']) || empty($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
@@ -116,7 +116,7 @@
 
 
                 $data = array(
-                    'pickup_location' => $_POST['pck_loc'],
+                    'pickup_location' => $_POST['pic_loc'],
                     'vehicle_type' => $_POST['vhl_type'],
                     'drop_off_location' => $_POST['dp_loc']
                 );
