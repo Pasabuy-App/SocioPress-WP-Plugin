@@ -118,7 +118,7 @@
 
 					$smp;
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
@@ -164,7 +164,7 @@
 
 					$smp;
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
@@ -204,14 +204,14 @@
 
 					$smp = '';
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
 
 					$image = '';
 					if (!$get_meta) {
-						$image = '';
+						$image =  '' ;
 					}else{
 						$image = $get_meta['data'];
 					}

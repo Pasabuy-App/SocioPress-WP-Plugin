@@ -126,7 +126,7 @@
 
 					$smp;
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
@@ -174,7 +174,7 @@
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 					$smp;
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
@@ -209,7 +209,7 @@
 
 					$smp;
 					if (!$avatar) {
-						$smp = '';
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
