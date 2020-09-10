@@ -106,8 +106,9 @@
 					for ($count=0; $count < count($keys) ; $count++) {
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
-					customSetPostViews($value->id);
-
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
 					$smp;
@@ -163,7 +164,9 @@
 						$smp = $avatar[0];
 					}
 
-					customSetPostViews($value->id);
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 
 					// Count view in post
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
@@ -192,8 +195,9 @@
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
-					customSetPostViews($value->id);
-
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$smp = '';
