@@ -46,8 +46,8 @@
 			$sql = "SELECT
 				post.id,
 				post.post_author,
-				user.display_name AS name,
-				user.user_status AS status,
+				user.display_name AS `name`,
+				user.user_status AS `status`,
 				post.post_title AS title,
 				post.post_content AS content,
 				post.post_date AS date_post,
@@ -61,29 +61,26 @@
 			AND
 				post.post_type IN ('status', 'move', 'sell')  ";
 
-
-
-
 			if( isset($_POST['lid']) ){
 
-			// Step 4: Validate parameter
-                if (empty($_POST['lid']) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
-                    );
-                }
-				if(!is_numeric($_POST["lid"])){
-					return array(
-						"status" => "failed",
-						"message" => "Parameters not in valid format.",
-					);
-				}
+				// Step 4: Validate parameter
+					if (empty($_POST['lid']) ) {
+						return array(
+							"status" => "failed",
+							"message" => "Required fields cannot be empty.",
+						);
+					}
+					if(!is_numeric($_POST["lid"])){
+						return array(
+							"status" => "failed",
+							"message" => "Parameters not in valid format.",
+						);
+					}
 
-			// Step 5: Pass the post in variable and continuation of query
-				$get_last_id = $_POST['lid'];
-				$add_feeds = $get_last_id - 7;
-				$sql .= " AND post.id BETWEEN $add_feeds AND  ($get_last_id - 1) ";
+				// Step 5: Pass the post in variable and continuation of query
+					$get_last_id = $_POST['lid'];
+					$add_feeds = $get_last_id - 7;
+					$sql .= " AND post.id BETWEEN $add_feeds AND  ($get_last_id - 1) ";
 
 			}
 
@@ -92,9 +89,6 @@
 			$result = $wpdb->get_results( $sql, OBJECT);
 
 			$vars = array();
-
-
-
 
 			foreach ($result as $key => $value) {
 
