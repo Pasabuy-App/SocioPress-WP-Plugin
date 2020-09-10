@@ -113,6 +113,7 @@
                     // Step 6: Start mysql transaction
                     $result = wp_insert_post($insert_post);
                 // End Insert WPPost
+                $post_count = update_post_meta($result, 'post_views_count', '0'  );
 
 
                 $data = array(
@@ -159,6 +160,7 @@
                     // Step 6: Start mysql transaction
                     $result = wp_insert_post($insert_post);
                 // End Insert WPPost
+                $post_count = update_post_meta($result, 'post_views_count', '0'  );
 
                 $data = array(
                     'item_category' => $_POST['item_cat'],
@@ -206,6 +208,7 @@
                     // Step 6: Start mysql transaction
                     $result = wp_insert_post($insert_post);
                 // End Insert WPPost
+                $post_count = update_post_meta($result, 'post_views_count', '0'  );
 
 
                 $files = $request->get_file_params();
