@@ -49,7 +49,7 @@
 			if(!isset($_POST['lid_sender']) && !isset($_POST['lid_recipient'])){
 
                 $recipient = $wpdb->get_results("SELECT
-                    mess.ID, 
+                    mess.ID,
                     (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
                     mess.date_created,
                     mess.date_seen
@@ -84,9 +84,7 @@
                 return array(
                     "status" => "success",
                     "data" => array(
-                        "list" =>  array_merge($recipient, $sender),
-                        "last_id_sender" => $last_id_sender->ID,
-                        "last_id_recipient" => $last_id_recipient->ID
+                        "list" =>  array_merge($recipient, $sender)
                     )
                 );
 
@@ -147,9 +145,7 @@
                 return array(
                     "status" => "success",
                     "data" => array(
-                        "list" =>  array_merge($recipient, $sender),
-                        "last_id_sender" => $last_id_sender->ID,
-                        "last_id_recipient" => $last_id_recipient->ID
+                        "list" =>  array_merge($recipient, $sender)
                     )
                 );
 
