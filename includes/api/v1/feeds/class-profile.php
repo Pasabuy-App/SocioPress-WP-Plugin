@@ -47,7 +47,9 @@
 			$sql ="SELECT
 				post.post_author,
 				user.display_name AS name,
-				post.id, post.post_content AS content, post_title as title, post.post_date AS date_post,
+				post.id, post.post_content AS content,
+				post_title as title,
+				post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
 			FROM
 				$table_post AS post
