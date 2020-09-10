@@ -198,6 +198,7 @@
 					if ($value->post_author != $_POST['wpid']) {
 						customSetPostViews($value->id);
 					}
+
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$smp = '';
