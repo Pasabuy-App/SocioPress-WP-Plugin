@@ -133,7 +133,9 @@
 						$smp = $avatar[0];
 					}
 
-					customSetPostViews($value->id);
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 
@@ -180,7 +182,9 @@
 					}else{
 						$smp = $avatar[0];
 					}
-					customSetPostViews($value->id);
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$image = '';
@@ -207,8 +211,9 @@
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
-					customSetPostViews($value->id);
-
+					if ($value->post_author != $_POST['wpid']) {
+						customSetPostViews($value->id);
+					}
 					$smp;
 					if (!$avatar) {
 						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";

@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,19 +12,19 @@
   	class SP_Listing_Message {
 
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 self::list_open()
             );
         }
-    
+
         public static function list_open(){
             global $wpdb;
-            
+
             $table_revs = SP_REVS_TABLE;
             $field_revs = SP_REVS_TABLE_FIELDS;
             $table_mess = SP_MESSAGES_TABLE;
             $fields_mess = SP_MESSAGES_FIELDS;
-			$succeeding_feeds = SUCCEEDING_FEEDS; 
+			$succeeding_feeds = SUCCEEDING_FEEDS;
 
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -36,15 +36,15 @@
             }
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-            //     return array(
-            //         "status"  => "unknown",
-            //         "message" => "Please contact your administrator. Verification issues!",
-            //     );
-            // }
+			if (DV_Verification::is_verified() == false) {
+                return array(
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
+                );
+            }
 
             $wpid = $_POST['wpid'];
-            
+
 
 			if(!isset($_POST['lid_sender']) && !isset($_POST['lid_recipient'])){
 
@@ -53,26 +53,26 @@
                     (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
                     mess.date_created,
                     mess.date_seen
-                FROM 
+                FROM
                     $table_mess mess
-                WHERE 
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1' 
-                AND  recipient = $wpid 
+                WHERE
+                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
+                AND  recipient = $wpid
                 GROUP BY
                     date_created
                 DESC
                 ");
                 $last_id_recipient = min($recipient);
- 
+
                 $sender = $wpdb->get_results("SELECT
-                    mess.ID , 
+                    mess.ID ,
                     (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
                     mess.date_created,
                     mess.date_seen
-                FROM 
+                FROM
                     $table_mess mess
-                WHERE 
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1' 
+                WHERE
+                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
                 AND  sender = $wpid
                 GROUP BY
                     date_created
@@ -89,7 +89,7 @@
                         "last_id_recipient" => $last_id_recipient->ID
                     )
                 );
-            
+
             }else{
 
                 if (!isset($_POST['lid_sender']) && !isset($_POST['lid_recipient'])) {
@@ -105,18 +105,18 @@
                 }
 				$add_feeds_sender = $lid_sender - $succeeding_feeds;
 				$add_feeds_recipient = $lid_recipient - $succeeding_feeds;
-                
+
 
                 $recipient = $wpdb->get_results("SELECT
-                    mess.ID, 
+                    mess.ID,
                     (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
                     mess.date_created,
                     mess.date_seen
-                FROM 
+                FROM
                     $table_mess mess
-                WHERE 
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1' 
-                AND  recipient = $wpid 
+                WHERE
+                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
+                AND  recipient = $wpid
 				AND hash_id BETWEEN $add_feeds_recipient AND ($lid_recipient - 1)
 
                 GROUP BY
@@ -125,16 +125,16 @@
                 ");
                 $last_id_recipient = min($recipient);
 
- 
+
                 $sender = $wpdb->get_results("SELECT
-                    mess.ID, 
+                    mess.ID,
                     (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
                     mess.date_created,
                     mess.date_seen
-                FROM 
+                FROM
                     $table_mess mess
-                WHERE 
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1' 
+                WHERE
+                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
                 AND  sender = $wpid
 				AND hash_id BETWEEN $add_feeds_sender AND ($lid_sender - 1)
                 GROUP BY
@@ -152,8 +152,8 @@
                         "last_id_recipient" => $last_id_recipient->ID
                     )
                 );
-            
+
             }
-            
+
         }
     }
