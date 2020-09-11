@@ -45,10 +45,12 @@
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT
-				post.post_author,
+				post.id,
 				user.display_name AS name,
-				post.id, post.post_content AS content,
+				post.post_author,
+				post.guid as post_link,
 				post_title as title,
+				post.post_content AS content,
 				post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
 			FROM
