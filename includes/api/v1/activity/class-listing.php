@@ -108,6 +108,8 @@
                 }
             }
 
+			$limit = 12;
+
             // Step 10: Check last id is set
             if ( isset($_POST['lid']) ){
 
@@ -127,14 +129,16 @@
 
 			// Step 12: Pass the post in variable and continuation of query
                 $lid = $_POST['lid'];
-                $add_feeds = $lid - 7;
-                $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
-                $result = $wpdb->get_results($sql, OBJECT);
+				$sql .= " AND sp_act.ID< $lid ";
+				$limit = 7;
+                // $add_feeds = $lid - 7;
+                // $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
+                // $result = $wpdb->get_results($sql, OBJECT);
 
             }
 
             // Step 13: Continuation of query
-            $sql .= " GROUP BY sp_act.ID DESC  LIMIT 12 ";
+            $sql .= " GROUP BY sp_act.ID DESC  LIMIT $limit ";
             $result = $wpdb->get_results($sql, OBJECT);
 
             // Step 14: Check if no rows found
