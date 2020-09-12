@@ -117,7 +117,7 @@
             // step 10 : Return result
             return array(
                 "status" => "success",
-                "data" => $result
+                "message" => "Data has been added successfully."
             );	
         }
     }

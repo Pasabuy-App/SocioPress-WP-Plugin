@@ -16,6 +16,7 @@
     require plugin_dir_path(__FILE__) . '/v1/activity/class-insert.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-listing.php'; // home feeds
     require plugin_dir_path(__FILE__) . '/v1/activity/class-select.php'; // home feeds
+    require plugin_dir_path(__FILE__) . '/v1/activity/class-mark-all-as-read.php'; // home feeds
 
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-profile.php'; // profile feeds
     require plugin_dir_path(__FILE__) . '/v1/feeds/class-home.php'; // home feeds
@@ -79,6 +80,11 @@
             register_rest_route( 'sociopress/v1/activity', 'select', array(
                 'methods' => 'POST',
                 'callback' => array('SP_Select_Activity','listen'),
+            ));
+
+            register_rest_route( 'sociopress/v1/activity/markall', 'read', array(
+                'methods' => 'POST',
+                'callback' => array('SP_Mark_all_as_read_Activity','listen'),
             ));
 
 

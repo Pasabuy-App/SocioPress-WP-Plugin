@@ -82,9 +82,8 @@
 
 				$sql .= " AND post.post_author = $user_id ";
 			}
-
+			$limit = 12;
 			if( isset($_POST['lid']) ){
-
 				// Step 4: Validate parameter
                 if (empty($_POST['lid']) ) {
                     return array(
@@ -100,15 +99,18 @@
 				}
 
 				// Step 5: Pass the post in variable and continuation of query
-				$get_last_id = $_POST['lid'];
-				$add_feeds = $get_last_id - 7;
-				$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
+				// $get_last_id = $_POST['lid'];
+				// $add_feeds = $get_last_id - 7;
+				//$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
+				$lastid = $_POST['lid'];
+				$sql .= " AND post.id < $lastid ";
+				$limit = 7;
 
 			}
 
 
 			// Step 6: Get results from database
-			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
+			$sql .= " ORDER BY post.id DESC LIMIT $limit ";
 			$result= $wpdb->get_results( $sql, OBJECT);
 			$vars = array();
 			foreach ($result as $key => $value) {
