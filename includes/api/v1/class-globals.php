@@ -83,4 +83,45 @@
                     return true;
             }
         }
+
+        public static function seen_post($wpid, $post_id){
+            global $wpdb;
+            $table_seen_post = SP_POST_SEEN;
+            $table_seen_post_fields = SP_POST_SEEN_FIELDS;
+
+            // Get post data
+            $post = get_post( $post = $post_id, $output = OBJECT, $filter = 'raw' );
+
+            // validate if wpid = post author
+            if ($post->post_author == $wpid) {
+                return false;
+            }
+
+            // Start query
+            $wpdb->query("START TRANSACTION");
+            $data = array();
+            $get_seen_post = $wpdb->get_results("SELECT * FROM $table_seen_post WHERE post_id = $post_id ");
+
+            if (!$get_seen_post) {
+                $result = $wpdb->query("INSERT INTO $table_seen_post ($table_seen_post_fields) VALUES ($post_id, $wpid)");
+
+            }else{
+
+                foreach ($get_seen_post as $key => $value) {
+                    if ($value->wpid == $wpid) {
+                        return false;
+                    }
+                }
+                $result = $wpdb->query("INSERT INTO $table_seen_post ($table_seen_post_fields) VALUES ($post_id, $wpid)");
+            }
+
+            if ($result == false) {
+                $wpdb->query("ROLLBACK");
+                return 'error';
+            }else{
+                $wpdb->query("COMMIT");
+                return true;
+            }
+
+        }
     }

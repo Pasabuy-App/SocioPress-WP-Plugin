@@ -48,7 +48,7 @@
     include_once ( SP_PLUGIN_PATH . '/includes/api/routes.php' );
 
     // function for post count
-    function customSetPostViews($postID) {
+    /* function customSetPostViews($postID) {
         $countKey = 'post_views_count';
         $count = get_post_meta($postID, $countKey, true);
         if($count==''){
@@ -59,6 +59,8 @@
             $count++;
             update_post_meta($postID, $countKey, $count);
         }
-    }
+    } */
+
+
 
 ?>

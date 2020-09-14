@@ -133,10 +133,17 @@
 						$smp = $avatar[0];
 					}
 
-					if ($value->post_author != $_POST['wpid']) {
-						customSetPostViews($value->id);
+
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
 					}
-					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
 
 
 					$image = '';
@@ -153,7 +160,7 @@
 						'pickup_location' => $var[3],
 						'item_image' => $image,
 						'author' => $smp,
-						'views' => $post_views_count[0]
+						'views' => $count_seen->views
 					);
 
 
@@ -161,6 +168,7 @@
 
 
 				}elseif ($value->type === 'Request'){
+
 					$keys = array(
 
 						'pickup_location',
@@ -182,10 +190,16 @@
 					}else{
 						$smp = $avatar[0];
 					}
-					if ($value->post_author != $_POST['wpid']) {
-						customSetPostViews($value->id);
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
 					}
-					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
 
 					$image = '';
 					if (!$get_meta) {
@@ -200,7 +214,7 @@
 						'drop_off_location' => $var[2],
 						'item_image' => $image,
 						'author' => $smp,
-						'views' => $post_views_count[0]
+						'views' => $count_seen->views
 					);
 
 
@@ -211,9 +225,17 @@
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 
-					if ($value->post_author != $_POST['wpid']) {
-						customSetPostViews($value->id);
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
 					}
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
+
 					$smp;
 					if (!$avatar) {
 						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
@@ -231,7 +253,7 @@
 					 $values = array(
 						'item_image' => $image,
 						'author' => $smp,
-						'views' => $post_views_count[0]
+						'views' => $count_seen->views
 					);
 					$vars[] = array_merge((array)$value, $values);
 				}

@@ -40,12 +40,8 @@
             }
 
             // Step 3: Check if the parameters is valid for icon
-            if ( isset($_POST['icon'])
-                && $_POST['icon'] != NULL
-                && is_numeric($_POST['icon'])){
-                if ($_POST['icon'] != 'warn'
-                    && $_POST['icon'] != 'info'
-                    && $_POST['icon'] != 'error' ) {
+            if ( isset($_POST['icon']) && $_POST['icon'] != NULL && is_numeric($_POST['icon'])){
+                if ($_POST['icon'] != 'warn' && $_POST['icon'] != 'info' && $_POST['icon'] != 'error' ) {
                     return array(
                         "status" => "failed",
                         "message" => "Icon is not in valid format.",
