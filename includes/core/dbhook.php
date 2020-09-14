@@ -9,9 +9,9 @@
      * @version 0.1.0
      * Here is where you add hook to WP to create our custom database if not found.
 	*/
-	
+
 	function sp_dbhook_activate(){
-		
+
 		//Initializing wordpress global variable
 		global $wpdb;
 
@@ -23,6 +23,19 @@
 		$tbl_market = SP_MARKET_TABLE;
 		$tbl_reacts = SP_REACTS_TABLE;
 		$tbl_reviews = SP_REVIEWS_TABLE;
+		$tbl_seen_post = SP_POST_SEEN;
+
+		// Database table creation for seen post
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_seen_post'" ) != $tbl_seen_post) {
+			$sql = "CREATE TABLE `".$tbl_seen_post."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`post_id` bigint(20) NOT NULL COMMENT 'psot id', ";
+				$sql .= " `wpid` bigint(20) NOT NULL COMMENT 'user who seen this post',";
+				$sql .= " `date_created` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'date seen createad', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
 
 		//Database table creation for activities
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_act'" ) != $tbl_act) {
