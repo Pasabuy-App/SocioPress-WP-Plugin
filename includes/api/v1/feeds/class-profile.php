@@ -45,10 +45,12 @@
 
 			// Step 3: Start mysql transaction
 			$sql ="SELECT
-				post.post_author,
+				post.id,
 				user.display_name AS name,
-				post.id, post.post_content AS content,
+				post.post_author,
+				post.guid as post_link,
 				post_title as title,
+				post.post_content AS content,
 				post.post_date AS date_post,
 				IF (post.post_type = 'move', 'Request', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
 			FROM
@@ -80,9 +82,8 @@
 
 				$sql .= " AND post.post_author = $user_id ";
 			}
-
+			$limit = 12;
 			if( isset($_POST['lid']) ){
-
 				// Step 4: Validate parameter
                 if (empty($_POST['lid']) ) {
                     return array(
@@ -98,15 +99,18 @@
 				}
 
 				// Step 5: Pass the post in variable and continuation of query
-				$get_last_id = $_POST['lid'];
-				$add_feeds = $get_last_id - 7;
-				$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
+				// $get_last_id = $_POST['lid'];
+				// $add_feeds = $get_last_id - 7;
+				//$sql .= " AND  post.id BETWEEN $add_feeds  AND  ($get_last_id - 1) ";
+				$lastid = $_POST['lid'];
+				$sql .= " AND post.id < $lastid ";
+				$limit = 7;
 
 			}
 
 
 			// Step 6: Get results from database
-			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
+			$sql .= " ORDER BY post.id DESC LIMIT $limit ";
 			$result= $wpdb->get_results( $sql, OBJECT);
 			$vars = array();
 			foreach ($result as $key => $value) {

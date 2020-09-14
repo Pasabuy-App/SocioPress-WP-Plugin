@@ -55,7 +55,7 @@
             isset($_POST['stid']) ? $stid = $_POST['stid'] : $stid = NULL;
             isset($_POST['open']) ? $open = $_POST['open'] : $open = NULL;
             $open = $open  == '0' || $open == NULL ? NULL : ($open !== '0'? '0':'1');
-            $icon = $pid  == '0' || $icon == NULL ? NULL: $icon = $icon;
+            $icon = $icon  == '0' || $icon == NULL ? NULL: $icon = $icon;
             $stid = $stid  == '0' || $stid == NULL ? NULL: $stid = $stid;
             $user_id = 0;
             $user = 'wpid';
@@ -80,6 +80,7 @@
             // Step 8: Continuation of query
             $sql .= " ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`title` ) AS `activity_title`,
                 ( SELECT sp_rev.child_val FROM $table_revision sp_rev WHERE sp_rev.ID = sp_act.`info` ) AS `activity_info`,
+                IF (sp_act.date_open != '', sp_act.date_open, '') AS open,
                 sp_act.date_created
             FROM
                 $table_activity sp_act
@@ -103,6 +104,8 @@
                 }
             }
 
+			$limit = 12;
+
             // Step 10: Check last id is set
             if ( isset($_POST['lid']) ){
 
@@ -122,20 +125,22 @@
 
 			// Step 12: Pass the post in variable and continuation of query
                 $lid = $_POST['lid'];
-                $add_feeds = $lid - 7;
-                $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
-                $result = $wpdb->get_results($sql, OBJECT);
+				$sql .= " AND sp_act.ID< $lid ";
+				$limit = 7;
+                // $add_feeds = $lid - 7;
+                // $sql .= " AND sp_act.ID  BETWEEN $add_feeds AND ( $lid - 1 ) ";
+                // $result = $wpdb->get_results($sql, OBJECT);
 
             }
 
             // Step 13: Continuation of query
-            $sql .= " GROUP BY sp_act.ID DESC  LIMIT 12 ";
+            $sql .= " GROUP BY sp_act.ID DESC  LIMIT $limit ";
             $result = $wpdb->get_results($sql, OBJECT);
 
             // Step 14: Check if no rows found
             if(!$result){
                 return array(
-                    "status" => "success",
+                    "status" => "failed",
                     "message" => "There is no activity found with this value.",
                 );
             }
