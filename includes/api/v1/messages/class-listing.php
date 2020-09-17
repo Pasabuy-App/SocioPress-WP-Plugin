@@ -36,28 +36,25 @@
             }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
+			/* if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            }
+            } */
 
             $wpid = $_POST['wpid'];
 
-            $sql = "SELECT t.hash_id as ID, date_created, if(date_seen is null , '', date_seen) as date_seen,  sender, recipient,
-            (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content,
-            null as avatar
-            FROM
-              sp_messages t INNER JOIN (
-                SELECT
-                  LEAST(sender, recipient) user1,
-                  GREATEST(sender, recipient) user2,
-                  MAX(date_created) max_created_on
-                FROM
-                  sp_messages mess
-                WHERE sender = $wpid or recipient = $wpid AND (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = mess.ID  AND rev.child_key = 'status' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) = 1
-
+            $sql = "SELECT
+                t.hash_id as ID,
+                IF (`sender` = '$wpid', `recipient`, `sender`) as `user_id`,
+                date_created,
+                if(date_seen is null , '', date_seen) as date_seen ,
+                null as avatar,
+                (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content
+            FROM sp_messages t
+            WHERE '$wpid'
+                IN (`sender`, `recipient`)
             ";
 
 			$limit = 12;
@@ -75,34 +72,20 @@
 				$limit = 7;
             }
 
-            $sql .= " GROUP BY
-                LEAST(sender, recipient),
-                GREATEST(sender, recipient)) M
-            on t.date_created = M.max_created_on
-            AND LEAST(t.sender, t.recipient)=user1
-            AND GREATEST(t.sender, t.recipient)=user2
-                ORDER BY t.ID DESC LIMIT $limit ";
+            $sql .= " GROUP BY user_id DESC LIMIT $limit ";
 
             $message = $wpdb->get_results($sql);
             foreach ($message as $key => $value) {
-
-                if ($value->recipient === $wpid) {
-                    $wp_user = get_user_by("ID", $value->recipient);
-                    $ava = isset($wp_user->avatar) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
-                    $value->avatar = $ava;
-
-                }else if($value->sender === $wpid){
-                    $wp_user = get_user_by("ID", $value->sender);
-                    $ava = isset($wp_user->avatar) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
+                if ($value->user_id ) {
+                    $wp_user = get_user_by("ID", $value->user_id);
+                    $ava = isset($wp_user->user_id) ? $ava = $wp_user->user_id: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
                     $value->avatar = $ava;
                 }
             }
 
             return array(
                 "status" => "success",
-                "data" => array(
-                    "list" => $message
-                )
+                "data" => $message
             );
         }
     }
