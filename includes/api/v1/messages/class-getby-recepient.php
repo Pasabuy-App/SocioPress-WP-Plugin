@@ -21,6 +21,7 @@
 
 			// Initialize WP global variable
 			global $wpdb;
+            $date = SP_Globals:: date_stamp();
 
 			// Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -43,7 +44,7 @@
 			$user_id = $_POST['user_id'];
 
 			// Step 3: Valdiate user using user id
-            $recepients = WP_User::get_data_by( 'ID', $recepient );
+            $recepients = WP_User::get_data_by( 'ID', $user_id );
             if ( !$recepients ) {
                 return array(
                     "status"  => "failed",
@@ -51,10 +52,10 @@
                 );
 			}
 
-
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
 			mess.id,
+			mess.sender,
 			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = mess.content ) AS content,
 			mess.date_created
 		FROM
@@ -78,13 +79,20 @@
 				}
 
 				$lastid = $_POST['lid'];
-				$sql .= " AND mess.id < $lastid ";
+
+				$get_id = $wpdb->get_row("SELECT ID FROM sp_messages WHERE `hash_id` = '$lastid' ");
+
+				$sql .= " AND mess.id < '$get_id->ID' ";
 				$limit = 7;
 			}
 
 			// Step 8: Get results from database
 			$sql .= " ORDER BY mess.id DESC  LIMIT $limit  ";
 			$result= $wpdb->get_results( $sql , OBJECT);
+
+			foreach ($result as $key => $value) {
+				$wpdb->query("UPDATE sp_messages SET date_seen = '$date' WHERE id = '$value->id' ");
+			}
 
 			// Step 11: Return result
 			return array(
