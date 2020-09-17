@@ -41,7 +41,7 @@
 			}
 
 			$wpid = $_POST['wpid'];
-			$user_id = $_POST['user_id'];
+			$user_id = $_POST['recepient'];
 
 			// Step 3: Valdiate user using user id
             $recepients = WP_User::get_data_by( 'ID', $user_id );
