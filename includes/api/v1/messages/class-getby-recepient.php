@@ -39,60 +39,51 @@
                 );
 			}
 
-			$sender = $_POST['wpid'];
-			$recepient = $_POST['recepient'];
+			$wpid = $_POST['wpid'];
+			$user_id = $_POST['user_id'];
 
 			// Step 3: Valdiate user using user id
-           /*  $recepients = WP_User::get_data_by( 'ID', $recepient );
+            $recepients = WP_User::get_data_by( 'ID', $recepient );
             if ( !$recepients ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Recepient does not exist.",
                 );
-			} */
+			}
 
 
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
-			sp_messages.id,
-			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content ) AS content,
-			sp_messages.date_created
+			mess.id,
+			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = mess.content ) AS content,
+			mess.date_created
 		FROM
-			sp_messages
+			sp_messages mess
 		WHERE
-			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.STATUS ) = '1'
-			AND (sp_messages.recipient = '1'
-			or sp_messages.sender = '1')
+			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = mess.STATUS ) = '1'
+			AND (mess.recipient = '$wpid'
+			or mess.sender = '$wpid')
 
-			AND (sp_messages.recipient = '2'
-			or sp_messages.sender = '2') ";
+			AND (mess.recipient = '$user_id'
+			or mess.sender = '$user_id') ";
 
-			// Step 5: Check last id post is set
-			if( isset($_POST['lid']) ){
+			$limit = 12;
 
-			// Step 6: Validate parameter
-                if (empty($_POST['lid']) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
-                    );
-                }
-				if ( !is_numeric($_POST["lid"])) {
+			if (isset($_POST['lid'])) {
+				if (empty($_POST['lid'])) {
 					return array(
-						"status" => "failed",
-						"message" => "Parameters not in valid format.",
+						"status"  => "unknown",
+						"message" => "Please contact your administrator. Request unknown!",
 					);
 				}
 
-			// Step 7: Pass the post in variable and continuation of query
-				$get_last_id = $_POST['lid'];
-				$add_feeds = $get_last_id - 7;
-				$sql .= " AND sp_messages.id BETWEEN $add_feeds AND ($get_last_id - 1) ";
-
+				$lastid = $_POST['lid'];
+				$sql .= " AND mess.id < $lastid ";
+				$limit = 7;
 			}
 
 			// Step 8: Get results from database
-			$sql .= " ORDER BY sp_messages.id DESC  LIMIT 12 ";
+			$sql .= " ORDER BY mess.id DESC  LIMIT $limit  ";
 			$result= $wpdb->get_results( $sql , OBJECT);
 
 			// Step 11: Return result
