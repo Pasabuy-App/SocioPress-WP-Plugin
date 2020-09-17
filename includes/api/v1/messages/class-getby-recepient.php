@@ -41,7 +41,7 @@
 			}
 
 			$wpid = $_POST['wpid'];
-			$user_id = $_POST['recepient'];
+			$user_id = $_POST['user_id'];
 
 			// Step 3: Valdiate user using user id
             $recepients = WP_User::get_data_by( 'ID', $user_id );
@@ -90,8 +90,11 @@
 			$sql .= " ORDER BY mess.id DESC  LIMIT $limit  ";
 			$result= $wpdb->get_results( $sql , OBJECT);
 
+
 			foreach ($result as $key => $value) {
-				$wpdb->query("UPDATE sp_messages SET date_seen = '$date' WHERE id = '$value->id' ");
+				if ($value->sender !== $wpid) {
+					$wpdb->query("UPDATE sp_messages SET date_seen = '$date' WHERE id = '$value->id' ");
+				}
 			}
 
 			// Step 11: Return result

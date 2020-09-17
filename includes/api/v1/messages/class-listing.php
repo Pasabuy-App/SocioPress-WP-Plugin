@@ -36,12 +36,12 @@
             }
 
 			// Step 2: Validate user
-			/* if (DV_Verification::is_verified() == false) {
+			if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            } */
+            }
 
             $wpid = $_POST['wpid'];
 
@@ -81,7 +81,7 @@
                     $wp_user = get_user_by("ID", $value->user_id);
                     $ava = isset($wp_user->user_id) ? $ava = $wp_user->user_id: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
                     $value->avatar = $ava;
-                    $value->name = $wp_user->first_name;
+                    $value->name = $wp_user->user_nicename;
                 }
             }
 
