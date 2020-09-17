@@ -45,7 +45,7 @@
 
             $wpid = $_POST['wpid'];
 
-            $sql = "SELECT t.hash_id as ID, date_created, COUNT(date_seen is null), sender, recipient,
+            $sql = "SELECT t.hash_id as ID, date_created, if(date_seen is null , '', date_seen) as date_seen,  sender, recipient,
             (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content,
             null as avatar
             FROM
