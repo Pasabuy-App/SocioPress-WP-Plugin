@@ -36,12 +36,12 @@
             }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
+			/* if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            }
+            } */
 
             $wpid = $_POST['wpid'];
 
@@ -51,6 +51,7 @@
                 date_created,
                 if(date_seen is null , '', date_seen) as date_seen ,
                 null as avatar,
+                null as `name`,
                 (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content
             FROM sp_messages t
             WHERE '$wpid'
@@ -80,6 +81,7 @@
                     $wp_user = get_user_by("ID", $value->user_id);
                     $ava = isset($wp_user->user_id) ? $ava = $wp_user->user_id: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
                     $value->avatar = $ava;
+                    $value->name = $wp_user->first_name;
                 }
             }
 
