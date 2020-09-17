@@ -45,111 +45,64 @@
 
             $wpid = $_POST['wpid'];
 
-
-			if(!isset($_POST['lid_sender']) && !isset($_POST['lid_recipient'])){
-
-                $recipient = $wpdb->get_results("SELECT
-                    mess.ID,
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
-                    mess.date_created,
-                    mess.date_seen
+            $sql = "SELECT t.hash_id as ID, date_created, date_seen, sender, recipient,
+            (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content,
+            null as avatar
+            FROM
+              sp_messages t INNER JOIN (
+                SELECT
+                  LEAST(sender, recipient) user1,
+                  GREATEST(sender, recipient) user2,
+                  MAX(date_created) max_created_on
                 FROM
-                    $table_mess mess
-                WHERE
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
-                AND  recipient = $wpid
-                GROUP BY
-                    date_created
-                DESC
-                ");
-                $last_id_recipient = min($recipient);
+                  sp_messages mess
+                WHERE sender = $wpid or recipient = $wpid AND (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = mess.ID  AND rev.child_key = 'status' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) = 1
 
-                $sender = $wpdb->get_results("SELECT
-                    mess.ID ,
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
-                    mess.date_created,
-                    mess.date_seen
-                FROM
-                    $table_mess mess
-                WHERE
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
-                AND  sender = $wpid
-                GROUP BY
-                    date_created
-                DESC
-                ");
+            ";
 
-                $last_id_sender = min($sender);
+			$limit = 12;
 
-                return array(
-                    "status" => "success",
-                    "data" => array(
-                        "list" =>  array_merge($recipient, $sender)
-                    )
-                );
-
-            }else{
-
-                if (!isset($_POST['lid_sender']) && !isset($_POST['lid_recipient'])) {
+            if (isset($_POST['lid'])) {
+                if (empty($_POST['lid'])) {
                     return array(
-                        "status" => "unknown",
-                        "message" => "please contact your administrator"
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
-                if (isset($_POST['lid_sender']) && isset($_POST['lid_recipient'])) {
-                    $lid_sender = $_POST['lid_sender'];
-                    $lid_recipient = $_POST['lid_recipient'];
 
-                }
-				$add_feeds_sender = $lid_sender - $succeeding_feeds;
-				$add_feeds_recipient = $lid_recipient - $succeeding_feeds;
-
-
-                $recipient = $wpdb->get_results("SELECT
-                    mess.ID,
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
-                    mess.date_created,
-                    mess.date_seen
-                FROM
-                    $table_mess mess
-                WHERE
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
-                AND  recipient = $wpid
-				AND hash_id BETWEEN $add_feeds_recipient AND ($lid_recipient - 1)
-
-                GROUP BY
-                    date_created
-                DESC
-                ");
-                $last_id_recipient = min($recipient);
-
-
-                $sender = $wpdb->get_results("SELECT
-                    mess.ID,
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.content) as content,
-                    mess.date_created,
-                    mess.date_seen
-                FROM
-                    $table_mess mess
-                WHERE
-                    (SELECT rev.child_val FROM $table_revs rev WHERE rev.id = mess.status) = '1'
-                AND  sender = $wpid
-				AND hash_id BETWEEN $add_feeds_sender AND ($lid_sender - 1)
-                GROUP BY
-                    date_created
-                DESC
-                ");
-
-                $last_id_sender = min($sender);
-
-                return array(
-                    "status" => "success",
-                    "data" => array(
-                        "list" =>  array_merge($recipient, $sender)
-                    )
-                );
-
+                $lastid = $_POST['lid'];
+				$sql .= " AND mess.id < $lastid ";
+				$limit = 7;
             }
 
+            $sql .= " GROUP BY
+                LEAST(sender, recipient),
+                GREATEST(sender, recipient)) M
+            on t.date_created = M.max_created_on
+            AND LEAST(t.sender, t.recipient)=user1
+            AND GREATEST(t.sender, t.recipient)=user2
+                ORDER BY t.ID DESC LIMIT $limit ";
+
+            $message = $wpdb->get_results($sql);
+            foreach ($message as $key => $value) {
+
+                if ($value->recipient === $wpid) {
+                    $wp_user = get_user_by("ID", $value->recipient);
+                    $ava = isset($wp_user->avatar) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
+                    $value->avatar = $ava;
+
+                }else if($value->sender === $wpid){
+                    $wp_user = get_user_by("ID", $value->sender);
+                    $ava = isset($wp_user->avatar) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
+                    $value->avatar = $ava;
+                }
+            }
+
+            return array(
+                "status" => "success",
+                "data" => array(
+                    "list" => $message
+                )
+            );
         }
     }

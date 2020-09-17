@@ -43,26 +43,29 @@
 			$recepient = $_POST['recepient'];
 
 			// Step 3: Valdiate user using user id
-            $recepients = WP_User::get_data_by( 'ID', $recepient );
+           /*  $recepients = WP_User::get_data_by( 'ID', $recepient );
             if ( !$recepients ) {
                 return array(
                     "status"  => "failed",
                     "message" => "Recepient does not exist.",
                 );
-			}
+			} */
 
 
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
-				sp_messages.id,
-				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content) as content,
-				sp_messages.date_created
-			FROM
-				sp_messages
-			WHERE
-				(SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.status) = '1'
-			AND
-				sp_messages.recipient = '$recepient' AND sp_messages.sender = '$sender' ";
+			sp_messages.id,
+			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.content ) AS content,
+			sp_messages.date_created
+		FROM
+			sp_messages
+		WHERE
+			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = sp_messages.STATUS ) = '1'
+			AND (sp_messages.recipient = '1'
+			or sp_messages.sender = '1')
+
+			AND (sp_messages.recipient = '2'
+			or sp_messages.sender = '2') ";
 
 			// Step 5: Check last id post is set
 			if( isset($_POST['lid']) ){
