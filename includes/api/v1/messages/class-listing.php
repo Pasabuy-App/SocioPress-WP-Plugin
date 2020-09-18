@@ -76,7 +76,7 @@
 				$limit = 7;
             }
 
-            $sql .= " GROUP BY user_id DESC LIMIT $limit ";
+            $sql .= " GROUP BY user_id ORDER BY MAX(T.ID) DESC LIMIT $limit ";
 
             $message = $wpdb->get_results($sql);
             foreach ($message as $key => $value) {
