@@ -83,12 +83,14 @@
 				$sql .= " AND post.post_author = $user_id ";
 			}
 
+			$limit = 12;
+
 			if( isset($_POST['lid']) ){
 				// Step 4: Validate parameter
                 if (empty($_POST['lid']) ) {
                     return array(
                         "status" => "failed",
-                        "message" => "Requirawdawded fields cannot be empty.",
+                        "message" => "Required fields cannot be empty.",
                     );
                 }
 				if ( !is_numeric($_POST["lid"])) {

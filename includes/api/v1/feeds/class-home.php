@@ -63,26 +63,26 @@
 			AND
 				post.post_type IN ('status', 'move', 'sell')  ";
 
+			$limit = 12;
+
 			if( isset($_POST['lid']) ){
-
 				// Step 4: Validate parameter
-					if (empty($_POST['lid']) ) {
-						return array(
-							"status" => "failed",
-							"message" => "Required fields cannot be empty.",
-						);
-					}
-					if(!is_numeric($_POST["lid"])){
-						return array(
-							"status" => "failed",
-							"message" => "Parameters not in valid format.",
-						);
-					}
+                if (empty($_POST['lid']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+				if ( !is_numeric($_POST["lid"])) {
+					return array(
+						"status" => "failed",
+						"message" => "Parameters not in valid format.",
+					);
+				}
 
-				// Step 5: Pass the post in variable and continuation of query
-					$get_last_id = $_POST['lid'];
-					$add_feeds = $get_last_id - 7;
-					$sql .= " AND post.id BETWEEN $add_feeds AND  ($get_last_id - 1) ";
+				$lastid = $_POST['lid'];
+				$sql .= " AND post.id < $lastid ";
+				$limit = 7;
 
 			}
 
