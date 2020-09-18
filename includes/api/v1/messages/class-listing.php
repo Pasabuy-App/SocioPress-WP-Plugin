@@ -46,13 +46,16 @@
             $wpid = $_POST['wpid'];
 
             $sql = "SELECT
-                t.hash_id as ID,
+                (SELECT id FROM sp_messages WHERE content = MAX(t.content)) as ID,
+                #t.hash_id as ID,
                 IF (`sender` = '$wpid', `recipient`, `sender`) as `user_id`,
-                date_created,
-                if(date_seen is null , '', date_seen) as date_seen ,
+                MAX(date_created) AS date_created,
+                if((SELECT date_seen FROM sp_messages WHERE content = MAX(t.content)) is null , '', (SELECT date_seen FROM sp_messages WHERE content = MAX(t.content))) as date_seen ,
                 null as avatar,
                 null as `name`,
-                (SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content
+				(SELECT child_val FROM sp_revisions WHERE ID = MAX(t.content)) AS content,
+				(SELECT sender FROM sp_messages WHERE content = MAX(t.content)) as sender_id
+                #(SELECT rev.child_val FROM sp_revisions rev WHERE rev.parent_id = t.ID AND rev.id = t.content AND rev.child_key = 'content' AND ID = (SELECT MAX(ID) FROM sp_revisions  WHERE id = rev.id  )) as content
             FROM sp_messages t
             WHERE '$wpid'
                 IN (`sender`, `recipient`)
