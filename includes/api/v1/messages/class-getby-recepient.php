@@ -33,24 +33,24 @@
             }
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-            //     return array(
-            //         "status"  => "unknown",
-            //         "message" => "Please contact your administrator. Verification issues!",
-            //     );
-			// }
+			if (DV_Verification::is_verified() == false) {
+                return array(
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
+                );
+			}
 
 			$wpid = $_POST['wpid'];
 			$user_id = $_POST['recepient'];
 
 			// Step 3: Valdiate user using user id
-            // $recepients = WP_User::get_data_by( 'ID', $user_id );
-            // if ( !$recepients ) {
-            //     return array(
-            //         "status"  => "failed",
-            //         "message" => "Recepient does not exist.",
-            //     );
-			// }
+            $recepients = WP_User::get_data_by( 'ID', $user_id );
+            if ( !$recepients ) {
+                return array(
+                    "status"  => "failed",
+                    "message" => "Recepient does not exist.",
+                );
+			}
 
 			// Step 4: Start mysql transaction
 			$sql = "SELECT
