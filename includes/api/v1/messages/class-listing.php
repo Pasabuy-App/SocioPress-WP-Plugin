@@ -64,16 +64,19 @@
 			$limit = 12;
 
             if (isset($_POST['lid'])) {
-                if (empty($_POST['lid'])) {
-                    return array(
-                        "status"  => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
-                    );
-                }
+                // if (empty($_POST['lid'])) {
+                //     return array(
+                //         "status"  => "unknown",
+                //         "message" => "Please contact your administrator. Request unknown!",
+                //     );
+                // }
 
                 $lastid = $_POST['lid'];
-				$sql .= " AND mess.id < $lastid ";
-				$limit = 7;
+                
+				$offset = 12 + $lastid;
+				//$sql .= " AND mess.id < $lastid ";
+
+				$limit = "7 OFFSET ".$offset;
             }
 
             $sql .= " GROUP BY user_id ORDER BY MAX(T.ID) DESC LIMIT $limit ";

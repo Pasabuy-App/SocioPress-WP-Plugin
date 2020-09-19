@@ -71,41 +71,43 @@
 			$limit = 12;
 
 			if (isset($_POST['lid'])) {
-				if (empty($_POST['lid'])) {
-					return array(
-						"status"  => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
-					);
-				}
+				// if (empty($_POST['lid'])) {
+				// 	return array(
+				// 		"status"  => "unknown",
+				// 		"message" => "Please contact your administrator. Request unknown!",
+				// 	);
+				// }
 
 				$lastid = $_POST['lid'];
+
+				$offset = 12 + $lastid;
 
 				//$get_id = $wpdb->get_row("SELECT ID FROM sp_messages WHERE `ID` = '$lastid' ");
 
 				//$sql .= " AND mess.id < '$get_id->ID' ";
-				$limit = 7;
+				$limit = "7 OFFSET ".$offset;
 			}
 			
-			$limits = $limit - 1;
-			$sqle = "SELECT ID FROM sp_messages WHERE ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = status ) = '1' 
-			AND (recipient = '$wpid' or sender = '$wpid') AND (recipient = '$user_id' or sender = '$user_id')";
-			if (isset($_POST['lid'])) {
-				$sqle .= "AND ID < '$lastid' ";
-			}
-			$sqle .= "ORDER BY ID DESC LIMIT $limits , 1";
-			//return $sqle;
-			$results= $wpdb->get_row( $sqle);
-			if ($results){
-				$sql .= "AND mess.id BETWEEN '$results->ID' AND (SELECT MAX(ID) FROM sp_messages) ";
-			} else{
-				if (isset($_POST['lid'])) {
-					$sql .= "AND mess.id < '$lastid' ";
-				 }
-			}
+			// $limits = $limit - 1;
+			// $sqle = "SELECT ID FROM sp_messages WHERE ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = status ) = '1' 
+			// AND (recipient = '$wpid' or sender = '$wpid') AND (recipient = '$user_id' or sender = '$user_id')";
+			// if (isset($_POST['lid'])) {
+			// 	$sqle .= "AND ID < '$lastid' ";
+			// }
+			// $sqle .= "ORDER BY ID DESC LIMIT $limits , 1";
+			// //return $sqle;
+			// $results= $wpdb->get_row( $sqle);
+			// if ($results){
+			// 	$sql .= "AND mess.id BETWEEN '$results->ID' AND (SELECT MAX(ID) FROM sp_messages) ";
+			// } else{
+			// 	if (isset($_POST['lid'])) {
+			// 		$sql .= "AND mess.id < '$lastid' ";
+			// 	 }
+			// }
 			
 
 			// Step 8: Get results from database
-			$sql .= " ORDER BY mess.id ASC LIMIT $limit  ";
+			$sql .= " ORDER BY mess.id DESC LIMIT $limit  ";
 			$result= $wpdb->get_results( $sql , OBJECT);
 
 
