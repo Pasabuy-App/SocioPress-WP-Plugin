@@ -61,7 +61,7 @@
                 IN (`sender`, `recipient`)
             ";
 
-			$limit = 12;
+            $limit = 12;
 
             if (isset($_POST['lid'])) {
                 // if (empty($_POST['lid'])) {
@@ -85,8 +85,17 @@
             foreach ($message as $key => $value) {
                 if ($value->user_id ) {
                     $wp_user = get_user_by("ID", $value->user_id);
-                    $ava = isset($wp_user->user_id) ? $ava = $wp_user->user_id: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
-                    $value->avatar = $ava;
+                    //return $value->user_id;
+                    $avatar = get_user_meta( $value->user_id,  $key = 'avatar', $single = false );
+                    // if (!$avatar) {
+					// 	$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+					// }else{
+					// 	$smp = $avatar[0];
+					// }
+                    //$ava = isset($value->user_id) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
+                    //$value->avatar = $smp;
+                    $value->avatar = !$avatar ? SP_PLUGIN_URL . "assets/default-avatar.png" : $avatar[0];
+                    
                     $value->name = $wp_user->display_name;
                 }
             }

@@ -70,22 +70,33 @@
 			
 			$limit = 12;
 
-			if (isset($_POST['lid'])) {
-				// if (empty($_POST['lid'])) {
+			if (isset($_POST['lid'])) { // inpput the last id of the message then lid for new message
+				if (empty($_POST['lid'])) {
+					return array(
+						"status"  => "unknown",
+						"message" => "Please contact your administrator. Request unknown!",
+					);
+				}
+                $lid = $_POST['lid'];
+                $sql .= " AND mess.id > $lid ";
+            }
+
+			if (isset($_POST['offset'])) {
+				// if (empty($_POST['offset'])) {
 				// 	return array(
 				// 		"status"  => "unknown",
 				// 		"message" => "Please contact your administrator. Request unknown!",
 				// 	);
 				// }
 
-				$lastid = $_POST['lid'];
+				$offset = $_POST['offset'];
 
-				$offset = 12 + $lastid;
+				$offsets = 12 + $offset;
 
 				//$get_id = $wpdb->get_row("SELECT ID FROM sp_messages WHERE `ID` = '$lastid' ");
 
 				//$sql .= " AND mess.id < '$get_id->ID' ";
-				$limit = "7 OFFSET ".$offset;
+				$limit = "7 OFFSET ".$offsets;
 			}
 			
 			// $limits = $limit - 1;
