@@ -72,14 +72,14 @@
                 // }
 
                 $lastid = $_POST['lid'];
-                
+
 				$offset = 12 + $lastid;
 				//$sql .= " AND mess.id < $lastid ";
 
 				$limit = "7 OFFSET ".$offset;
             }
 
-            $sql .= " GROUP BY user_id ORDER BY MAX(T.ID) DESC LIMIT $limit ";
+            $sql .= " GROUP BY user_id ORDER BY MAX(t.ID) DESC LIMIT $limit ";
 
             $message = $wpdb->get_results($sql);
             foreach ($message as $key => $value) {
