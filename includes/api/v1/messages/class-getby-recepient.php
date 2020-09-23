@@ -42,6 +42,7 @@
 
 			$wpid = $_POST['wpid'];
 			$user_id = $_POST['recepient'];
+			$type = $_POST['type'];
 
 			// Step 3: Valdiate user using user id
             $recepients = WP_User::get_data_by( 'ID', $user_id );
@@ -115,7 +116,22 @@
 			// 		$sql .= "AND mess.id < '$lastid' ";
 			// 	 }
 			// }
-			
+			if ($type === "0"){
+				$sql .= " AND type IN ('0')";
+			}
+			if ($type === "1"){
+				if  ( !isset($_POST['stid']) ) {
+                    return array(
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $stid = $_POST['stid'];
+				$sql .= " AND type IN ('1') AND stid = '$stid' ";
+			}
+			if ($type === "2"){
+				$sql .= " AND type IN ('2')";
+			}
 
 			// Step 8: Get results from database
 			$sql .= " ORDER BY mess.id DESC LIMIT $limit  ";

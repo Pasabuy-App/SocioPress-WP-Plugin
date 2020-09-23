@@ -44,9 +44,13 @@
             }
 
             $wpid = $_POST['wpid'];
+            $type = $_POST['type'];
+            $stid = "0";
 
             $sql = "SELECT
                 (SELECT id FROM sp_messages WHERE content = MAX(t.content)) as ID,
+                (SELECT stid FROM sp_messages WHERE content = MAX(t.content)) as store_id,
+                (SELECT type FROM sp_messages WHERE content = MAX(t.content)) as types,
                 #t.hash_id as ID,
                 IF (`sender` = '$wpid', `recipient`, `sender`) as `user_id`,
                 MAX(date_created) AS date_created,
@@ -78,8 +82,27 @@
 
 				$limit = "7 OFFSET ".$offset;
             }
-
-            $sql .= " GROUP BY user_id ORDER BY MAX(t.ID) DESC LIMIT $limit ";
+            if ($type === "1"){ // for user message with store but for user only
+                $sql .= " AND type NOT IN ('1') "; 
+            }
+            if ($type === "2"){ // for user message with store but for store only
+                if  ( !isset($_POST['stid']) ) {
+                    return array(
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $stid = $_POST['stid'];
+                $sql .= " AND type IN ('1') AND stid = '$stid' "; 
+            }
+            if ($type === "3"){ // for user message with mover but for user only
+                $sql .= " AND type NOT IN ('2') "; 
+            }
+            if ($type === "4"){ // for user message with mover but for mover only
+                $sql .= " AND type IN ('2') "; 
+            }
+            
+            $sql .= " GROUP BY user_id, type ORDER BY MAX(t.ID) DESC LIMIT $limit ";
 
             $message = $wpdb->get_results($sql);
             foreach ($message as $key => $value) {

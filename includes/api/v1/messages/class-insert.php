@@ -68,22 +68,97 @@
                 );
             }
 
-            $user = SP_Insert_Message::catch_post();
+            $sender = $_POST['wpid'];
+            $content = $_POST['content'];
+            $recepient = $_POST['recepient'];
+            $type = $_POST['type'];
+            $stid = "0";
+            if ($type === "1"){ //User to Store, validate sender using wpid and recipient using stid and recipient
+                if (!isset($_POST['stid']) ){
+                    return array(
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $type = "1";
+                $stid = $_POST['stid'];
+                $senders = WP_User::get_data_by( 'ID', $sender ); // validate sender using wpid
+                $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$stid' AND created_by = '$recepient' "); // validate recipient using stid and recipient
+                if (!$senders || !$valstore){
+                    return array(
+                        "status"  => "failed",
+                        "message" => "Invalid sender or recipient.",
+                    );
+                }
+            }
+            if ($type === "2"){ //Store to user, validate store using stid and wpid and user using recipient
+                if (!isset($_POST['stid']) ){
+                    return array(
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $type = "1";
+                $stid = $_POST['stid'];
+                $recepients = WP_User::get_data_by( 'ID', $recepient ); //validate recipient using recipient
+                $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$stid' AND created_by = '$sender' "); //validate sender using sender and store id
+                if (!$recepients || !$valstore){
+                    return array(
+                        "status"  => "failed",
+                        "message" => "Invalid sender or recipient.",
+                    );
+                }
+            }
+            if ($type === "3"){ //User to mover or mover to user, validate user using wpid and mover using recipient if have documents
+                $type = "2";
+                $senders = WP_User::get_data_by( 'ID', $sender );
+                $recepients = WP_User::get_data_by( 'ID', $recepient );
+                if (!$recepients || !$senders){
+                    return array(
+                        "status"  => "failed",
+                        "message" => "Invalid sender or recipient.",
+                    );
+                }
+            }
+            if ($type === "0"){ //user to user
+                $type = "0";
+                $senders = WP_User::get_data_by( 'ID', $sender );
+                $recepients = WP_User::get_data_by( 'ID', $recepient );
+                if (!$senders || !$recepients){
+                    return array(
+                        "status"  => "failed",
+                        "message" => "Invalid sender or recipient.",
+                    );
+                }
+            }
+            
+            //$recepients = WP_User::get_data_by( 'ID', $recepient ); // validate recipient if user
+            // if ( !$recepients || !$valstore {
+            //     return array(
+            //         "status"  => "failed",
+            //         "message" => "Recepient does not exist.",
+            //     );
+            // }
+
+            //$user = SP_Insert_Message::catch_post();
             $date = SP_Globals:: date_stamp();
             $id = array();
 
-            // Step 6: Valdiate user using user id
-            $recepients = WP_User::get_data_by( 'ID', $user['recepient'] );
-            if ( !$recepients ) {
-                return array(
-                    "status"  => "failed",
-                    "message" => "Recepient does not exist.",
-                );
-            }
+            // Step 6: Validate user using user id
+            // TODO : If recipipent is user or mover, valdiate using wpid and if store, ude store id
+            // $recepients = WP_User::get_data_by( 'ID', $recepient ); // wpid
+            // $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$recepient' "); // store id
+            // if ( !$recepients || !$valstore {
+            //     return array(
+            //         "status"  => "failed",
+            //         "message" => "Recepient does not exist.",
+            //     );
+            // }
+            //return 0;
 
             // Step 7: Insert data to array
             $child_key = array(
-                'content' => $user['content'],
+                'content' => $content,
                 'status'  => '1'
             );
 
@@ -91,11 +166,11 @@
             $wpdb->query("START TRANSACTION");
 
                 foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
-                    $insert_revs = $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '0', '$key', '$child_val', '{$user["user_id"]}', '$date' ) ");
+                    $insert_revs = $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '0', '$key', '$child_val', '$sender', '$date' ) ");
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
                 }
 
-                $wpdb->query("INSERT INTO $table_mess $fields_mess VALUES ('{$id[0]}', '{$user["user_id"]}', '{$user["recepient"]}', '{$id[1]}', '$date' ) "); // Insert data into mp messages
+                $wpdb->query("INSERT INTO $table_mess (content, sender, recipient, stid, type, status, date_created) VALUES ('{$id[0]}', '$sender', '$recepient', '$stid', '$type', '{$id[1]}', '$date' ) "); // Insert data into mp messages
                 $last_id = $wpdb->insert_id;
 
                 $wpdb->query("UPDATE $table_mess SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id ");
