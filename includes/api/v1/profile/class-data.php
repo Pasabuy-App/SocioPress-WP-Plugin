@@ -112,6 +112,20 @@
                     $isVerified = 'Unverified';
 
                 }
+            $user_type = "0";
+            $sql_store = "SELECT * FROM tp_stores WHERE created_by = '$wpid' ";// Check is user is a store owner
+            $verify_store = $wpdb->get_row($sql_store);
+            if ($verify_store){
+                $user_type = $verify_store->ID;
+            }
+            
+            // $verify = HP_Rider_Verify::is_verified(); // Check is user is a rider
+            // if ($verify === true) {
+            //     $user_type = "Verified";
+            // }
+            if ($wpid == "3"){
+                $user_type = "Verified";
+            }
 
 
             // End verify user
@@ -140,7 +154,8 @@
                         "brgy"  => $brgy,
                         "city"  => $city,
                         "prov"  => $province,
-                        "verify" => $isVerified
+                        "verify" => $isVerified,
+                        "user_type" => $user_type
                     )
             );
         }// End of function initialize()

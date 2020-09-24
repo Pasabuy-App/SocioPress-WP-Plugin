@@ -36,12 +36,12 @@
             }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-            }
+			// if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status"  => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+            // }
 
             $wpid = $_POST['wpid'];
             $type = $_POST['type'];
@@ -50,6 +50,8 @@
             $sql = "SELECT
                 (SELECT id FROM sp_messages WHERE content = MAX(t.content)) as ID,
                 (SELECT stid FROM sp_messages WHERE content = MAX(t.content)) as store_id,
+                (SELECT child_val FROM tp_revisions WHERE ID = (SELECT logo FROM tp_stores WHERE ID = (SELECT stid FROM sp_messages WHERE content = MAX(t.content) ) )) as store_avatar,
+                (SELECT child_val FROM tp_revisions WHERE ID = (SELECT title FROM tp_stores WHERE ID = (SELECT stid FROM sp_messages WHERE content = MAX(t.content)))) as store_name,
                 (SELECT type FROM sp_messages WHERE content = MAX(t.content)) as types,
                 #t.hash_id as ID,
                 IF (`sender` = '$wpid', `recipient`, `sender`) as `user_id`,

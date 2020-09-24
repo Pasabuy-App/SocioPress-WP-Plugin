@@ -33,12 +33,12 @@
             }
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status"  => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-			}
+			// if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status"  => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+			// }
 
 			$wpid = $_POST['wpid'];
 			$user_id = $_POST['recepient'];
@@ -69,7 +69,7 @@
 			AND (mess.recipient = '$user_id'
 			or mess.sender = '$user_id') ";
 			
-			$limit = 12;
+			$limit = " DESC LIMIT 12 ";
 
 			if (isset($_POST['lid'])) { // inpput the last id of the message then lid for new message
 				if (empty($_POST['lid'])) {
@@ -79,7 +79,8 @@
 					);
 				}
                 $lid = $_POST['lid'];
-                $sql .= " AND mess.id > $lid ";
+				$sql .= " AND mess.id > $lid ";
+				$limit = " ASC LIMIT 1";
             }
 
 			if (isset($_POST['offset'])) {
@@ -97,7 +98,7 @@
 				//$get_id = $wpdb->get_row("SELECT ID FROM sp_messages WHERE `ID` = '$lastid' ");
 
 				//$sql .= " AND mess.id < '$get_id->ID' ";
-				$limit = "7 OFFSET ".$offsets;
+				$limit = " DESC LIMIT 7 OFFSET ".$offsets;
 			}
 			
 			// $limits = $limit - 1;
@@ -134,7 +135,7 @@
 			}
 
 			// Step 8: Get results from database
-			$sql .= " ORDER BY mess.id DESC LIMIT $limit  ";
+			$sql .= " ORDER BY mess.id $limit  ";
 			$result= $wpdb->get_results( $sql , OBJECT);
 
 
