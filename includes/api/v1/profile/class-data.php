@@ -123,6 +123,7 @@
 
                         $stid = $IsStore['data']['stid'];
                         $roid = $IsStore['data']['roid'];
+                        $store_name = $IsStore['data']['store_name'];
                         $logo = $IsStore['data']['logo'];
                         $banner = $IsStore['data']['banner'];
 
@@ -130,8 +131,9 @@
 
                     case 'failed':
 
-                        $stid =0;
-                        $roid = 0;
+                        $stid = "0";
+                        $roid = "0";
+                        $store_name = '';
                         $logo = '';
                         $banner = '';
 
@@ -190,6 +192,7 @@
                         "verify" => $isVerified,
                         "user_type" => $user_type,
                         "stid" => $stid,
+                        "store_name" => $store_name,
                         "roid" => $roid,
                         "store_logo" => $logo,
                         "store_banner" => $banner
