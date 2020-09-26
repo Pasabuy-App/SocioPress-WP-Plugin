@@ -32,12 +32,12 @@
             }
 
             // Step 2: Valdiate user
-            if (DV_Verification::is_verified() == false) {
+            /* if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            }
+            } */
 
 
             $wpid = '';
@@ -112,20 +112,53 @@
                     $isVerified = 'Unverified';
 
                 }
-            $user_type = "0";
-            $sql_store = "SELECT * FROM tp_stores WHERE created_by = '$wpid' ";// Check is user is a store owner
-            $verify_store = $wpdb->get_row($sql_store);
-            if ($verify_store){
-                $user_type = $verify_store->ID;
-            }
-            
-            // $verify = HP_Rider_Verify::is_verified(); // Check is user is a rider
-            // if ($verify === true) {
-            //     $user_type = "Verified";
-            // }
-            if ($wpid == "3"){
-                $user_type = "Verified";
-            }
+
+
+             // Check if wpid is store personnel
+
+                $IsStore = TP_Verify_Store_Personel::listen();
+
+                switch ($IsStore['status']) {
+                    case 'success':
+
+                        $stid = $IsStore['data']['stid'];
+                        $roid = $IsStore['data']['roid'];
+                        $logo = $IsStore['data']['logo'];
+                        $banner = $IsStore['data']['banner'];
+
+                        break;
+
+                    case 'failed':
+
+                        $stid =0;
+                        $roid = 0;
+                        $logo = '';
+                        $banner = '';
+
+                        break;
+                }
+
+            // End
+
+
+            // Check if wpid is rider or user
+                $rider = HP_Rider_Verify::is_verified();
+                switch ($rider['status']) {
+                    case 'success':
+                        if ($rider) {
+                            $user_type = "Verified";
+                        }
+                        break;
+
+                    case 'false':
+                        $user_type = "User";
+                        break;
+
+                    case 'failed':
+                        $user_type = "Unverified";
+                        break;
+                }
+            // End
 
 
             // End verify user
@@ -155,7 +188,12 @@
                         "city"  => $city,
                         "prov"  => $province,
                         "verify" => $isVerified,
-                        "user_type" => $user_type
+                        "user_type" => $user_type,
+                        "stid" => $stid,
+                        "roid" => $roid,
+                        "store_logo" => $logo,
+                        "store_banner" => $banner
+
                     )
             );
         }// End of function initialize()
