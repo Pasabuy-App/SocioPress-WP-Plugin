@@ -76,6 +76,7 @@
 				$sql .= "`sender` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
 				$sql .= "`recipient` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
 				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, if 0 User', ";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'WPID for Mover sender or recipient.', ";
 				$sql .= "`type` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '0 User, 1 Store, 2 Mover', ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT '1 active or 0 inactive, use to delete.', ";
 				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this message is created.', ";

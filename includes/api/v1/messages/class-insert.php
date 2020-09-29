@@ -73,6 +73,7 @@
             $recepient = $_POST['recepient'];
             $type = $_POST['type'];
             $stid = "0";
+            $mover = "0";
             if ($type === "1"){ //User to Store, validate sender using wpid and recipient using stid and recipient
                 if (!isset($_POST['stid']) ){
                     return array(
@@ -83,7 +84,7 @@
                 $type = "1";
                 $stid = $_POST['stid'];
                 $senders = WP_User::get_data_by( 'ID', $sender ); // validate sender using wpid
-                $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$stid' AND created_by = '$recepient' "); // validate recipient using stid and recipient
+                $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$recepient' "); // validate recipient using stid and recipient
                 if (!$senders || !$valstore){
                     return array(
                         "status"  => "failed",
@@ -101,7 +102,7 @@
                 $type = "1";
                 $stid = $_POST['stid'];
                 $recepients = WP_User::get_data_by( 'ID', $recepient ); //validate recipient using recipient
-                $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$stid' AND created_by = '$sender' "); //validate sender using sender and store id
+                $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$sender' "); //validate sender using sender and store id
                 if (!$recepients || !$valstore){
                     return array(
                         "status"  => "failed",
@@ -119,6 +120,19 @@
                         "message" => "Invalid sender or recipient.",
                     );
                 }
+                $mover = $sender;
+            }
+            if ($type === "4"){ //User to mover or mover to user, validate user using wpid and mover using recipient if have documents
+                $type = "2";
+                $senders = WP_User::get_data_by( 'ID', $sender );
+                $recepients = WP_User::get_data_by( 'ID', $recepient );
+                if (!$recepients || !$senders){
+                    return array(
+                        "status"  => "failed",
+                        "message" => "Invalid sender or recipient.",
+                    );
+                }
+                $mover = $recepient;
             }
             if ($type === "0"){ //user to user
                 $type = "0";
@@ -170,7 +184,7 @@
                     $id[] = $wpdb->insert_id;  // Last ID insert to Array
                 }
 
-                $wpdb->query("INSERT INTO $table_mess (content, sender, recipient, stid, type, status, date_created) VALUES ('{$id[0]}', '$sender', '$recepient', '$stid', '$type', '{$id[1]}', '$date' ) "); // Insert data into mp messages
+                $wpdb->query("INSERT INTO $table_mess (content, sender, recipient, stid, wpid, type, status, date_created) VALUES ('{$id[0]}', '$sender', '$recepient', '$stid', '$mover','$type', '{$id[1]}', '$date' ) "); // Insert data into mp messages
                 $last_id = $wpdb->insert_id;
 
                 $wpdb->query("UPDATE $table_mess SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id ");
