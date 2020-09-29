@@ -52,13 +52,13 @@
 				post_title as title,
 				post.post_content AS content,
 				post.post_date AS date_post,
-				IF (post.post_type = 'move', 'Pasabuy', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
+				IF (post.post_type = 'move', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
 			FROM
 				$table_post AS post
 			INNER JOIN
 				wp_users AS user ON post.post_author = user.ID
 			WHERE
-				post.post_status = 'publish' AND post.post_type IN ('status', 'move', 'sell')  ";
+				post.post_type IN ('status', 'move', 'sell', 'pahatid', 'pabili')  ";
 
 
 			if (isset($_POST['user_id'])) {
@@ -114,27 +114,20 @@
 			foreach ($result as $key => $value) {
 
 				if ($value->type === 'Selling') {
+
 					$keys = array(
 						'item_category',
-						'vehicle_type',
-						'item_price',
+						'vehicle_date',
+						'time_price',
 						'pickup_location',
 						'item_image'
 					);
 
 					$var = array();
+
 					for ($count=0; $count < count($keys) ; $count++) {
 						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
-					$avatar = get_user_meta( $value->post_author,'avatar', $single = false );
-
-					$smp;
-					if (!$avatar) {
-						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
-					}else{
-						$smp = $avatar[0];
-					}
-
 
 					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
 
@@ -145,39 +138,44 @@
 						);
 					}
 
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
-
-
+					$smp;
 					$image = '';
-					if (!$get_meta) {
-						$image = '';
+
+					if (!$avatar) {
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+
 					}else{
+						$smp = $avatar[0];
+
+					}
+
+					if ($get_meta) {
 						$image = $var[4]['data'];
 					}
 
 					$values = array(
 						'item_category' => $var[0],
-						'vehicle_type' => $var[1],
-						'item_price' => $var[2],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
 						'pickup_location' => $var[3],
 						'item_image' => $image,
 						'author' => $smp,
 						'views' => $count_seen->views
 					);
 
+					$vars[] = array_merge((array)$value, $values);
 
-						$vars[] = array_merge((array)$value, $values);
 
-
-				}elseif ($value->type === 'Pasabuy'){
+				}else if($value->type === 'Pasabay'){
 
 					$keys = array(
-
 						'pickup_location',
-						'vehicle_type',
+						'vehicle_date',
+						'time_price',
 						'drop_off_location',
 						'item_image'
-
 					);
 
 					$var = array();
@@ -186,12 +184,14 @@
 					}
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+
 					$smp;
 					if (!$avatar) {
 						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
+
 					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
 
 					if ($seen === 'error') {
@@ -212,15 +212,124 @@
 
 					$values = array(
 						'pickup_location' => $var[0],
-						'vehicle_type' => $var[1],
-						'drop_off_location' => $var[2],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
+						'drop_off_location' => $var[3],
 						'item_image' => $image,
 						'author' => $smp,
 						'views' => $count_seen->views
 					);
 
 
-					$vars[] = array_merge((array)$value, $values);
+						$vars[] = array_merge((array)$value, $values);
+
+				}else if($value->type === 'Pahatid'){
+
+					$keys = array(
+						'pickup_location',
+						'vehicle_date',
+						'time_price',
+						'drop_off_location',
+						'item_image'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+
+					$smp;
+					if (!$avatar) {
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+					}else{
+						$smp = $avatar[0];
+					}
+
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
+					}
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
+
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[3]['data'];
+					}
+
+					$values = array(
+						'pickup_location' => $var[0],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
+						'drop_off_location' => $var[3],
+						'item_image' => $image,
+						'author' => $smp,
+						'views' => $count_seen->views
+					);
+
+
+						$vars[] = array_merge((array)$value, $values);
+
+				}else if($value->type === 'Pabili'){
+
+					$keys = array(
+						'pickup_location',
+						'vehicle_date',
+						'time_price',
+						'item_image'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+
+					$smp;
+					if (!$avatar) {
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+					}else{
+						$smp = $avatar[0];
+					}
+
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
+					}
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
+
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[3]['data'];
+					}
+
+					$values = array(
+						'pickup_location' => $var[0],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
+						'item_image' => $image,
+						'author' => $smp,
+						'views' => $count_seen->views
+					);
+
+
+						$vars[] = array_merge((array)$value, $values);
 
 				}elseif ($value->type === 'Status') {
 					$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
@@ -238,17 +347,16 @@
 
 					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
 
-					$smp;
+					$smp = '';
 					if (!$avatar) {
 						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 					}else{
 						$smp = $avatar[0];
 					}
-					$post_views_count = get_post_meta( $value->id, 'post_views_count', false );
 
 					$image = '';
 					if (!$get_meta) {
-						$image = '';
+						$image =  '' ;
 					}else{
 						$image = $get_meta['data'];
 					}

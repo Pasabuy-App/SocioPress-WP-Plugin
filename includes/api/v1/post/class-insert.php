@@ -58,22 +58,58 @@
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move')  && !($_POST["type"] === 'sell') && !($_POST["type"] === 'status') ) {
+            if ( !($_POST["type"] === 'move')  
+                && !($_POST["type"] === 'pabili') 
+                && !($_POST["type"] === 'pahatid') 
+                && !($_POST["type"] === 'sell') 
+                && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
                     "message" => "Invalid post type.",
                 );
             }
 
-            if ($_POST['type'] === 'move') {
-                if ( !isset($_POST['vhl_type']) || !isset($_POST['pic_loc']) || !isset($_POST['dp_loc'])  ) {
+            if ($_POST['type'] === 'pahatid') {
+                if ( !isset($_POST['pic_loc']) || !isset($_POST['dp_loc'])  || !isset($_POST['vhl_date']) || !isset($_POST['time_price']) ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
-                if ( empty($_POST['vhl_type']) || empty($_POST['pic_loc']) || empty($_POST['dp_loc'])  ) {
+                if ( empty($_POST['pic_loc']) || empty($_POST['dp_loc'])  || empty($_POST['vhl_date']) || empty($_POST['time_price']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+
+            }
+            if ($_POST['type'] === 'pabili') {
+                if ( !isset($_POST['pic_loc']) || !isset($_POST['vhl_date']) || !isset($_POST['time_price'])  ) {
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+
+                if ( empty($_POST['pic_loc']) || empty($_POST['vhl_date']) || empty($_POST['time_price'])  ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                }
+
+            }
+            if ($_POST['type'] === 'move') {
+                if ( !isset($_POST['pic_loc']) || !isset($_POST['dp_loc']) || !isset($_POST['vhl_date']) || !isset($_POST['time_price'])  ) {
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+
+                if (  empty($_POST['pic_loc']) || empty($_POST['dp_loc']) || empty($_POST['vhl_date']) || empty($_POST['time_price'])  ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
@@ -82,18 +118,111 @@
 
             }elseif ($_POST['type'] === 'sell') {
 
-                if (!isset($_POST['item_cat']) ||  !isset($_POST['vhl_type']) ||!isset($_POST['item_price']) || !isset($_POST['pic_loc'])  ) {
+                if (!isset($_POST['item_cat']) ||  !isset($_POST['vhl_date']) ||!isset($_POST['time_price']) || !isset($_POST['pic_loc']) ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
-                if (empty($_POST['item_cat'])|| empty($_POST['vhl_type'])  || empty($_POST['item_price']) || empty($_POST['pic_loc'])  ) {
+                if (empty($_POST['item_cat'])|| empty($_POST['vhl_date'])  || empty($_POST['time_price']) || empty($_POST['pic_loc']) ) {
                     return array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                     );
+                }
+            }
+
+            if ($_POST['type'] === 'pabili') {
+
+                // Insert WPPost
+                    $insert_post = array(
+                        'post_author'	=> $user["created_by"],
+                        'post_title'	=> $user["title"],
+                        'post_content'	=> $user["content"],
+                        'post_status'	=> $user["post_status"],
+                        'comment_status'=> $user["comment_status"],
+                        'ping_status'	=> $user["ping_status"],
+                        'post_type'		=> $user["post_type"]
+                    );
+
+                    // Step 6: Start mysql transaction
+                    $result = wp_insert_post($insert_post);
+                // End Insert WPPost
+                $post_count = update_post_meta($result, 'post_views_count', '0'  );
+
+
+                $data = array(
+                    'pickup_location' => $_POST['pic_loc'], //location
+                    'vehicle_date' => $_POST['vhl_date'],
+                    'time_price' => $_POST['time_price'],
+                );
+
+                foreach ($data as $key => $value) {
+                    $result1 = update_post_meta($result, $key, $value );
+                }
+
+                $files = $request->get_file_params();
+
+                if (isset($files['img'])) {
+
+                    $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
+
+                    if ($image['status'] === 'failed') {
+                        return array(
+                            "status" => $image['status'],
+                            "message" => $image['message']
+                        );
+
+                    }
+                    $result5 = update_post_meta($result, 'item_image', $image  );
+                }
+            }
+
+            if ($_POST['type'] === 'pahatid') {
+
+                // Insert WPPost
+                    $insert_post = array(
+                        'post_author'	=> $user["created_by"],
+                        'post_title'	=> $user["title"],
+                        'post_content'	=> $user["content"],
+                        'post_status'	=> $user["post_status"],
+                        'comment_status'=> $user["comment_status"],
+                        'ping_status'	=> $user["ping_status"],
+                        'post_type'		=> $user["post_type"]
+                    );
+
+                    // Step 6: Start mysql transaction
+                    $result = wp_insert_post($insert_post);
+                // End Insert WPPost
+                $post_count = update_post_meta($result, 'post_views_count', '0'  );
+
+
+                $data = array(
+                    'pickup_location' => $_POST['pic_loc'], // pick up location
+                    'drop_off_location' => $_POST['dp_loc'],// drop off location
+                    'vehicle_date' => $_POST['vhl_date'],
+                    'time_price' => $_POST['time_price'],
+                );
+
+                foreach ($data as $key => $value) {
+                    $result1 = update_post_meta($result, $key, $value );
+                }
+
+                $files = $request->get_file_params();
+
+                if (isset($files['img'])) {
+
+                    $image = DV_Globals::upload_image( $request, $files); // Call upload image function in globals
+
+                    if ($image['status'] === 'failed') {
+                        return array(
+                            "status" => $image['status'],
+                            "message" => $image['message']
+                        );
+
+                    }
+                    $result5 = update_post_meta($result, 'item_image', $image  );
                 }
             }
 
@@ -117,9 +246,11 @@
 
 
                 $data = array(
-                    'pickup_location' => $_POST['pic_loc'],
-                    'vehicle_type' => $_POST['vhl_type'],
-                    'drop_off_location' => $_POST['dp_loc']
+                    'pickup_location' => $_POST['pic_loc'], //destination
+                    //'vehicle_type' => $_POST['vhl_date'],
+                    'drop_off_location' => $_POST['dp_loc'],// return place
+                    'vehicle_date' => $_POST['vhl_date'],
+                    'time_price' => $_POST['time_price'],
                 );
 
                 foreach ($data as $key => $value) {
@@ -145,7 +276,6 @@
 
             if ($_POST['type'] === 'sell') {
 
-
                 // Insert WPPost
                     $insert_post = array(
                         'post_author'	=> $user["created_by"],
@@ -164,8 +294,8 @@
 
                 $data = array(
                     'item_category' => $_POST['item_cat'],
-                    'vehicle_type' => $_POST['vhl_type'],
-                    'item_price' => $_POST['item_price'],
+                    'vehicle_date' => $_POST['vhl_date'],
+                    'time_price' => $_POST['time_price'],
                     'pickup_location' => $_POST['pic_loc']
                 );
 
@@ -192,7 +322,6 @@
             }
 
             if ($_POST['type'] === 'status') {
-
 
                 // Insert WPPost
                     $insert_post = array(
