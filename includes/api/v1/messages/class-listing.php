@@ -43,10 +43,19 @@
             //     );
             // }
 
+            // Step 3: Validate parameter if passed
+            if  ( !isset($_POST['type']) ) {
+                return array(
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Request unknown!",
+                );
+            }
+
             $wpid = $_POST['wpid'];
             $type = $_POST['type'];
-            $stid = "0";
+            //$stid = "0";
 
+            // Step 4: Start mysql transaction
             $sql = "SELECT
                 (SELECT id FROM sp_messages WHERE content = MAX(t.content)) as ID,
                 (SELECT stid FROM sp_messages WHERE content = MAX(t.content)) as store_id,
@@ -84,10 +93,26 @@
 
 				$limit = "7 OFFSET ".$offset;
             }
-            if ($type === "1"){ // for user message with store but for user only
-                $sql .= " AND type NOT IN ('1') "; 
+            // if ($type === "0"){ // for user message with store but for user 
+            //     if  ( !isset($_POST['stid']) ) {
+            //         return array(
+            //             "status"  => "unknown",
+            //             "message" => "Please contact your administrator. Request unknown!",
+            //         );
+            //     }
+            //     $stid = $_POST['stid'];
+            //     if ($stid === "0"){
+            //         $sql .= " AND sender = $wpid AND type != '2' "; 
+            //     }
+            //     if ($stid !== "0"){
+            //         $sql .= " AND stid != '$stid'  ";  //AND sender = $wpid AND type != '2'
+            //     }
+            // }
+            if ($type === "1"){ // new(mover message w/ or w/o store) old(for user message with store but for user only)
+                //$sql .= " AND type NOT IN ('1') "; 
+                $sql .= " AND wpid = '$wpid' "; 
             }
-            if ($type === "2"){ // for user message with store but for store only
+            if ($type === "2"){ // new(store message w/ or w/o mover) old(for user message with store but for store only)
                 if  ( !isset($_POST['stid']) ) {
                     return array(
                         "status"  => "unknown",
@@ -95,13 +120,23 @@
                     );
                 }
                 $stid = $_POST['stid'];
-                $sql .= " AND type IN ('1') AND stid = '$stid' "; 
+                //$sql .= " AND type IN ('1') AND stid = '$stid' "; 
+                $sql .= " AND stid = '$stid' "; 
             }
-            if ($type === "3"){ // for user message with mover but for user only
-                $sql .= " AND type NOT IN ('2') "; 
+            if ($type === "3"){ // new(user message w/ mover only) old(for user message with mover but for user only)
+                //$sql .= " AND type NOT IN ('2') "; 
+                $sql .= " AND wpid != '$wpid' "; 
             }
-            if ($type === "4"){ // for user message with mover but for mover only
-                $sql .= " AND type IN ('2') "; 
+            if ($type === "4"){ // new(user message with store only or store w/ mover) old(for user message with mover but for mover only)
+                //$sql .= " AND type IN ('2') ";
+                if  ( !isset($_POST['stid']) ) {
+                    return array(
+                        "status"  => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $stid = $_POST['stid'];
+                $sql .= " AND stid != '$stid' AND wpid != '$wpid' "; 
             }
             
             $sql .= " GROUP BY user_id, type ORDER BY MAX(t.ID) DESC LIMIT $limit ";

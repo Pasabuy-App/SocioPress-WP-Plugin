@@ -131,7 +131,10 @@
 				$sql .= " AND type IN ('1') AND stid = '$stid' ";
 			}
 			if ($type === "2"){
-				$sql .= " AND type IN ('2')";
+				$sql .= " AND type IN ('2') AND wpid != '$wpid' ";
+			}
+			if ($type === "3"){
+				$sql .= " AND type IN ('2') AND wpid = '$wpid' ";
 			}
 
 			// Step 8: Get results from database
