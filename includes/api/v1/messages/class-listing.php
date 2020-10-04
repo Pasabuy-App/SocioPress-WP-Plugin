@@ -43,6 +43,13 @@
             //     );
             // }
 
+            if(!isset($_POST['type'])){
+                return array(
+                             "status"  => "unknown",
+                             "message" => "Please contact your administrator. Verification issues!",
+                         );
+            }
+
             $wpid = $_POST['wpid'];
             $type = $_POST['type'];
             $stid = "0";
@@ -85,7 +92,7 @@
 				$limit = "7 OFFSET ".$offset;
             }
             if ($type === "1"){ // for user message with store but for user only
-                $sql .= " AND type NOT IN ('1') "; 
+                $sql .= " AND type NOT IN ('1') ";
             }
             if ($type === "2"){ // for user message with store but for store only
                 if  ( !isset($_POST['stid']) ) {
@@ -95,15 +102,15 @@
                     );
                 }
                 $stid = $_POST['stid'];
-                $sql .= " AND type IN ('1') AND stid = '$stid' "; 
+                $sql .= " AND type IN ('1') AND stid = '$stid' ";
             }
             if ($type === "3"){ // for user message with mover but for user only
-                $sql .= " AND type NOT IN ('2') "; 
+                $sql .= " AND type NOT IN ('2') ";
             }
             if ($type === "4"){ // for user message with mover but for mover only
-                $sql .= " AND type IN ('2') "; 
+                $sql .= " AND type IN ('2') ";
             }
-            
+
             $sql .= " GROUP BY user_id, type ORDER BY MAX(t.ID) DESC LIMIT $limit ";
 
             $message = $wpdb->get_results($sql);
@@ -120,7 +127,7 @@
                     //$ava = isset($value->user_id) ? $ava = $wp_user->avatar: $ava = SP_PLUGIN_URL . "assets/default-avatar.png";
                     //$value->avatar = $smp;
                     $value->avatar = !$avatar ? SP_PLUGIN_URL . "assets/default-avatar.png" : $avatar[0];
-                    
+
                     $value->name = $wp_user->display_name;
                 }
             }

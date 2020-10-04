@@ -32,12 +32,12 @@
             }
 
             // Step 2: Valdiate user
-            /* if (DV_Verification::is_verified() == false) {
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            } */
+            }
 
 
             $wpid = '';
@@ -114,55 +114,6 @@
                 }
 
 
-             // Check if wpid is store personnel
-
-                $IsStore = TP_Verify_Store_Personel::listen();
-
-                switch ($IsStore['status']) {
-                    case 'success':
-
-                        $stid = $IsStore['data']['stid'];
-                        $roid = $IsStore['data']['roid'];
-                        $store_name = $IsStore['data']['store_name'];
-                        $logo = $IsStore['data']['logo'];
-                        $banner = $IsStore['data']['banner'];
-
-                        break;
-
-                    case 'failed':
-
-                        $stid = "0";
-                        $roid = "0";
-                        $store_name = '';
-                        $logo = '';
-                        $banner = '';
-
-                        break;
-                }
-
-            // End
-
-
-            // Check if wpid is rider or user
-                $rider = HP_Rider_Verify::is_verified();
-                switch ($rider['status']) {
-                    case 'success':
-                        if ($rider) {
-                            $user_type = "Verified";
-                        }
-                        break;
-
-                    case 'false':
-                        $user_type = "User";
-                        break;
-
-                    case 'failed':
-                        $user_type = "Unverified";
-                        break;
-                }
-            // End
-
-
             // End verify user
             !empty($wp_user)? $ava = $wp_user->avatar : $ava = '';
             !empty($wp_user)? $ban = $wp_user->banner : $ban = '';
@@ -188,15 +139,7 @@
                         "street" => $street,
                         "brgy"  => $brgy,
                         "city"  => $city,
-                        "prov"  => $province,
-                        "verify" => $isVerified,
-                        "user_type" => $user_type,
-                        "stid" => $stid,
-                        "store_name" => $store_name,
-                        "roid" => $roid,
-                        "store_logo" => $logo,
-                        "store_banner" => $banner
-
+                        "prov"  => $province
                     )
             );
         }// End of function initialize()
