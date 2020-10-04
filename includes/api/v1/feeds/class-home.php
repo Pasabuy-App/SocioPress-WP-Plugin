@@ -53,7 +53,7 @@
 				post.post_content AS content,
 				post.post_date AS date_post,
 				user.user_status AS `status`,
-				IF (post.post_type = 'move', 'Pasabuy', IF (post.post_type = 'sell', 'Selling', 'Status'))  AS type
+				IF (post.post_type = 'move', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
 			FROM
 				$table_post AS post
 			INNER JOIN
@@ -61,7 +61,7 @@
 			WHERE
 				post.post_status = 'publish'
 			AND
-				post.post_type IN ('status', 'move', 'sell')  ";
+				post.post_type IN ('status', 'move', 'sell', 'pahatid', 'pabili')  ";
 
 			$limit = 12;
 
@@ -97,8 +97,8 @@
 
 					$keys = array(
 						'item_category',
-						'vehicle_type',
-						'item_price',
+						'vehicle_date',
+						'time_price',
 						'pickup_location',
 						'item_image'
 					);
@@ -137,8 +137,8 @@
 
 					$values = array(
 						'item_category' => $var[0],
-						'vehicle_type' => $var[1],
-						'item_price' => $var[2],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
 						'pickup_location' => $var[3],
 						'item_image' => $image,
 						'author' => $smp,
@@ -148,11 +148,12 @@
 					$vars[] = array_merge((array)$value, $values);
 
 
-				}else if($value->type === 'Pasabuy'){
+				}else if($value->type === 'Pasabay'){
 
 					$keys = array(
 						'pickup_location',
-						'vehicle_type',
+						'vehicle_date',
+						'time_price',
 						'drop_off_location',
 						'item_image'
 					);
@@ -191,8 +192,117 @@
 
 					$values = array(
 						'pickup_location' => $var[0],
-						'vehicle_type' => $var[1],
-						'drop_off_location' => $var[2],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
+						'drop_off_location' => $var[3],
+						'item_image' => $image,
+						'author' => $smp,
+						'views' => $count_seen->views
+					);
+
+
+						$vars[] = array_merge((array)$value, $values);
+
+				}else if($value->type === 'Pahatid'){
+
+					$keys = array(
+						'pickup_location',
+						'vehicle_date',
+						'time_price',
+						'drop_off_location',
+						'item_image'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+
+					$smp;
+					if (!$avatar) {
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+					}else{
+						$smp = $avatar[0];
+					}
+
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
+					}
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
+
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[3]['data'];
+					}
+
+					$values = array(
+						'pickup_location' => $var[0],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
+						'drop_off_location' => $var[3],
+						'item_image' => $image,
+						'author' => $smp,
+						'views' => $count_seen->views
+					);
+
+
+						$vars[] = array_merge((array)$value, $values);
+
+				}else if($value->type === 'Pabili'){
+
+					$keys = array(
+						'pickup_location',
+						'vehicle_date',
+						'time_price',
+						'item_image'
+					);
+
+					$var = array();
+					for ($count=0; $count < count($keys) ; $count++) {
+						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+					}
+
+					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
+
+					$smp;
+					if (!$avatar) {
+						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
+					}else{
+						$smp = $avatar[0];
+					}
+
+					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
+
+					if ($seen === 'error') {
+						return array(
+							"status" => "unknown",
+							"message" => "Please contact your administrator. post seen error"
+						);
+					}
+
+					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
+
+					$image = '';
+					if (!$get_meta) {
+						$image = '';
+					}else{
+						$image = $var[3]['data'];
+					}
+
+					$values = array(
+						'pickup_location' => $var[0],
+						'vehicle_date' => $var[1],
+						'time_price' => $var[2],
 						'item_image' => $image,
 						'author' => $smp,
 						'views' => $count_seen->views

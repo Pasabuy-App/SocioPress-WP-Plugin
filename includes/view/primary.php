@@ -79,6 +79,54 @@
             'not_found_in_trash'  => __( 'Not found in Trash', 'status' ),
           );
 
+          $labels_pahatid = array(
+            'name'                => _x( 'Pahatid', 'Post Type General Name', 'pahatid' ),
+            'singular_name'       => _x( 'Pahatid', 'Post Type Singular Name', 'pahatid' ),
+            'menu_name'           => __( 'Pahatid', 'pahatid' ),
+            'parent_item_colon'   => __( 'Parent Pahatid', 'pahatid' ),
+            'all_items'           => __( 'Pahatid Post', 'pahatid' ),
+            'view_item'           => __( 'View Pahatid', 'pahatid' ),
+            'add_new_item'        => __( 'Add New Pahatid', 'pahatid' ),
+            'add_new'             => __( 'Add New', 'pahatid' ),
+            'edit_item'           => __( 'Edit', 'pahatid' ),
+            'update_item'         => __( 'Update', 'pahatid' ),
+            'search_items'        => __( 'Search', 'pahatid' ),
+            'not_found'           => __( 'Not Found', 'pahatid' ),
+            'not_found_in_trash'  => __( 'Not found in Trash', 'pahatid' ),
+          );
+
+          $labels_pabili = array(
+            'name'                => _x( 'Pabili', 'Post Type General Name', 'pabili' ),
+            'singular_name'       => _x( 'Pabili', 'Post Type Singular Name', 'pabili' ),
+            'menu_name'           => __( 'Pabili', 'pabili' ),
+            'parent_item_colon'   => __( 'Parent Pabili', 'pabili' ),
+            'all_items'           => __( 'Pabili Post', 'pabili' ),
+            'view_item'           => __( 'View Pabili', 'pabili' ),
+            'add_new_item'        => __( 'Add New Pabili', 'pabili' ),
+            'add_new'             => __( 'Add New', 'pabili' ),
+            'edit_item'           => __( 'Edit', 'pabili' ),
+            'update_item'         => __( 'Update', 'pabili' ),
+            'search_items'        => __( 'Search', 'pabili' ),
+            'not_found'           => __( 'Not Found', 'pabili' ),
+            'not_found_in_trash'  => __( 'Not found in Trash', 'pabili' ),
+          );
+
+          $labels_pasakay = array(
+            'name'                => _x( 'Pasakay', 'Post Type General Name', 'pasakay' ),
+            'singular_name'       => _x( 'Pasakay', 'Post Type Singular Name', 'pasakay' ),
+            'menu_name'           => __( 'Pasakay', 'pasakay' ),
+            'parent_item_colon'   => __( 'Parent Pasakay', 'pasakay' ),
+            'all_items'           => __( 'Pasakay Post', 'pasakay' ),
+            'view_item'           => __( 'View Pasakay', 'pasakay' ),
+            'add_new_item'        => __( 'Add New Pasakay', 'pasakay' ),
+            'add_new'             => __( 'Add New', 'pasakay' ),
+            'edit_item'           => __( 'Edit', 'pasakay' ),
+            'update_item'         => __( 'Update', 'pasakay' ),
+            'search_items'        => __( 'Search', 'pasakay' ),
+            'not_found'           => __( 'Not Found', 'pasakay' ),
+            'not_found_in_trash'  => __( 'Not found in Trash', 'pasakay' ),
+          );
+
           $args_sell = array(
             'label'               => __( 'sell', 'sell' ),
             'description'         => __( 'Sell', 'sell' ),
@@ -117,7 +165,49 @@
             // This is where we add taxonomies to our CPT
             'taxonomies'          => array( 'category' ),
           );
+
+          $args_pahatid = array(
+            'label'               => __( 'pahatid', 'pahatid' ),
+            'description'         => __( 'Pahatid', 'pahatid' ),
+            'labels'              => $labels_pahatid,
+            'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => 'front-sections',
+            
+            // This is where we add taxonomies to our CPT
+            'taxonomies'          => array( 'category' ),
+          );
+
+          $args_pabili = array(
+            'label'               => __( 'pabili', 'pabili' ),
+            'description'         => __( 'Pabili', 'pabili' ),
+            'labels'              => $labels_pabili,
+            'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => 'front-sections',
+            
+            // This is where we add taxonomies to our CPT
+            'taxonomies'          => array( 'category' ),
+          );
+
+          $args_pasakay = array(
+            'label'               => __( 'pasakay', 'pasakay' ),
+            'description'         => __( 'Pasakay', 'pasakay' ),
+            'labels'              => $labels_pasakay,
+            'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => 'front-sections',
+            
+            // This is where we add taxonomies to our CPT
+            'taxonomies'          => array( 'category' ),
+          );
           
+          register_post_type( 'pasakay', $args_pasakay );
+          register_post_type( 'pabili', $args_pabili );
+          register_post_type( 'pahatid', $args_pahatid );
           register_post_type( 'move', $args_move );
           register_post_type( 'sell', $args_sell );
           register_post_type( 'status', $args_status );

@@ -117,9 +117,11 @@
 			// 		$sql .= "AND mess.id < '$lastid' ";
 			// 	 }
 			// }
+			
 			if ($type === "0"){
 				$sql .= " AND type IN ('0')";
 			}
+
 			if ($type === "1"){
 				if  ( !isset($_POST['stid']) ) {
                     return array(
@@ -130,8 +132,13 @@
                 $stid = $_POST['stid'];
 				$sql .= " AND type IN ('1') AND stid = '$stid' ";
 			}
+
 			if ($type === "2"){
-				$sql .= " AND type IN ('2')";
+				$sql .= " AND type IN ('2') AND wpid != '$wpid' ";
+			}
+
+			if ($type === "3"){
+				$sql .= " AND type IN ('2') AND wpid = '$wpid' ";
 			}
 
 			// Step 8: Get results from database
