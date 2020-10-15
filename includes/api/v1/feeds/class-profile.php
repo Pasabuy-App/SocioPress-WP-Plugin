@@ -52,13 +52,13 @@
 				post_title as title,
 				post.post_content AS content,
 				post.post_date AS date_post,
-				IF (post.post_type = 'move', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
+				IF (post.post_type = 'pasabay', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
 			FROM
 				$table_post AS post
 			INNER JOIN
 				wp_users AS user ON post.post_author = user.ID
 			WHERE
-				post.post_type IN ('status', 'move', 'sell', 'pahatid', 'pabili')  ";
+				post.post_type IN ('status', 'pasabay', 'sell', 'pahatid', 'pabili')  ";
 
 
 			if (isset($_POST['user_id'])) {

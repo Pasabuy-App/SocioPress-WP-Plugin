@@ -58,7 +58,7 @@
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move')  
+            if ( !($_POST["type"] === 'pasabay')  
                 && !($_POST["type"] === 'pabili') 
                 && !($_POST["type"] === 'pahatid') 
                 && !($_POST["type"] === 'sell') 

@@ -70,7 +70,7 @@
                 );
             }
 
-            if ($get_id->post_type === 'move') {
+            if ($get_id->post_type === 'pasabay') {
                 if (!isset($_POST['item_name']) || !isset($_POST['vhl_type']) || !isset($_POST['pck_loc']) || !isset($_POST['dp_loc'])  ) {
                     return array(
                         "status" => "unknown",
@@ -121,7 +121,7 @@
             // Step 6: Start mysql transaction
             $result = wp_update_post( $update_post );
 
-            if ($get_id->post_type === 'move') {
+            if ($get_id->post_type === 'pasabay') {
 
                 $result1 = update_post_meta($result, 'item_name', $_POST['item_name']  );
                 $result2 = update_post_meta($result, 'pickup_location', $_POST['pck_loc']  );
