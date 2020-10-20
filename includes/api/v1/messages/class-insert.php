@@ -37,12 +37,12 @@
             }
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-            //     return array(
-            //         "status"  => "unknown",
-            //         "message" => "Please contact your administrator. Verification issues!",
-            //     );
-            // }
+			if (DV_Verification::is_verified() == false) {
+                return array(
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
+                );
+            }
 
 			// Step 3: Check if required parameters are passed
             if  ( !isset($_POST['content']) || !isset($_POST['recepient']) ) {
@@ -83,14 +83,14 @@
                 }
                 $type = "1";
                 $stid = $_POST['stid'];
-                $senders = WP_User::get_data_by( 'ID', $sender ); // validate sender using wpid
-                $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$recepient' "); // validate recipient using stid and recipient
-                if (!$senders || !$valstore){
-                    return array(
-                        "status"  => "failed",
-                        "message" => "Invalid sender or recipient.",
-                    );
-                }
+                // $senders = WP_User::get_data_by( 'ID', $sender ); // validate sender using wpid
+                // $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$recepient' "); // validate recipient using stid and recipient
+                // if (!$senders || !$valstore){
+                //     return array(
+                //         "status"  => "failed",
+                //         "message" => "Invalid sender or recipient.",
+                //     );
+                // }
             }
             if ($type === "2"){ //Store to user, validate store using stid and wpid and user using recipient
                 if (!isset($_POST['stid']) ){
@@ -101,14 +101,14 @@
                 }
                 $type = "1";
                 $stid = $_POST['stid'];
-                $recepients = WP_User::get_data_by( 'ID', $recepient ); //validate recipient using recipient
-                $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$sender' "); //validate sender using sender and store id
-                if (!$recepients || !$valstore){
-                    return array(
-                        "status"  => "failed",
-                        "message" => "Invalid sender or recipient.",
-                    );
-                }
+                // $recepients = WP_User::get_data_by( 'ID', $recepient ); //validate recipient using recipient
+                // $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$sender' "); //validate sender using sender and store id
+                // if (!$recepients || !$valstore){
+                //     return array(
+                //         "status"  => "failed",
+                //         "message" => "Invalid sender or recipient.",
+                //     );
+                // }
             }
             if ($type === "3"){ //User to mover or mover to user, validate user using wpid and mover using recipient if have documents
                 $type = "2";
