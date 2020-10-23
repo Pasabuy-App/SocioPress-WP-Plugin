@@ -61,6 +61,12 @@
         }
     } */
 
+    add_action('every_minutes', 'custom_run_crons');
 
+    function custom_run_crons() {
+        global $wpdb;
+        $query = "INSERT INTO wp_crons (title, info) VALUES ('Heading', 'Body');";
+        $wpdb->query($query);
+    }
 
 ?>

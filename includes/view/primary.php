@@ -132,8 +132,9 @@
             'description'         => __( 'Sell', 'sell' ),
             'labels'              => $labels_sell,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -145,8 +146,9 @@
             'description'         => __( 'Pasabay', 'pasabay' ),
             'labels'              => $labels_pasabay,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -158,8 +160,9 @@
             'description'         => __( 'Status', 'status' ),
             'labels'              => $labels_status,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -171,8 +174,9 @@
             'description'         => __( 'Pahatid', 'pahatid' ),
             'labels'              => $labels_pahatid,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -184,8 +188,9 @@
             'description'         => __( 'Pabili', 'pabili' ),
             'labels'              => $labels_pabili,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -197,8 +202,9 @@
             'description'         => __( 'Pasakay', 'pasakay' ),
             'labels'              => $labels_pasakay,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
