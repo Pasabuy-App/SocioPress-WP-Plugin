@@ -36,12 +36,12 @@
             }
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-            //     return array(
-            //         "status"  => "unknown",
-            //         "message" => "Please contact your administrator. Verification issues!",
-            //     );
-            // }
+			if (DV_Verification::is_verified() == false) {
+                return array(
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
+                );
+            }
 
             // Step 3: Validate parameter if passed
             if  ( !isset($_POST['type']) ) {
@@ -108,6 +108,9 @@
             //         $sql .= " AND stid != '$stid'  ";  //AND sender = $wpid AND type != '2'
             //     }
             // }
+            if ($type === "0"){ 
+                $sql .= " AND type = '0' ";
+            }
             if ($type === "1"){ // new(mover message w/ or w/o store) old(for user message with store but for user only)
                 //$sql .= " AND type NOT IN ('1') ";
                 $sql .= " AND wpid = '$wpid' ";
