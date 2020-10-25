@@ -56,7 +56,7 @@
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move') && !($_POST["type"] === 'sell') && !($_POST["type"] === 'status') ) {
+            if ( !($_POST["type"] === 'pasabay') && !($_POST["type"] === 'sell') && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
                     "message" => "Invalid post type.",
