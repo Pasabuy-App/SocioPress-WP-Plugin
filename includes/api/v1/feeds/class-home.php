@@ -63,16 +63,16 @@
 			AND
 				post.post_type IN ('status', 'move', 'sell', 'pahatid', 'pabili')  ";
 
-			$limit = 12;
+			$limit = " 12 OFFSET 0";
 
 			if( isset($_POST['lid']) ){
 				// Step 4: Validate parameter
-                if (empty($_POST['lid']) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
-                    );
-                }
+                // if (empty($_POST['lid']) ) {
+                //     return array(
+                //         "status" => "failed",
+                //         "message" => "Required fields cannot be empty.",
+                //     );
+                // }
 				if ( !is_numeric($_POST["lid"])) {
 					return array(
 						"status" => "failed",
@@ -81,13 +81,13 @@
 				}
 
 				$lastid = $_POST['lid'];
-				$sql .= " AND post.id < $lastid ";
-				$limit = 7;
+				#$sql .= " AND post.id < $lastid ";
+				$limit = " 7 OFFSET ".$lastid;
 
 			}
 
 			// Step 6: Get results from database
-			$sql .= " ORDER BY post.id DESC LIMIT 12 ";
+			$sql .= " ORDER BY post.id DESC LIMIT ".$limit;
 			$result = $wpdb->get_results( $sql, OBJECT);
 
 			$vars = array();
