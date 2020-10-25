@@ -36,12 +36,12 @@
 
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-			//  	return array(
-			// 		"status" => "unknown",
-			// 		"message" => "Please contact your administrator. Verification issues!",
-			//  	);
-			// }
+			if (DV_Verification::is_verified() == false) {
+			 	return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Verification issues!",
+			 	);
+			}
 
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
@@ -131,7 +131,11 @@
 					}
 
 					if ($get_meta) {
-						$image = $var[4];
+						if (isset($var[4]['data'])){
+							$image = $var[4]['data'];
+						}else{
+							$image = $var[4];
+						}
 					}
 
 					$values = array(
@@ -186,7 +190,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -241,7 +249,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -295,7 +307,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -332,12 +348,14 @@
 					}else{
 						$smp = $avatar[0];
 					}
-					
+
 					$image = '';
 					if (!$get_meta) {
 						$image =  '' ;
 					}else{
-						if (!empty($get_meta)){
+						if (isset($get_meta['data'])){
+							$image = $get_meta['data'];
+						}else{
 							$image = $get_meta;
 						}
 					}
