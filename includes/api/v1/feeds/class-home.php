@@ -36,12 +36,12 @@
 
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-			 	return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Verification issues!",
-			 	);
-			}
+			// if (DV_Verification::is_verified() == false) {
+			//  	return array(
+			// 		"status" => "unknown",
+			// 		"message" => "Please contact your administrator. Verification issues!",
+			//  	);
+			// }
 
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
@@ -53,7 +53,7 @@
 				post.post_content AS content,
 				post.post_date AS date_post,
 				user.user_status AS `status`,
-				IF (post.post_type = 'move', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
+				IF (post.post_type = 'pasabay', 'Pasabay', IF (post.post_type = 'sell', 'Selling', IF (post.post_type = 'pabili', 'Pabili', IF (post.post_type = 'pahatid', 'Pahatid', 'Status' )) ))  AS type
 			FROM
 				$table_post AS post
 			INNER JOIN
@@ -61,7 +61,7 @@
 			WHERE
 				post.post_status = 'publish'
 			AND
-				post.post_type IN ('status', 'move', 'sell', 'pahatid', 'pabili')  ";
+				post.post_type IN ('status', 'pasabay', 'sell', 'pahatid', 'pabili')  ";
 
 			$limit = " 12 OFFSET 0";
 
@@ -85,7 +85,6 @@
 				$limit = " 7 OFFSET ".$lastid;
 
 			}
-
 			// Step 6: Get results from database
 			$sql .= " ORDER BY post.id DESC LIMIT ".$limit;
 			$result = $wpdb->get_results( $sql, OBJECT);
@@ -132,7 +131,7 @@
 					}
 
 					if ($get_meta) {
-						$image = $var[4]['data'];
+						$image = $var[4];
 					}
 
 					$values = array(
@@ -187,7 +186,7 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						$image = $var[3];
 					}
 
 					$values = array(
@@ -242,7 +241,7 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						$image = $var[3];
 					}
 
 					$values = array(
@@ -296,7 +295,7 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						$image = $var[3];
 					}
 
 					$values = array(
@@ -333,12 +332,14 @@
 					}else{
 						$smp = $avatar[0];
 					}
-
+					
 					$image = '';
 					if (!$get_meta) {
 						$image =  '' ;
 					}else{
-						$image = $get_meta['data'];
+						if (!empty($get_meta)){
+							$image = $get_meta;
+						}
 					}
 					 $values = array(
 						'item_image' => $image,
