@@ -58,10 +58,10 @@
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move')
-                && !($_POST["type"] === 'pabili')
-                && !($_POST["type"] === 'pahatid')
-                && !($_POST["type"] === 'sell')
+            if ( !($_POST["type"] === 'pasabay')  
+                && !($_POST["type"] === 'pabili') 
+                && !($_POST["type"] === 'pahatid') 
+                && !($_POST["type"] === 'sell') 
                 && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
@@ -101,7 +101,8 @@
                 }
 
             }
-            if ($_POST['type'] === 'move') {
+            if ($_POST['type'] === 'pasabay') {
+                
                 if ( !isset($_POST['pic_loc']) || !isset($_POST['dp_loc']) || !isset($_POST['vhl_date']) || !isset($_POST['time_price'])  ) {
                     return array(
                         "status" => "unknown",
@@ -228,7 +229,7 @@
                 }
             }
 
-            if ($_POST['type'] === 'move') {
+            if ($_POST['type'] === 'pasabay') {
 
                 // Insert WPPost
                     $insert_post = array(
