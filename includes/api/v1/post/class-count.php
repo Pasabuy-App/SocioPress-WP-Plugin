@@ -77,7 +77,7 @@
             WHERE
                 post.post_status = 'publish'
                 AND post.post_author = '$user_id' 
-                AND post.post_type IN ('status', 'move', 'sell') 
+                AND post.post_type IN ('status', 'pasabay', 'sell') 
             GROUP BY
                 post.post_author
             ");
