@@ -11,7 +11,7 @@
       * @version 0.1.0
     */
 
-      #region for move registration post type
+      #region for pasabay registration post type
 
       /*
       * Adding a menu to contain the custom post types for frontpage
@@ -36,7 +36,7 @@
             'singular_name'       => _x( 'Sell', 'Post Type Singular Name', 'sell' ),
             'menu_name'           => __( 'Sell', 'sell' ),
             'parent_item_colon'   => __( 'Parent Sell', 'sell' ),
-            'all_items'           => __( 'Sell Post', 'sell' ),
+            'all_items'           => __( 'Seller', 'sell' ),
             'view_item'           => __( 'View Sell', 'sell' ),
             'add_new_item'        => __( 'Add New Sell', 'sell' ),
             'add_new'             => __( 'Add New', 'sell' ),
@@ -47,20 +47,20 @@
             'not_found_in_trash'  => __( 'Not found in Trash', 'sell' ),
           );
 
-          $labels_move = array(
-            'name'                => _x( 'Move', 'Post Type General Name', 'move' ),
-            'singular_name'       => _x( 'Move', 'Post Type Singular Name', 'move' ),
-            'menu_name'           => __( 'Move', 'move' ),
-            'parent_item_colon'   => __( 'Parent Move', 'move' ),
-            'all_items'           => __( 'Move Post', 'move' ),
-            'view_item'           => __( 'View Move', 'move' ),
-            'add_new_item'        => __( 'Add New Move', 'move' ),
-            'add_new'             => __( 'Add New', 'move' ),
-            'edit_item'           => __( 'Edit', 'move' ),
-            'update_item'         => __( 'Update', 'move' ),
-            'search_items'        => __( 'Search', 'move' ),
-            'not_found'           => __( 'Not Found', 'move' ),
-            'not_found_in_trash'  => __( 'Not found in Trash', 'move' ),
+          $labels_pasabay = array(
+            'name'                => _x( 'Pasabay', 'Post Type General Name', 'pasabay' ),
+            'singular_name'       => _x( 'Pasabay', 'Post Type Singular Name', 'pasabay' ),
+            'menu_name'           => __( 'Pasabay', 'pasabay' ),
+            'parent_item_colon'   => __( 'Parent Pasabay', 'pasabay' ),
+            'all_items'           => __( 'Pasabay', 'pasabay' ),
+            'view_item'           => __( 'View Pasabay', 'pasabay' ),
+            'add_new_item'        => __( 'Add New Pasabay', 'pasabay' ),
+            'add_new'             => __( 'Add New', 'pasabay' ),
+            'edit_item'           => __( 'Edit', 'pasabay' ),
+            'update_item'         => __( 'Update', 'pasabay' ),
+            'search_items'        => __( 'Search', 'pasabay' ),
+            'not_found'           => __( 'Not Found', 'pasabay' ),
+            'not_found_in_trash'  => __( 'Not found in Trash', 'pasabay' ),
           );
 
           $labels_status = array(
@@ -68,7 +68,7 @@
             'singular_name'       => _x( 'Status', 'Post Type Singular Name', 'status' ),
             'menu_name'           => __( 'Status', 'status' ),
             'parent_item_colon'   => __( 'Parent Status', 'status' ),
-            'all_items'           => __( 'Status Post', 'status' ),
+            'all_items'           => __( 'Status', 'status' ),
             'view_item'           => __( 'View Status', 'status' ),
             'add_new_item'        => __( 'Add New Status', 'status' ),
             'add_new'             => __( 'Add New', 'status' ),
@@ -84,7 +84,7 @@
             'singular_name'       => _x( 'Pahatid', 'Post Type Singular Name', 'pahatid' ),
             'menu_name'           => __( 'Pahatid', 'pahatid' ),
             'parent_item_colon'   => __( 'Parent Pahatid', 'pahatid' ),
-            'all_items'           => __( 'Pahatid Post', 'pahatid' ),
+            'all_items'           => __( 'Pahatid', 'pahatid' ),
             'view_item'           => __( 'View Pahatid', 'pahatid' ),
             'add_new_item'        => __( 'Add New Pahatid', 'pahatid' ),
             'add_new'             => __( 'Add New', 'pahatid' ),
@@ -100,7 +100,7 @@
             'singular_name'       => _x( 'Pabili', 'Post Type Singular Name', 'pabili' ),
             'menu_name'           => __( 'Pabili', 'pabili' ),
             'parent_item_colon'   => __( 'Parent Pabili', 'pabili' ),
-            'all_items'           => __( 'Pabili Post', 'pabili' ),
+            'all_items'           => __( 'Pabili', 'pabili' ),
             'view_item'           => __( 'View Pabili', 'pabili' ),
             'add_new_item'        => __( 'Add New Pabili', 'pabili' ),
             'add_new'             => __( 'Add New', 'pabili' ),
@@ -116,7 +116,7 @@
             'singular_name'       => _x( 'Pasakay', 'Post Type Singular Name', 'pasakay' ),
             'menu_name'           => __( 'Pasakay', 'pasakay' ),
             'parent_item_colon'   => __( 'Parent Pasakay', 'pasakay' ),
-            'all_items'           => __( 'Pasakay Post', 'pasakay' ),
+            'all_items'           => __( 'Pasakay', 'pasakay' ),
             'view_item'           => __( 'View Pasakay', 'pasakay' ),
             'add_new_item'        => __( 'Add New Pasakay', 'pasakay' ),
             'add_new'             => __( 'Add New', 'pasakay' ),
@@ -132,21 +132,23 @@
             'description'         => __( 'Sell', 'sell' ),
             'labels'              => $labels_sell,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
             'taxonomies'          => array( 'category' ),
           );
 
-          $args_move = array(
-            'label'               => __( 'move', 'move' ),
-            'description'         => __( 'Move', 'move' ),
-            'labels'              => $labels_move,
+          $args_pasabay = array(
+            'label'               => __( 'pasabay', 'pasabay' ),
+            'description'         => __( 'Pasabay', 'pasabay' ),
+            'labels'              => $labels_pasabay,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -158,8 +160,9 @@
             'description'         => __( 'Status', 'status' ),
             'labels'              => $labels_status,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -171,8 +174,9 @@
             'description'         => __( 'Pahatid', 'pahatid' ),
             'labels'              => $labels_pahatid,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -184,8 +188,9 @@
             'description'         => __( 'Pabili', 'pabili' ),
             'labels'              => $labels_pabili,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
@@ -197,20 +202,21 @@
             'description'         => __( 'Pasakay', 'pasakay' ),
             'labels'              => $labels_pasakay,
             'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
+            'publicly_queryable'  => true,
             'show_in_menu'        => 'front-sections',
             
             // This is where we add taxonomies to our CPT
             'taxonomies'          => array( 'category' ),
           );
           
-          register_post_type( 'pasakay', $args_pasakay );
+          register_post_type( 'status', $args_status );
+          register_post_type( 'pasabay', $args_pasabay );
           register_post_type( 'pabili', $args_pabili );
           register_post_type( 'pahatid', $args_pahatid );
-          register_post_type( 'move', $args_move );
+          register_post_type( 'pasakay', $args_pasakay );
           register_post_type( 'sell', $args_sell );
-          register_post_type( 'status', $args_status );
     }
     add_action( 'init', 'register_cpt_features' );
     #endregion
