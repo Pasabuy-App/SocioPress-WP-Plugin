@@ -58,10 +58,10 @@
             }
 
             // Step 5: Ensure that type is correct
-            if ( !($_POST["type"] === 'move')  
-                && !($_POST["type"] === 'pabili') 
-                && !($_POST["type"] === 'pahatid') 
-                && !($_POST["type"] === 'sell') 
+            if ( !($_POST["type"] === 'move')
+                && !($_POST["type"] === 'pabili')
+                && !($_POST["type"] === 'pahatid')
+                && !($_POST["type"] === 'sell')
                 && !($_POST["type"] === 'status') ) {
                 return array(
                     "status" => "failed",
@@ -175,7 +175,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -222,7 +223,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -270,7 +272,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -317,7 +320,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -353,7 +357,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
