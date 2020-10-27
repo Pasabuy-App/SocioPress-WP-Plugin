@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -12,13 +12,13 @@
   	class SP_Transactions_List_Total {
 
           public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 SP_Transactions_List_Total::total_transactions()
             );
           }
-    
+
         public static function total_transactions(){
-            
+
 			// Initialize WP global variable
             global $wpdb;
 
@@ -27,7 +27,7 @@
             $table_reviews= SP_REVIEWS_TABLE;
             $table_reviews_fields = SP_REVIEWS_FIELDS;
             $table_orders = MP_ORDERS_TABLE;
-           
+
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
             if ($plugin !== true) {
@@ -47,7 +47,7 @@
 
             // Step 3: If uid is not set, it means we are trying to get reviews of the logged user
             isset($_POST['uid']) ? $user_id = $_POST['uid'] : $user_id = $_POST['wpid'];
-            
+
             $date = SP_Globals::date_stamp();
 
             // Step 4: Start mysql transaction
@@ -56,7 +56,7 @@
             WHERE wpid = %d OR created_by = %d", $user_id, $user_id);
 
             $results = $wpdb->get_row( $sql , OBJECT );
-            
+
             // Step 5: Check if no rows found
             if ( !($results->transac) ) {
                 return array(
@@ -64,15 +64,13 @@
                     "message" => "This user does not have transactions yet."
                 );
             }
-        
+
             // Step 6: Return result
             return array(
                 "status" => "success",
                 "data" => $results
-        
-            );
-                   
-        }
-        
 
+            );
+
+        }
     }

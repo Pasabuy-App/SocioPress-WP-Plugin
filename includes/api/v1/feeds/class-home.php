@@ -36,12 +36,12 @@
 
 
 			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
-			 	return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Verification issues!",
-			 	);
-			}
+			// if (DV_Verification::is_verified() == false) {
+			//  	return array(
+			// 		"status" => "unknown",
+			// 		"message" => "Please contact your administrator. Verification issues!",
+			//  	);
+			// }
 
 			// Step 3: Start mysql transaction
 			$sql = "SELECT
@@ -105,7 +105,9 @@
 					$var = array();
 
 					for ($count=0; $count < count($keys) ; $count++) {
-						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						$var[] = $get_meta =  $get_meta = get_the_post_thumbnail_url(  $value->id, 'medium'  );
+
+						//$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
 					}
 
 					$seen = SP_Globals::seen_post( $_POST['wpid'], $value->id);
@@ -121,7 +123,6 @@
 					$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM $table_seen_post WHERE post_id = $value->id  ");
 					$smp;
 					$image = '';
-
 					if (!$avatar) {
 						$smp = SP_PLUGIN_URL . "assets/default-avatar.png";
 
@@ -163,7 +164,9 @@
 
 					$var = array();
 					for ($count=0; $count < count($keys) ; $count++) {
-						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						// $var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						$var[] = $get_meta =  $get_meta = get_the_post_thumbnail_url(  $value->id, 'medium'  );
+
 					}
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
@@ -222,7 +225,9 @@
 
 					$var = array();
 					for ($count=0; $count < count($keys) ; $count++) {
-						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						// $var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						$var[] = $get_meta =  $get_meta = get_the_post_thumbnail_url(  $value->id, 'medium'  );
+
 					}
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
@@ -280,7 +285,10 @@
 
 					$var = array();
 					for ($count=0; $count < count($keys) ; $count++) {
-						$var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						// $var[] = $get_meta = get_post_meta( $value->id, $keys[$count],  $single = true );
+						$var[] = $get_meta =  $get_meta = get_the_post_thumbnail_url(  $value->id, 'medium'  );
+
+						//$get_meta = get_the_post_thumbnail_url(  $value->id  );
 					}
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
@@ -327,7 +335,8 @@
 						$vars[] = array_merge((array)$value, $values);
 
 				}elseif ($value->type === 'Status') {
-					$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
+					//$get_meta = get_post_meta( $value->id, 'item_image',  $single = true );
+					$get_meta = get_the_post_thumbnail_url(  $value->id, 'medium'  );
 
 					$avatar = get_user_meta( $value->post_author,  $key = 'avatar', $single = false );
 

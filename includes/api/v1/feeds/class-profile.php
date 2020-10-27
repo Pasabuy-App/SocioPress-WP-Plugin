@@ -152,7 +152,11 @@
 					}
 
 					if ($get_meta) {
-						$image = $var[4]['data'];
+						if (isset($var[4]['data'])){
+							$image = $var[4]['data'];
+						}else{
+							$image = $var[4];
+						}
 					}
 
 					$values = array(
@@ -207,7 +211,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -262,7 +270,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -316,7 +328,11 @@
 					if (!$get_meta) {
 						$image = '';
 					}else{
-						$image = $var[3]['data'];
+						if (isset($var[3]['data'])){
+							$image = $var[3]['data'];
+						}else{
+							$image = $var[3];
+						}
 					}
 
 					$values = array(
@@ -358,7 +374,11 @@
 					if (!$get_meta) {
 						$image =  '' ;
 					}else{
-						$image = $get_meta['data'];
+						if (isset($get_meta['data'])){
+							$image = $get_meta['data'];
+						}else{
+							$image = $get_meta;
+						}
 					}
 					 $values = array(
 						'item_image' => $image,

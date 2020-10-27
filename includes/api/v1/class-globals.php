@@ -37,6 +37,33 @@
 
         }
 
+        public static function get_post_thumbnail_id( $post_id = null ) {
+            $post_id = ( null === $post_id ) ? get_the_ID() : $post_id;
+            return get_post_meta( $post_id, '_thumbnail_id', true );
+        }
+
+
+        /**
+         * Retrieve Post Thumbnail.
+         *
+         * @since 2.9.0
+         *
+         * @param int $post_id Optional. Post ID.
+         * @param string $size Optional. Image size. Defaults to 'post-thumbnail'.
+         * @param string|array $attr Optional. Query string or array of attributes.
+         *
+        */
+
+        function get_the_post_thumbnail_url( $post = null, $size = 'post-thumbnail' ) {
+    	        $post_thumbnail_id = get_post_thumbnail_id( $post );
+
+    	        if ( ! $post_thumbnail_id ) {
+    	                return false;
+    	        }
+
+    	        return wp_get_attachment_image_url( $post_thumbnail_id, $size );
+    	}
+
 
         public static function check_by_field($table_name, $key, $value){
 
