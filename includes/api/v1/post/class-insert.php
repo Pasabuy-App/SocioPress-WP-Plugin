@@ -101,7 +101,8 @@
                 }
 
             }
-            if ($_POST['type'] === 'move') {
+            if ($_POST['type'] === 'pasabay') {
+                
                 if ( !isset($_POST['pic_loc']) || !isset($_POST['dp_loc']) || !isset($_POST['vhl_date']) || !isset($_POST['time_price'])  ) {
                     return array(
                         "status" => "unknown",
@@ -175,7 +176,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -222,11 +224,12 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
-            if ($_POST['type'] === 'move') {
+            if ($_POST['type'] === 'pasabay') {
 
                 // Insert WPPost
                     $insert_post = array(
@@ -270,7 +273,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -317,7 +321,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 
@@ -353,7 +358,8 @@
                         );
 
                     }
-                    $result5 = update_post_meta($result, 'item_image', $image  );
+                    $result5 = update_post_meta($result, 'item_image', $image['data']  );
+                    SP_Globals::Generate_Featured_Image( $image['data'], $result  );
                 }
             }
 

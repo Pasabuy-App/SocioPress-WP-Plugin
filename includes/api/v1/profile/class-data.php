@@ -136,10 +136,10 @@
                         "lname" => $wp_user->last_name,
                         "avatar" => $ava == "" ? SP_PLUGIN_URL . "assets/default-avatar.png" : $ava,
                         "banner" => $ban == "" ? SP_PLUGIN_URL . "assets/default-banner.png" : $ban,
-                        "street" => $street,
-                        "brgy"  => $brgy,
-                        "city"  => $city,
-                        "prov"  => $province
+                        "street" => $street == null? $street = '': $street ,
+                        "brgy"  => $brgy == null? $brgy = '': $brgy ,
+                        "city"  => $city == null? $city = '': $city ,
+                        "prov"  => $province == null? $province = '': $province
                     )
             );
         }// End of function initialize()
