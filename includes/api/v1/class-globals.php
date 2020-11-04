@@ -94,6 +94,7 @@
         }
 
         public static function Generate_Featured_Image( $image_url, $post_id  ){
+
             $upload_dir = wp_upload_dir();
             $image_data = file_get_contents($image_url);
             $filename = basename($image_url);
@@ -115,6 +116,7 @@
             $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
             $res1= wp_update_attachment_metadata( $attach_id, $attach_data );
             $res2= set_post_thumbnail( $post_id, $attach_id );
+
         }
 
         public static function validate_user(){
@@ -145,7 +147,7 @@
 
             // validate if wpid = post author
             if ($post->post_author == $wpid) {
-                return false;
+                return "false";
             }
 
             // Start query
@@ -160,19 +162,210 @@
 
                 foreach ($get_seen_post as $key => $value) {
                     if ($value->wpid == $wpid) {
-                        return false;
+                        return "false";
                     }
                 }
                 $result = $wpdb->query("INSERT INTO $table_seen_post ($table_seen_post_fields) VALUES ($post_id, $wpid)");
             }
 
-            if ($result == false) {
+            if ($result < 1) {
                 $wpdb->query("ROLLBACK");
-                return 'error';
+                return "error";
             }else{
                 $wpdb->query("COMMIT");
-                return true;
+                return "true";
             }
 
         }
+
+
+        public static function custom_get_post_meta($post_id, $wpid, $wpdb, $post_author, $post_type, $variable){
+			$_data = array();
+
+			switch ($post_type) {
+				case 'status':
+
+						// Get post Image
+                            #$get_meta = get_the_post_thumbnail_url(  $post_id, 'medium'  );
+                            $variable['status']['item_image'] =  get_the_post_thumbnail_url(  $post_id, 'medium'  ) == false ? '' : get_the_post_thumbnail_url(  $post_id, 'medium'  );
+
+							// if (isset($get_meta['data'])) {
+							// 	$variable['status']['item_image'] = $get_meta['data'];
+							// }else{
+							// 	$variable['status']['item_image'] = $get_meta;
+							// }
+						// End
+
+						// Get post author avatar
+							$get_avatar = get_user_meta( $post_author,  $key = 'avatar', $single = false );
+							empty($get_avatar)? $variable['status']['author'] = SP_PLUGIN_URL . "assets/default-avatar.png" : $variable['status']['author'] = $get_avatar[0];
+						// End
+
+                        // Import seen
+                            $seen = SP_Globals::seen_post( $wpid, $post_id);
+                            if ($seen == "error") {
+                                return array(
+                                    "status" => 'false',
+                                    "message" => "Please contact your administrator. post seen error"
+                                );
+                            }
+                        // End
+
+                        // Get post seen
+							$count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM {$variable["seen"]} WHERE post_id = '$post_id'  ");
+							$variable['status']['views'] = $count_seen->views;
+                        // End
+
+						$_data = $variable['status'];
+					break;
+
+                case 'pasabay':
+
+                    $avatar = get_user_meta( $post_author,  $key = 'avatar', $single = false );
+
+                    // Get post details
+                        foreach ($variable['pasabuy'] as $key => $value) {
+
+                            $variable['pasabuy'][$key] = get_post_meta( $post_id, $key,  $single = true );
+                        }
+                        $variable['pasabuy']['item_image'] =  get_the_post_thumbnail_url(  $post_id, 'medium'  ) == false ? '' : get_the_post_thumbnail_url(  $post_id, 'medium'  );
+
+                        if ($avatar != null && $avatar != 'false') {
+                            $variable['pasabuy']['author'] = $avatar[0];
+                        }else{
+                            $variable['pasabuy']['author'] =  SP_PLUGIN_URL . "assets/default-avatar.png";
+                        }
+                    // End
+
+                    // Import seen
+                        $seen = SP_Globals::seen_post( $wpid, $post_id);
+                        if ($seen == "error") {
+                            return array(
+                                "status" => 'false',
+                                "message" => "Please contact your administrator. post seen error"
+                            );
+                        }
+                    // End
+
+                    // Get post seen
+                        $count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM {$variable["seen"]} WHERE post_id = '$post_id'  ");
+                        $variable['pasabuy']['views'] = $count_seen->views;
+                    // End
+
+					$_data = $variable['pasabuy'];
+					break;
+
+                case 'sell':
+
+                    $avatar = get_user_meta( $post_author,  $key = 'avatar', $single = false );
+
+                    // Get post details
+                        foreach ($variable['selling'] as $key => $value) {
+
+                            $variable['selling'][$key] = get_post_meta( $post_id, $key,  $single = true );
+                        }
+                        $variable['selling']['item_image'] =  get_the_post_thumbnail_url(  $post_id, 'medium'  ) == false ? '' : get_the_post_thumbnail_url(  $post_id, 'medium'  );
+
+                        if ($avatar != null && $avatar != 'false') {
+                            $variable['selling']['author'] = $avatar[0];
+                        }else{
+                            $variable['selling']['author'] =  SP_PLUGIN_URL . "assets/default-avatar.png";
+                        }
+                    // End
+
+                    // Import seen
+                        $seen = self::seen_post( $wpid, $post_id);
+                        if ($seen == "error") {
+                            return array(
+                                "status" => "false",
+                                "message" => "Please contact your administrator. Post seen error!"
+                            );
+                        }
+                    // End
+
+                    // Get post seen
+                        $count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM {$variable["seen"]} WHERE post_id = '$post_id'  ");
+                        $variable['selling']['views'] = $count_seen->views;
+                    // End
+
+                    $_data = $variable['selling'];
+					break;
+
+                case 'pahatid':
+
+                    $avatar = get_user_meta( $post_author,  $key = 'avatar', $single = false );
+
+                    // Get post details
+                        foreach ($variable['pahatid'] as $key => $value) {
+
+                            $variable['pahatid'][$key] = get_post_meta( $post_id, $key,  $single = true );
+                        }
+                        $variable['pahatid']['item_image'] =  get_the_post_thumbnail_url(  $post_id, 'medium'  ) == false ? '' : get_the_post_thumbnail_url(  $post_id, 'medium'  );
+                        if ($avatar != null && $avatar != 'false') {
+                            $variable['pahatid']['author'] = $avatar[0];
+                        }else{
+                            $variable['pahatid']['author'] =  SP_PLUGIN_URL . "assets/default-avatar.png";
+                        }
+                    // End
+
+                    // Import seen
+                        $seen = self::seen_post( $wpid, $post_id);
+                        if ($seen == "error") {
+                            return array(
+                                "status" => "false",
+                                "message" => "Please contact your administrator. Post seen error!"
+                            );
+                        }
+                    // End
+
+                    // Get post seen
+                        $count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM {$variable["seen"]} WHERE post_id = '$post_id'  ");
+                        $variable['pahatid']['views'] = $count_seen->views;
+                    // End
+
+                    $_data = $variable['pahatid'];
+					break;
+
+                case 'pabili':
+
+                    $avatar = get_user_meta( $post_author,  $key = 'avatar', $single = false );
+
+                    // Get post details
+                        foreach ($variable['pabili'] as $key => $value) {
+
+                            $variable['pabili'][$key] = get_post_meta( $post_id, $key,  $single = true );
+                        }
+                        $variable['pabili']['item_image'] =  get_the_post_thumbnail_url(  $post_id, 'medium'  ) == false ? '' : get_the_post_thumbnail_url(  $post_id, 'medium'  );
+
+                        if ($avatar != null && $avatar != 'false') {
+                            $variable['pabili']['author'] = $avatar[0];
+                        }else{
+                            $variable['pabili']['author'] =  SP_PLUGIN_URL . "assets/default-avatar.png";
+                        }
+                    // End
+
+                    // Import seen
+                        $seen = self::seen_post( $wpid, $post_id);
+                        if ($seen == "error") {
+                            return array(
+                                "status" => "false",
+                                "message" => "Please contact your administrator. Post seen error!"
+                            );
+                        }
+                    // End
+
+                    // Get post seen
+                        $count_seen = $wpdb->get_row("SELECT COUNT(wpid) as views FROM {$variable["seen"]} WHERE post_id = '$post_id'  ");
+                        $variable['pabili']['views'] = $count_seen->views;
+                    // End
+
+                    $_data = $variable['pabili'];
+					break;
+			}
+
+			return array(
+                "status" => "true",
+                "data" => $_data
+            );
+		}
     }
