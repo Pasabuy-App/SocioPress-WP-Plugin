@@ -20,11 +20,12 @@
 		public static function catch_post(){
 			$curl_user = array();
 
+			$curl_user['wpid'] = $_POST['wpid'];
 			$curl_user['recipient'] = $_POST['recipient'];
 			$curl_user['sender'] = $_POST['sender'];
 			$curl_user['message_type'] = $_POST['type'];
-			$curl_user['offset'] = $_POST['offset'];
-			$curl_user['lid'] = $_POST['lid'];
+            isset($_POST['lid']) && !empty($_POST['lid'])? $curl_user['lid'] =  $_POST['lid'] :  $curl_user['lid'] = null ;
+            isset($_POST['offset']) && !empty($_POST['offset'])? $curl_user['offset'] =  $_POST['offset'] :  $curl_user['offset'] = null ;
 
 			return $curl_user;
 		}
@@ -33,6 +34,7 @@
 			global $wpdb;
             $tbl_message = SP_MESSAGES_TABLE;
 			$limit = " DESC LIMIT 12 ";
+			$date = SP_Globals::date_stamp();
 
 			// Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -83,8 +85,7 @@
 
 			$sql .= " AND `status` = 'active'
 				AND  (recipient ='{$user["sender"]}' OR sender = '{$user["sender"]}')
-				AND  (recipient ='{$user["recipient"]}' OR sender = '{$user["recipient"]}')
-			";
+				AND  (recipient ='{$user["recipient"]}' OR sender = '{$user["recipient"]}') ";
 
 			if ($user['lid'] != null ) { // inpput the last id of the message then lid for new message
 				if (empty($user['lid'])) {
@@ -105,6 +106,12 @@
 			$sql .= " ORDER BY ID $limit ";
 
 			$data = $wpdb->get_results($sql);
+
+			foreach ($data as $key => $value) {
+				if ($value->sender != $user["wpid"]) {
+					$wpdb->query("UPDATE $tbl_message SET date_seen = '$date' WHERE id = '$value->ID' ");
+				}
+			}
 
 			return array(
 				"status" => "success",
