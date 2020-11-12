@@ -8,7 +8,8 @@
         * @package sociopress-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
-	*/
+    */
+
   	class SP_Listing_Message {
 
         public static function listen(){
@@ -20,6 +21,7 @@
         public static function catch_post(){
             $curl_user = array();
 
+            $curl_user['user_id'] = $_POST['user_id'];
             $curl_user['message_type'] = $_POST['type'];
             isset($_POST['lid']) && !empty($_POST['lid'])? $curl_user['lid'] =  $_POST['lid'] :  $curl_user['lid'] = null ;
 
@@ -61,28 +63,31 @@
             $sql = "SELECT
                     ID,
                     hash_id,
-                    content,
+                    (SELECT content FROM $tbl_message WHERE id IN ( SELECT MAX( id ) FROM $tbl_message WHERE t.hash_id = hash_id GROUP BY sender OR recipient ) ) as content,
                     sender,
                     recipient,
                     `type`,
                     `status`,
                     created_by,
-                    date_created,
-                    date_seen
+                    (SELECT date_seen FROM $tbl_message WHERE id IN ( SELECT MAX( id ) FROM $tbl_message WHERE t.hash_id = hash_id GROUP BY sender OR recipient ) ) as date_seen,
+
+                    MAX(date_created) AS date_created
                 FROM
-                    $tbl_message ";
+                    $tbl_message t
+                WHERE
+                    '{$user["user_id"]}' IN ( `sender`, `recipient` ) ";
 
             switch ($user['message_type']) {
                 case 'store':
-                    $sql .= " WHERE `type` = 'store' ";
+                    $sql .= " AND `type` = 'store' ";
                 break;
 
                 case 'mover':
-                    $sql .= " WHERE `type` = 'mover' ";
+                    $sql .= " AND `type` = 'mover' ";
                     break;
 
                 case 'user':
-                    $sql .= " WHERE `type` = 'user' ";
+                    $sql .= " AND `type` = 'user' ";
                     break;
             }
 
@@ -93,7 +98,7 @@
 
             }
 
-            $sql .= " GROUP BY type ORDER BY MAX(ID) DESC LIMIT $limit ";
+            $sql .= " GROUP BY sender, recipient, type ORDER BY MAX(ID) DESC LIMIT $limit ";
 
             $data = $wpdb->get_results($sql);
 
