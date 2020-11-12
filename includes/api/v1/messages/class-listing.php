@@ -63,14 +63,13 @@
             $sql = "SELECT
                     ID,
                     hash_id,
-                    (SELECT content FROM $tbl_message WHERE id IN ( SELECT MAX( id ) FROM $tbl_message WHERE t.hash_id = hash_id GROUP BY sender OR recipient ) ) as content,
+                     MAX( content )  as content,
                     sender,
                     recipient,
                     `type`,
                     `status`,
                     created_by,
                     (SELECT date_seen FROM $tbl_message WHERE id IN ( SELECT MAX( id ) FROM $tbl_message WHERE t.hash_id = hash_id GROUP BY sender OR recipient ) ) as date_seen,
-
                     MAX(date_created) AS date_created
                 FROM
                     $tbl_message t
