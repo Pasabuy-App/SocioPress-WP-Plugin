@@ -111,6 +111,7 @@
 				if ($value->sender != $user["wpid"]) {
 					$wpdb->query("UPDATE $tbl_message SET date_seen = '$date' WHERE id = '$value->ID' ");
 				}
+
 			}
 
 			return array(

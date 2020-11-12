@@ -66,6 +66,7 @@
                      MAX( content )  as content,
                     sender,
                     recipient,
+                    IF (`sender` = '{$user["user_id"]}', `recipient`, `sender`) as `user_id`,
                     `type`,
                     `status`,
                     created_by,
@@ -100,6 +101,21 @@
             $sql .= " GROUP BY sender, recipient, type ORDER BY MAX(ID) DESC LIMIT $limit ";
 
             $data = $wpdb->get_results($sql);
+
+            foreach ($data as $key => $value) {
+
+                if ($value->user = "type" ) {
+                    if ($value->user_id ) {
+                        $wp_user = get_user_by("ID", $value->user_id);
+
+                        $avatar = get_user_meta( $value->user_id,  $key = 'avatar', $single = false );
+
+                        $value->avatar = !$avatar ? SP_PLUGIN_URL . "assets/default-avatar.png" : $avatar[0];
+
+                        $value->name = $wp_user->display_name;
+                    }
+                }
+            }
 
             return array(
                 "status" => "success",
