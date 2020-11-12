@@ -23,6 +23,7 @@
 			global $wpdb;
 
 			$table_post = WP_POSTS;
+			$table_seen_post = SP_POST_SEEN;
 
 			// Step 1: Check if prerequisites plugin are missing
 			$plugin = SP_Globals::verify_prerequisites();

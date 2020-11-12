@@ -32,12 +32,12 @@
             }
 
             // Step 2: Valdiate user
-            if (DV_Verification::is_verified() == false) {
-                return array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Verification issues!",
-                );
-            }
+            // if (DV_Verification::is_verified() == false) {
+            //     return array(
+            //         "status" => "unknown",
+            //         "message" => "Please contact your administrator. Verification issues!",
+            //     );
+            // }
 
 
             $wpid = '';
@@ -113,7 +113,6 @@
 
                 }
 
-
             // End verify user
             !empty($wp_user)? $ava = $wp_user->avatar : $ava = '';
             !empty($wp_user)? $ban = $wp_user->banner : $ban = '';
@@ -122,7 +121,6 @@
             !empty($user_address)? $city = $user_address->city : $city = '';
             !empty($user_address)? $province = $user_address->province : $province = '';
 
-
             // Step 4: Return success status and complete object.
             return array(
                 "status" => "success",
@@ -130,7 +128,7 @@
                         "uname" => $wp_user->data->user_nicename,
                         "dname" => $wp_user->data->display_name,
                         "email" => $wp_user->data->user_email,
-                        "role" => $wp_user->roles,
+                        "role" => $wp_user->roles[0],
                         "date_registered" => $wp_user->user_registered,
                         "fname" => $wp_user->first_name,
                         "lname" => $wp_user->last_name,

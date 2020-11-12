@@ -11,21 +11,35 @@
 	*/
   	class SP_Insert_Message {
 
-        public static function listen(){
+        public static function listen(WP_REST_Request $request){
             return rest_ensure_response(
-                self::list_open()
+                self::list_open($request)
             );
         }
 
-        public static function list_open(){
+        public static function catch_post(){
 
-			// Initialize WP global variable
+            $cur_user = array();
+
+            $cur_user['type']      = $_POST['type'];
+            $cur_user['sender']    = $_POST['sender'];
+            $cur_user['recepient'] = $_POST['recepient'];
+            $cur_user['content']   = $_POST['content'];
+            $cur_user['wpid']     = $_POST['wpid'];
+
+            return  $cur_user;
+
+        }
+
+        public static function list_open($request){
             global $wpdb;
+            $tbl_message       = SP_MESSAGES_TABLE;
+            $tbl_message_filed = SP_MESSAGES_FIELDS;
+            $tbl_mover         = HP_MOVERS_v2;
+            $tbl_store         = TP_STORES_v2;
+            $files             = $request->get_file_params();
 
-            $table_revs = SP_REVS_TABLE;
-            $field_revs = SP_REVS_TABLE_FIELDS;
-            $table_mess = SP_MESSAGES_TABLE;
-            $fields_mess = SP_MESSAGES_FIELDS;
+            // Note: Message attachment
 
             // Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -36,193 +50,71 @@
                 );
             }
 
-			// Step 2: Validate user
-			if (DV_Verification::is_verified() == false) {
+            // Step 2: Validate
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Verification issues!",
                 );
-            }
+			}
 
-			// Step 3: Check if required parameters are passed
-            if  ( !isset($_POST['content']) || !isset($_POST['recepient']) ) {
+            $user = self::catch_post();
+
+            if($user['type'] != "store" && $user['type'] != "mover" && $user['type'] != "user" ){
                 return array(
-                    "status"  => "unknown",
-                    "message" => "Please contact your administrator. Request unknown!",
+                    "status" => "failed",
+                    "message" => "Invalid type of message."
                 );
             }
 
-            // Step 4: Check if parameters passed are empty
-            if ( empty($_POST['content']) || empty($_POST['recepient']) ) {
-                return array(
-                    "status"  => "failed",
-                    "message" => "Required fields cannot be empty.",
-                );
+            switch ($user['type']) {
+                case 'store':
+                    // Check store if exists    AND `status` = 'active'
+
+                        $check_store = $wpdb->get_row("SELECT ID FROM $tbl_store WHERE hsid IN ( '{$user["sender"]}', '{$user["recepient"]}' )   AND id IN ( SELECT MAX( id ) FROM $tbl_store s WHERE s.hsid = hsid  GROUP BY hsid )");
+                        if (empty($check_store)) {
+                            return array(
+                                "status" => "failed",
+                                "message" => "This store does not exists."
+                            );
+                        }
+                    // End
+                    break;
+
+                case 'mover':
+                    // Check mover if exists
+                        $check_mover = $wpdb->get_row("SELECT * FROM $tbl_mover WHERE pubkey IN ( '{$user["sender"]}', '{$user["recepient"]}' ) AND `status` = 'active' AND id IN ( SELECT MAX( id ) FROM $tbl_mover w WHERE w.hsid = hsid  GROUP BY hsid ) ");
+                        if (empty($check_mover)) {
+                            return array(
+                                "status" => "failed",
+                                "message" => "This mover does not exists"
+                            );
+                        }
+                    // End
+                    break;
             }
 
-            // Step 5: Check if parameter is valid
-            if ( !is_numeric($_POST['recepient']) ) {
-                return array(
-                    "status"  => "failed",
-                    "message" => "ID is not in valid format.",
-                );
-            }
-
-            $sender = $_POST['wpid'];
-            $content = $_POST['content'];
-            $recepient = $_POST['recepient'];
-            $type = $_POST['type'];
-            $stid = "0";
-            $mover = "0";
-            if ($type === "1"){ //User to Store, validate sender using wpid and recipient using stid and recipient
-                if (!isset($_POST['stid']) ){
-                    return array(
-                        "status"  => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
-                    );
-                }
-                $type = "1";
-                $stid = $_POST['stid'];
-                // $senders = WP_User::get_data_by( 'ID', $sender ); // validate sender using wpid
-                // $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$recepient' "); // validate recipient using stid and recipient
-                // if (!$senders || !$valstore){
-                //     return array(
-                //         "status"  => "failed",
-                //         "message" => "Invalid sender or recipient.",
-                //     );
-                // }
-            }
-            if ($type === "2"){ //Store to user, validate store using stid and wpid and user using recipient
-                if (!isset($_POST['stid']) ){
-                    return array(
-                        "status"  => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
-                    );
-                }
-                $type = "1";
-                $stid = $_POST['stid'];
-                // $recepients = WP_User::get_data_by( 'ID', $recepient ); //validate recipient using recipient
-                // $valstore = $wpdb->get_row("SELECT * FROM tp_personnels WHERE stid = '$stid' AND wpid = '$sender' "); //validate sender using sender and store id
-                // if (!$recepients || !$valstore){
-                //     return array(
-                //         "status"  => "failed",
-                //         "message" => "Invalid sender or recipient.",
-                //     );
-                // }
-            }
-            if ($type === "3"){ //User to mover or mover to user, validate user using wpid and mover using recipient if have documents
-                $type = "2";
-                $senders = WP_User::get_data_by( 'ID', $sender );
-                $recepients = WP_User::get_data_by( 'ID', $recepient );
-                if (!$recepients || !$senders){
-                    return array(
-                        "status"  => "failed",
-                        "message" => "Invalid sender or recipient.",
-                    );
-                }
-                $mover = $sender;
-            }
-            if ($type === "4"){ //User to mover or mover to user, validate user using wpid and mover using recipient if have documents
-                $type = "2";
-                $senders = WP_User::get_data_by( 'ID', $sender );
-                $recepients = WP_User::get_data_by( 'ID', $recepient );
-                if (!$recepients || !$senders){
-                    return array(
-                        "status"  => "failed",
-                        "message" => "Invalid sender or recipient.",
-                    );
-                }
-                $mover = $recepient;
-            }
-            if ($type === "0"){ //user to user
-                $type = "0";
-                $senders = WP_User::get_data_by( 'ID', $sender );
-                $recepients = WP_User::get_data_by( 'ID', $recepient );
-                if (!$senders || !$recepients){
-                    return array(
-                        "status"  => "failed",
-                        "message" => "Invalid sender or recipient.",
-                    );
-                }
-            }
-            
-            //$recepients = WP_User::get_data_by( 'ID', $recepient ); // validate recipient if user
-            // if ( !$recepients || !$valstore {
-            //     return array(
-            //         "status"  => "failed",
-            //         "message" => "Recepient does not exist.",
-            //     );
-            // }
-
-            //$user = SP_Insert_Message::catch_post();
-            $date = SP_Globals:: date_stamp();
-            $id = array();
-
-            // Step 6: Validate user using user id
-            // TODO : If recipipent is user or mover, valdiate using wpid and if store, ude store id
-            // $recepients = WP_User::get_data_by( 'ID', $recepient ); // wpid
-            // $valstore = $wpdb->get_row("SELECT * FROM tp_stores WHERE ID = '$recepient' "); // store id
-            // if ( !$recepients || !$valstore {
-            //     return array(
-            //         "status"  => "failed",
-            //         "message" => "Recepient does not exist.",
-            //     );
-            // }
-            //return 0;
-
-            // Step 7: Insert data to array
-            $child_key = array(
-                'content' => $content,
-                'status'  => '1'
-            );
-
-            // Step 8: Start mysql transaction
             $wpdb->query("START TRANSACTION");
 
-                foreach ( $child_key as $key => $child_val) { // Loop array and insert data ito mp revisions
-                    $insert_revs = $wpdb->query("INSERT INTO $table_revs ($field_revs) VALUES ('messages', '0', '$key', '$child_val', '$sender', '$date' ) ");
-                    $id[] = $wpdb->insert_id;  // Last ID insert to Array
-                }
+            $import = $wpdb->query("INSERT INTO $tbl_message ($tbl_message_filed) VALUES ( '{$user["content"]}', '{$user["sender"]}', '{$user["recepient"]}', '{$user["type"]}', '{$user["wpid"]}'  ) ");
+            $import_id = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $table_mess (content, sender, recipient, stid, wpid, type, status, date_created) VALUES ('{$id[0]}', '$sender', '$recepient', '$stid', '$mover','$type', '{$id[1]}', '$date' ) "); // Insert data into mp messages
-                $last_id = $wpdb->insert_id;
+            $hsid = SP_Globals::generating_hsid($import_id, $tbl_message, 'hash_id');
 
-                $wpdb->query("UPDATE $table_mess SET `hash_id` = sha2($last_id, 256) WHERE ID = $last_id ");
-
-                $update_revs = $wpdb->query("UPDATE $table_revs SET `parent_id` = $last_id WHERE ID IN ($id[0], $id[1]) ");// Update parent id in np revision
-
-                $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[0], 256) WHERE ID = $id[0]");
-                $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[1], 256) WHERE ID = $id[1]");
-
-            // Step 9: Check if any queries above failed
-            if ($insert_revs < 1 || $last_id < 1 || $update_revs < 1) {
+            if ($import < 1 || $hsid = false) {
                 $wpdb->query("ROLLBACK");
                 return array(
                     "status" => "failed",
-                    "message" => "An error occured while submitting data to server."
+                    "message" => "An error occured while submitting data to sever."
                 );
+
             }else{
-                // Step 10: Commit if no errors found
                 $wpdb->query("COMMIT");
                 return array(
                     "status" => "success",
                     "message" => "Data has been added successfully."
                 );
             }
-
-
-
-        }
-
-        public static function catch_post(){
-
-            $cur_user = array();
-
-            $cur_user['user_id']   = $_POST['wpid'];
-            $cur_user['recepient'] = $_POST['recepient'];
-            $cur_user['content']   = $_POST['content'];
-
-            return  $cur_user;
 
         }
     }
