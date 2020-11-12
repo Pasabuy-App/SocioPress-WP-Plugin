@@ -27,7 +27,6 @@
 				'views' => ''
 			);
 
-
 			$variables['status'] = array(
 				'item_image' => '',
 				'author' => '',
@@ -44,7 +43,6 @@
 				'views' => ''
 			);
 
-
 			$variables['selling'] = array(
 				'item_category' => '',
 				'vehicle_date' => '',
@@ -54,7 +52,6 @@
 				'author' => '',
 				'views' => ''
 			);
-
 
 			$variables['pasabuy'] = array(
 				'pickup_location' => '',
@@ -66,7 +63,6 @@
 				'views' => ''
 			);
 
-
 			return $variables;
 		}
 
@@ -74,14 +70,22 @@
             return rest_ensure_response(
                 SP_Homefeed:: list_open()
             );
-        }
+		}
+
+		public static function catch_post(){
+			$curl_user = array();
+
+			isset($_POST['search']) && !empty($_POST['search'])? $curl_user['search'] =  $_POST['search'] :  $curl_user['search'] = null ;
+
+			return $curl_user;
+		}
 
         public static function list_open(){
 			global $wpdb;
 
-
 			// Get variables
 			$variable = self::variables();
+			$user = self::catch_post();
 
 			// Step 1: Check if prerequisites plugin are missing
 			$plugin = SP_Globals::verify_prerequisites();
@@ -118,12 +122,27 @@
 			WHERE
 				post.post_status = 'publish'
 			AND
-				post.post_type IN ('status', 'pasabay', 'sell', 'pahatid', 'pabili')
+				post.post_type IN ('status', 'pasabay', 'sell', 'pahatid', 'pabili') ";
 
-				ORDER BY post_date DESC ";
+			if ( $user['search'] != null ) {
+				$sql .= " AND post.post_type OR post.post_title OR post.post_content  LIKE '%{$user["search"]}%'  ";
+			}
 
 			$limit = " 12 OFFSET 0";
 
+			if( isset($_POST['lid']) ){
+				if ( !is_numeric($_POST["lid"])) {
+					return array(
+						"status" => "failed",
+						"message" => "Parameters not in valid format.",
+					);
+				}
+
+				$lastid = $_POST['lid'];
+				$limit = " 7 OFFSET ".$lastid;
+			}
+
+			$sql .= " ORDER BY post.id DESC LIMIT ".$limit;
 			$_data = $wpdb->get_results($sql);
 			$post_data = array();
 			// Filter data

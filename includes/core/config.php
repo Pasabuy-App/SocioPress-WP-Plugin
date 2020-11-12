@@ -31,7 +31,7 @@
 
 	//Message Configs
 	define('SP_MESSAGES_TABLE', SP_PREFIX.'messages');
-	define('SP_MESSAGES_FIELDS', '(`content`, `sender`, `recipient`, `status`, `date_created` )');
+	define('SP_MESSAGES_FIELDS', ' `content`, `sender`, `recipient`, `type`, `created_by`  ');
 
 	//Market Configs
 	define('SP_MARKET_TABLE', SP_PREFIX.'market');

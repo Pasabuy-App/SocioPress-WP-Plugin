@@ -15,13 +15,24 @@
             return rest_ensure_response(
                 self:: list_open()
             );
-        }
+		}
 
-        public static function list_open(){
+		public static function catch_post(){
+			$curl_user = array();
 
-			// Initialize WP global variable
+			$curl_user['recipient'] = $_POST['recipient'];
+			$curl_user['sender'] = $_POST['sender'];
+			$curl_user['message_type'] = $_POST['type'];
+			$curl_user['offset'] = $_POST['offset'];
+			$curl_user['lid'] = $_POST['lid'];
+
+			return $curl_user;
+		}
+
+		public static function list_open(){
 			global $wpdb;
-            $date = SP_Globals:: date_stamp();
+            $tbl_message = SP_MESSAGES_TABLE;
+			$limit = " DESC LIMIT 12 ";
 
 			// Step 1: Check if prerequisites plugin are missing
             $plugin = SP_Globals::verify_prerequisites();
@@ -30,132 +41,74 @@
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
-            }
+			}
 
 			// Step 2: Validate user
-			// if (DV_Verification::is_verified() == false) {
-            //     return array(
-            //         "status"  => "unknown",
-            //         "message" => "Please contact your administrator. Verification issues!",
-            //     );
-			// }
-
-			$wpid = $_POST['wpid'];
-			$user_id = $_POST['recepient'];
-			$type = $_POST['type'];
-
-			// Step 3: Valdiate user using user id
-            $recepients = WP_User::get_data_by( 'ID', $user_id );
-            if ( !$recepients ) {
+			if (DV_Verification::is_verified() == false) {
                 return array(
-                    "status"  => "failed",
-                    "message" => "Recepient does not exist.",
+                    "status"  => "unknown",
+                    "message" => "Please contact your administrator. Verification issues!",
                 );
 			}
 
-			// Step 4: Start mysql transaction
+			$user = self::catch_post();
+
 			$sql = "SELECT
-			mess.id,
-			mess.sender,
-			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = mess.content ) AS content,
-			mess.date_created
-		FROM
-			sp_messages mess
-		WHERE
-			( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = mess.STATUS ) = '1'
-			AND (mess.recipient = '$wpid'
-			or mess.sender = '$wpid')
+					ID,
+					hash_id,
+					content,
+					sender,
+					recipient,
+					`type`,
+					`status`,
+					created_by,
+					date_created,
+					date_seen
+				FROM
+					$tbl_message ";
 
-			AND (mess.recipient = '$user_id'
-			or mess.sender = '$user_id') ";
-			
-			$limit = " DESC LIMIT 12 ";
+			switch ($user['message_type']) {
+                case 'store':
+                    $sql .= " WHERE `type` = 'store' ";
+                break;
 
-			if (isset($_POST['lid'])) { // inpput the last id of the message then lid for new message
-				if (empty($_POST['lid'])) {
+                case 'mover':
+                    $sql .= " WHERE `type` = 'mover' ";
+                    break;
+
+                case 'user':
+                    $sql .= " WHERE `type` = 'user' ";
+                    break;
+			}
+
+			$sql .= " AND `status` = 'active'
+				AND  (recipient ='{$user["sender"]}' OR sender = '{$user["sender"]}')
+				AND  (recipient ='{$user["recipient"]}' OR sender = '{$user["recipient"]}')
+			";
+
+			if ($user['lid'] != null ) { // inpput the last id of the message then lid for new message
+				if (empty($user['lid'])) {
 					return array(
 						"status"  => "unknown",
 						"message" => "Please contact your administrator. Request unknown!",
 					);
 				}
-                $lid = $_POST['lid'];
-				$sql .= " AND mess.id > $lid ";
+				$sql .= " AND id > {$user["lid"]} ";
 				$limit = " ASC LIMIT 1";
-            }
+			}
 
-			if (isset($_POST['offset'])) {
-				// if (empty($_POST['offset'])) {
-				// 	return array(
-				// 		"status"  => "unknown",
-				// 		"message" => "Please contact your administrator. Request unknown!",
-				// 	);
-				// }
-
-				$offset = $_POST['offset'];
-
-				$offsets = 12 + $offset;
-
-				//$get_id = $wpdb->get_row("SELECT ID FROM sp_messages WHERE `ID` = '$lastid' ");
-
-				//$sql .= " AND mess.id < '$get_id->ID' ";
+			if ($user['offset'] != null) {
+				$offsets = 12 + $user["offset"];
 				$limit = " DESC LIMIT 7 OFFSET ".$offsets;
 			}
-			
-			// $limits = $limit - 1;
-			// $sqle = "SELECT ID FROM sp_messages WHERE ( SELECT sp_revisions.child_val FROM sp_revisions WHERE sp_revisions.id = status ) = '1' 
-			// AND (recipient = '$wpid' or sender = '$wpid') AND (recipient = '$user_id' or sender = '$user_id')";
-			// if (isset($_POST['lid'])) {
-			// 	$sqle .= "AND ID < '$lastid' ";
-			// }
-			// $sqle .= "ORDER BY ID DESC LIMIT $limits , 1";
-			// //return $sqle;
-			// $results= $wpdb->get_row( $sqle);
-			// if ($results){
-			// 	$sql .= "AND mess.id BETWEEN '$results->ID' AND (SELECT MAX(ID) FROM sp_messages) ";
-			// } else{
-			// 	if (isset($_POST['lid'])) {
-			// 		$sql .= "AND mess.id < '$lastid' ";
-			// 	 }
-			// }
-			
-			if ($type === "0"){
-				$sql .= " AND type IN ('0')";
-			}
 
-			if ($type === "1"){
-				if  ( !isset($_POST['stid']) ) {
-                    return array(
-                        "status"  => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
-                    );
-                }
-                $stid = $_POST['stid'];
-				$sql .= " AND type IN ('1') AND stid = '$stid' ";
-			}
+			$sql .= " ORDER BY ID $limit ";
 
-			if ($type === "2"){
-				$sql .= " AND type IN ('2') AND wpid != '$wpid' ";
-			}
+			$data = $wpdb->get_results($sql);
 
-			if ($type === "3"){
-				$sql .= " AND type IN ('2') AND wpid = '$wpid' ";
-			}
-
-			// Step 8: Get results from database
-			$sql .= " ORDER BY mess.id $limit  ";
-			$result= $wpdb->get_results( $sql , OBJECT);
-
-
-			foreach ($result as $key => $value) {
-				if ($value->sender !== $wpid) {
-					$wpdb->query("UPDATE sp_messages SET date_seen = '$date' WHERE id = '$value->id' ");
-				}
-			}
-
-			// Step 11: Return result
 			return array(
 				"status" => "success",
-				"data" => $result
+				"data" => $data
 			);
 		}
     }
