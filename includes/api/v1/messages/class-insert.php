@@ -22,6 +22,7 @@
             $cur_user = array();
 
             $cur_user['type']      = $_POST['type'];
+            $cur_user['odid']    = $_POST['odid'];
             $cur_user['sender']    = $_POST['sender'];
             $cur_user['recepient'] = $_POST['recepient'];
             $cur_user['content']   = $_POST['content'];
@@ -96,7 +97,7 @@
 
             $wpdb->query("START TRANSACTION");
 
-            $import = $wpdb->query("INSERT INTO $tbl_message ($tbl_message_filed) VALUES ( '{$user["content"]}', '{$user["sender"]}', '{$user["recepient"]}', '{$user["type"]}', '{$user["wpid"]}'  ) ");
+            $import = $wpdb->query("INSERT INTO $tbl_message ($tbl_message_filed, odid) VALUES ( '{$user["content"]}', '{$user["sender"]}', '{$user["recepient"]}', '{$user["type"]}', '{$user["wpid"]}', '{$user["odid"]}'  ) ");
             $import_id = $wpdb->insert_id;
 
             $hsid = SP_Globals::generating_hsid($import_id, $tbl_message, 'hash_id');

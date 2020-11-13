@@ -71,17 +71,18 @@
 		//Database table creation for messages
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_mess'" ) != $tbl_mess) {
 			$sql = "CREATE TABLE `".$tbl_mess."` (";
-				$sql .= "`ID` 		    bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`hash_id`      varchar(255) NOT NULL , ";
-				$sql .= "`content`      varchar(255) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
-				$sql .= "`sender` 	    varchar(150) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
-				$sql .= "`recipient`    varchar(150) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
-				$sql .= "`attachment`   varchar(255) DEFAULT 0 COMMENT 'Attachment if this message', ";
-				$sql .= "`type` 	    enum('users','store','mover') NOT NULL COMMENT 'Message type', ";
-				$sql .= "`status` 	    enum('active', 'inactive') NOT NULL COMMENT '1 active or 0 inactive, use to delete.', ";
-				$sql .= "`created_by`   bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID created this Revision.', ";
-				$sql .= "`date_created` datetime NOT NULL DEFAULT current_timestamp(), ";
-				$sql .= "`date_seen` 	datetime DEFAULT NULL COMMENT 'The date this message is seen.', ";
+				$sql .= " `ID` 		    bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= " `hash_id`      varchar(255) NOT NULL , ";
+				$sql .= " `content`      varchar(255) NOT NULL DEFAULT 0 COMMENT 'Parent ID of Content revision', ";
+				$sql .= " `sender` 	    varchar(150) NOT NULL DEFAULT 0 COMMENT 'User ID of Sender', ";
+				$sql .= " `recipient`    varchar(150) NOT NULL DEFAULT 0 COMMENT 'User ID of Recepient', ";
+				$sql .= " `attachment`   varchar(255) DEFAULT 0 COMMENT 'Attachment if this message', ";
+				$sql .= " `type` 	    enum('users','store','mover') NOT NULL COMMENT 'Message type', ";
+				$sql .= " `odid` 	    varchar(100) NOT NULL DEFAULT 0 COMMENT 'Message type', ";
+				$sql .= " `status` 	    enum('active', 'inactive') NOT NULL COMMENT '1 active or 0 inactive, use to delete.', ";
+				$sql .= " `created_by`   bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID created this Revision.', ";
+				$sql .= " `date_created` datetime NOT NULL DEFAULT current_timestamp(), ";
+				$sql .= " `date_seen` 	datetime DEFAULT NULL COMMENT 'The date this message is seen.', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);

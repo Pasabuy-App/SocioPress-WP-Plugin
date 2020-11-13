@@ -62,6 +62,7 @@
 					sender,
 					recipient,
 					`type`,
+					`odid`,
 					`status`,
 					created_by,
 					date_created,
@@ -87,20 +88,8 @@
 				AND  (recipient ='{$user["sender"]}' OR sender = '{$user["sender"]}')
 				AND  (recipient ='{$user["recipient"]}' OR sender = '{$user["recipient"]}') ";
 
-			if ($user['lid'] != null ) { // inpput the last id of the message then lid for new message
-				if (empty($user['lid'])) {
-					return array(
-						"status"  => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
-					);
-				}
-				$sql .= " AND id > {$user["lid"]} ";
-				$limit = " ASC LIMIT 1";
-			}
-
 			if ($user['offset'] != null) {
-				$offsets = 12 + $user["offset"];
-				$limit = " DESC LIMIT 7 OFFSET ".$offsets;
+				$limit = " DESC LIMIT 7 OFFSET ".$user['offset']." ";
 			}
 
 			$sql .= " ORDER BY ID $limit ";
@@ -111,7 +100,6 @@
 				if ($value->sender != $user["wpid"]) {
 					$wpdb->query("UPDATE $tbl_message SET date_seen = '$date' WHERE id = '$value->ID' ");
 				}
-
 			}
 
 			return array(
