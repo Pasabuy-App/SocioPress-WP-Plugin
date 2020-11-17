@@ -20,6 +20,7 @@
 		public static function catch_post(){
 			$curl_user = array();
 
+			$curl_user['odid'] = $_POST['odid'];
 			$curl_user['wpid'] = $_POST['wpid'];
 			$curl_user['recipient'] = $_POST['recipient'];
 			$curl_user['sender'] = $_POST['sender'];
@@ -83,6 +84,11 @@
                     $sql .= " WHERE `type` = 'user' ";
                     break;
 			}
+
+			if ($user["odid"] != null) {
+				$sql .= " AND `odid` = '{$user["odid"]}' ";
+			}
+
 
 			$sql .= " AND `status` = 'active'
 				AND  (recipient ='{$user["sender"]}' OR sender = '{$user["sender"]}')
